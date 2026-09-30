@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 CSRF_TRUSTED_ORIGINS = [
-    'https://your-project.onrender.com',
+    "https://MyReviewPortal.onrender.com",
 ]
 ALLOWED_HOSTS = [
     '127.0.0.1',
