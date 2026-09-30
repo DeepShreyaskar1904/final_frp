@@ -6,3 +6,5 @@ vaderSentiment
 google-auth
 google-auth-oauthlib
 requests
+gunicorn
+whitenoise
