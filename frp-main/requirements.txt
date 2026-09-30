@@ -1,0 +1,8 @@
+Django
+mysqlclient
+python-dotenv
+openpyxl
+vaderSentiment
+google-auth
+google-auth-oauthlib
+requests

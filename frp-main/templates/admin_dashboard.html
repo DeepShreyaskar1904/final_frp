@@ -1,0 +1,3229 @@
+{% extends 'base.html' %}
+{% block title %}
+Admin Dashboard | Faculty Review Portal
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    /* ==================================================
+       PAGE
+    ================================================== */
+
+    body {
+        background: #f5f7fb;
+    }
+
+    .dashboard-wrapper {
+        padding: 35px 20px;
+        min-height: calc(100vh - 70px);
+    }
+
+
+    /* ==================================================
+       HEADER
+    ================================================== */
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        gap: 20px;
+    }
+
+    .dashboard-title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #172033;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-subtitle {
+        color: #6c757d;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .logout-btn {
+        border: none;
+        background: #fff;
+        color: #dc3545;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        transition: 0.2s;
+    }
+
+    .logout-btn:hover {
+        background: #dc3545;
+        color: #fff;
+    }
+
+
+    /* ==================================================
+       STAT CARDS
+    ================================================== */
+
+    .stat-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 22px;
+        border: 2px solid #a5b4fc;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        height: 100%;
+        transition: 0.25s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 34px rgba(0,0,0,0.12);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .icon-blue {
+        background: #e8f1ff;
+        color: #0d6efd;
+    }
+
+    .icon-purple {
+        background: #f0e9ff;
+        color: #6f42c1;
+    }
+
+    .icon-yellow {
+        background: #fff5d8;
+        color: #f0ad00;
+    }
+
+    .icon-green {
+        background: #e7f8ef;
+        color: #198754;
+    }
+
+    .icon-gray {
+        background: #f0f1f3;
+        color: #6c757d;
+    }
+
+    .icon-red {
+        background: #ffe9ec;
+        color: #dc3545;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: #7a8494;
+        margin-bottom: 4px;
+    }
+
+    .stat-value {
+        font-size: 27px;
+        font-weight: 700;
+        color: #172033;
+    }
+
+
+    /* ==================================================
+       CHART CARDS
+    ================================================== */
+
+    .dashboard-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 24px;
+        border: 2px solid #a5b4fc;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+
+    .card-title {
+        font-weight: 700;
+        color: #172033;
+        margin-bottom: 20px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 280px;
+    }
+
+
+    /* ==================================================
+       REVIEWS CARD
+    ================================================== */
+
+    .reviews-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 24px;
+    border: 2px solid #a5b4fc;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    margin-top: 25px;
+}
+
+    .reviews-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 15px;
+    }
+
+
+    /* ==================================================
+       FILTER BOX
+    ================================================== */
+
+    .review-filter-form {
+        background: #f8f9fc;
+        border: 2px solid #a5b4fc;
+        border-radius: 15px;
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    .filter-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #5f6877;
+        margin-bottom: 7px;
+    }
+
+    .filter-input {
+        height: 43px;
+        border-radius: 9px;
+        border: 2px solid #d4dbe5;
+        font-size: 13px;
+    }
+
+    .filter-input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13,110,253,0.08);
+    }
+
+    .filter-btn {
+        height: 43px;
+        background: linear-gradient(
+            135deg,
+            #0d6efd,
+            #6f42c1
+        );
+        color: white;
+        border: none;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 0 17px;
+    }
+
+    .filter-btn:hover {
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .clear-btn {
+        height: 43px;
+        width: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        background: white;
+        border: 2px solid #d4dbe5;
+        color: #6c757d;
+        text-decoration: none;
+    }
+
+    .clear-btn:hover {
+        background: #f1f3f5;
+        color: #dc3545;
+    }
+
+
+    /* ==================================================
+       RESULTS INFO
+    ================================================== */
+
+    .results-info {
+        color: #7a8494;
+        font-size: 12px;
+        margin: 15px 0;
+    }
+
+    .results-info strong {
+        color: #343a40;
+    }
+
+
+    /* ==================================================
+       TABLE
+    ================================================== */
+
+    .table-responsive {
+    border: none;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+    .table {
+    margin-bottom: 0;
+    vertical-align: middle;
+    min-width: 1000px;
+    border: 2px solid #a5b4fc;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .table thead th {
+        background: #f8f9fc;
+        color: #5f6877;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        padding: 14px;
+        border-bottom: 2px solid #a5b4fc;
+        white-space: nowrap;
+    }
+
+    .table tbody td {
+        padding: 15px 14px;
+        font-size: 13px;
+        color: #343a40;
+        border-bottom: 1px solid #c7d2fe;
+    }
+
+    .table tbody tr:hover {
+        background: #fafbfe;
+    }
+
+    .student-name {
+        font-weight: 600;
+        color: #172033;
+    }
+
+    .student-email {
+        font-size: 11px;
+        color: #8a94a6;
+        margin-top: 3px;
+    }
+
+    .rating-stars {
+        color: #f5b301;
+        white-space: nowrap;
+    }
+
+    .sentiment-badge {
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .sentiment-positive {
+        background: #e7f8ef;
+        color: #198754;
+    }
+
+    .sentiment-neutral {
+        background: #f0f1f3;
+        color: #6c757d;
+    }
+
+    .sentiment-negative {
+        background: #ffe9ec;
+        color: #dc3545;
+    }
+
+    .feedback-text {
+        max-width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    /* ==================================================
+       EMPTY STATE
+    ================================================== */
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #8a94a6;
+    }
+
+    .empty-state i {
+        font-size: 45px;
+        margin-bottom: 15px;
+    }
+
+
+    /* ==================================================
+       PAGINATION
+    ================================================== */
+
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .pagination .page-link {
+        border: 1px solid #e1e5ea;
+        color: #0d6efd;
+        margin: 0 3px;
+        border-radius: 8px !important;
+        min-width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+    }
+
+    .pagination .page-link:hover {
+        background: #f0f5ff;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(
+            135deg,
+            #0d6efd,
+            #6f42c1
+        );
+        border-color: transparent;
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #adb5bd;
+        background: #f8f9fa;
+    }
+
+
+
+    /* ==================================================
+       FULL REVIEW MODAL
+    ================================================== */
+
+    .review-modal {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+
+    .review-modal-header {
+        background: linear-gradient(135deg, #0d6efd, #6f42c1);
+        color: white;
+        border: none;
+        padding: 20px 24px;
+    }
+
+    .review-modal-header .modal-title {
+        font-weight: 700;
+    }
+
+    .review-modal-header small {
+        opacity: 0.85;
+    }
+
+    .review-detail-card {
+        background: #f8f9fc;
+        border: 2px solid #dfe4ec;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 16px;
+    }
+
+    .detail-title {
+        font-weight: 700;
+        font-size: 16px;
+        color: #172033;
+        margin-bottom: 18px;
+    }
+
+    .detail-title i {
+        color: #6f42c1;
+        margin-right: 8px;
+    }
+
+    .review-detail-card label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: #7a8494;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #172033;
+        word-break: break-word;
+    }
+
+    .rating-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .rating-item {
+        background: #fff;
+        border: 1px solid #e9edf2;
+        border-radius: 11px;
+        padding: 13px;
+    }
+
+    .rating-item span {
+        display: block;
+        font-size: 12px;
+        color: #7a8494;
+        margin-bottom: 5px;
+    }
+
+    .rating-item strong {
+        color: #172033;
+        font-size: 14px;
+    }
+
+    .feedback-full {
+        background: #fff;
+        border-left: 4px solid #6f42c1;
+        border-radius: 8px;
+        padding: 16px;
+        line-height: 1.7;
+        color: #343a40;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .view-review-btn {
+        border: none;
+        border-radius: 8px;
+        padding: 7px 11px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #eef4ff;
+        color: #0d6efd;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+
+    .view-review-btn:hover {
+        background: #0d6efd;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    /* ==================================================
+       MOBILE
+    ================================================== */
+
+    @media (max-width: 768px) {
+
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .dashboard-title {
+            font-size: 25px;
+        }
+
+        .reviews-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .review-filter-form {
+            padding: 15px;
+        }
+
+        .results-info {
+            font-size: 11px;
+        }
+
+        .pagination .page-link {
+            min-width: 34px;
+            height: 34px;
+        }
+        /* ==================================================
+   EXPORT BUTTONS
+================================================== */
+
+.export-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.export-buttons .btn {
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 14px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .reviews-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .export-buttons {
+        width: 100%;
+    }
+
+    .export-buttons .btn {
+        flex: 1;
+    }
+
+}
+
+    }
+
+
+/* =========================================================
+   DARK MODE ONLY
+   ---------------------------------------------------------
+   Light theme above is intentionally unchanged.
+   ========================================================= */
+
+html[data-theme="dark"] body {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .dashboard-wrapper {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .dashboard-title,
+html[data-theme="dark"] .card-title,
+html[data-theme="dark"] .stat-value,
+html[data-theme="dark"] .student-name,
+html[data-theme="dark"] .detail-title,
+html[data-theme="dark"] .detail-value,
+html[data-theme="dark"] .results-info strong {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .dashboard-subtitle,
+html[data-theme="dark"] .stat-label,
+html[data-theme="dark"] .results-info,
+html[data-theme="dark"] .filter-label,
+html[data-theme="dark"] .student-email,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .review-detail-card label,
+html[data-theme="dark"] .rating-item span {
+    color: #94a3b8;
+}
+
+/* Keep the same card dimensions, radius and 2px border. */
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .reviews-card {
+    background: #1e293b;
+    border-color: #475569;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.28);
+}
+
+html[data-theme="dark"] .stat-card:hover {
+    box-shadow: 0 16px 34px rgba(0,0,0,0.38);
+}
+
+html[data-theme="dark"] .review-filter-form {
+    background: #172033;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .filter-input {
+    background: #0f172a;
+    color: #f8fafc;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .filter-input::placeholder {
+    color: #64748b;
+}
+
+html[data-theme="dark"] .filter-input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96,165,250,0.14);
+}
+
+html[data-theme="dark"] .clear-btn {
+    background: #0f172a;
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .clear-btn:hover {
+    background: #1e293b;
+    color: #f87171;
+}
+
+/* Table keeps the exact original width/min-width and spacing. */
+html[data-theme="dark"] .table {
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .table thead th {
+    background: #172033;
+    color: #cbd5e1;
+    border-bottom-color: #475569;
+}
+
+html[data-theme="dark"] .table tbody td {
+    color: #e2e8f0;
+    border-bottom-color: #334155;
+}
+
+html[data-theme="dark"] .table tbody tr:hover {
+    background: #243044;
+}
+
+html[data-theme="dark"] .sentiment-positive {
+    background: #123b2c;
+    color: #6ee7b7;
+}
+
+html[data-theme="dark"] .sentiment-neutral {
+    background: #334155;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .sentiment-negative {
+    background: #451b25;
+    color: #fda4af;
+}
+
+html[data-theme="dark"] .pagination .page-link {
+    background: #1e293b;
+    border-color: #475569;
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] .pagination .page-link:hover {
+    background: #243044;
+}
+
+html[data-theme="dark"] .pagination .page-item.disabled .page-link {
+    color: #64748b;
+    background: #172033;
+}
+
+html[data-theme="dark"] .review-detail-card {
+    background: #172033;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .rating-item {
+    background: #1e293b;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .rating-item strong {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .feedback-full {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-left-color: #8b5cf6;
+}
+
+html[data-theme="dark"] .view-review-btn {
+    background: #172d4d;
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] .view-review-btn:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* Dark theme: keep the original light icon backgrounds, but make the
+   icon glyphs darker for better contrast with the dark dashboard. */
+html[data-theme="dark"] .icon-blue { color: #1e3a8a; }
+html[data-theme="dark"] .icon-purple { color: #4c1d95; }
+html[data-theme="dark"] .icon-yellow { color: #92400e; }
+html[data-theme="dark"] .icon-green { color: #065f46; }
+html[data-theme="dark"] .icon-gray { color: #334155; }
+html[data-theme="dark"] .icon-red { color: #991b1b; }
+
+/* Header controls: same position/order, only theme-aware colors. */
+.dashboard-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.dashboard-manage-profile {
+    text-decoration: none;
+    background: #eef2ff;
+    color: #4338ca;
+    padding: 11px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-theme-toggle {
+    border: 1px solid #d4dbe5;
+    background: #fff;
+    color: #172033;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+    min-height: 42px;
+}
+
+html[data-theme="dark"] .dashboard-manage-profile {
+    background: #243b67;
+    color: #dbeafe;
+}
+
+html[data-theme="dark"] .dashboard-theme-toggle {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .logout-btn {
+    background: #1e293b;
+    color: #f87171;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+}
+
+html[data-theme="dark"] .logout-btn:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+/* ==================================================
+   SESSION COUNTDOWN
+================================================== */
+.session-timer {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:10px 14px; min-height:42px; border-radius:10px;
+    background:#fff; color:#6c757d; font-size:13px; font-weight:600;
+    border:1px solid #edf0f5; box-shadow:0 4px 15px rgba(0,0,0,.05);
+    white-space:nowrap; transition:.25s ease;
+}
+.session-timer i { font-size:14px; }
+.session-timer strong { font-size:14px; font-weight:700; color:#dc3545; min-width:42px; text-align:center; font-variant-numeric:tabular-nums; }
+.session-timer.warning { background:#fff5f5; border-color:#f5c2c7; animation:timerPulse 1s infinite; }
+.session-timer.warning strong { color:#dc3545; }
+@keyframes timerPulse { 0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
+html[data-theme="dark"] .session-timer { background:#1e293b; color:#cbd5e1; border-color:#475569; box-shadow:0 4px 15px rgba(0,0,0,.25); }
+html[data-theme="dark"] .session-timer strong { color:#f87171; }
+html[data-theme="dark"] .session-timer.warning { background:#3b1f24; border-color:#7f1d1d; }
+@media (max-width:768px) { .session-timer { width:100%; } }
+
+/* Hide ONLY the old global floating toggle on this dashboard. */
+body:has(.dashboard-theme-toggle) #themeToggleWrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-theme-toggle {
+        min-height: 42px;
+    }
+}
+
+
+/* Mobile rating chart: horizontal bars are easier to read on narrow screens. */
+@media (max-width: 768px) {
+    .dashboard-card .chart-container {
+        height: 250px;
+    }
+}
+    /* ================================
+   MANAGE PROFILE - SAME AS OTHER BUTTONS
+   ================================ */
+
+.dashboard-manage-profile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+    min-height: 42px;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #3730a3;
+
+    border: 1px solid #edf0f5;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: all 0.25s ease;
+}
+
+.dashboard-manage-profile:hover {
+    background: #f8f7ff;
+    color: #3730a3;
+    transform: translateY(-1px);
+}
+
+/* Dark Mode */
+html[data-theme="dark"] .dashboard-manage-profile {
+    background: #1e293b;
+    color: #93c5fd;
+
+    border-color: #475569;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .dashboard-manage-profile:hover {
+    background: #26344d;
+    color: #bfdbfe;
+}
+</style>
+
+
+<div class="dashboard-wrapper">
+
+
+    <!-- ==================================================
+         HEADER
+    ================================================== -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h1 class="dashboard-title">
+
+                <i class="fas fa-chart-line me-2"></i>
+
+                Faculty Review Dashboard
+
+            </h1>
+
+            <p class="dashboard-subtitle">
+
+                Welcome back, {{ request.user.username }} 👋
+
+                Here's an overview of your student feedback.
+
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-header-actions">
+
+            <div class="session-timer" id="sessionTimer">
+        <i class="fa-solid fa-clock"></i>
+        <span>Logout in</span>
+        <strong id="sessionCountdown">
+    01:00:00
+</strong>
+    </div>
+
+    <a href="{% url 'manage_profile' %}"
+       class="dashboard-manage-profile">
+        <i class="fa-solid fa-user-pen"></i>
+        Manage Profile
+    </a>
+
+    <button
+        type="button"
+        id="dashboardThemeToggle"
+        class="dashboard-theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode">
+        <i id="dashboardThemeIcon" class="fa-solid fa-moon"></i>
+        <span id="dashboardThemeText">Dark</span>
+    </button>
+
+
+
+    <a href="{% url 'admin_logout' %}"
+       class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+    </a>
+
+</div>
+    </div>
+
+
+
+    <!-- ==================================================
+         MAIN STATISTICS
+    ================================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- TOTAL REVIEWS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-blue">
+
+                    <i class="fas fa-comments"></i>
+
+                </div>
+
+                <div class="stat-label">
+
+                    Total Reviews
+
+                </div>
+
+                <div class="stat-value">
+
+                    {{ total_reviews }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNIQUE STUDENTS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-purple">
+
+                    <i class="fas fa-user-graduate"></i>
+
+                </div>
+
+                <div class="stat-label">
+
+                    Unique Students
+
+                </div>
+
+                <div class="stat-value">
+
+                    {{ total_students }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AVERAGE RATING -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-yellow">
+
+                    <i class="fas fa-star"></i>
+
+                </div>
+
+                <div class="stat-label">
+
+                    Average Rating
+
+                </div>
+
+                <div class="stat-value">
+
+                    {{ average_rating }}
+
+                    <small
+                        style="font-size:15px;color:#f5b301;"
+                    >
+                        / 5
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- POSITIVE REVIEWS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-green">
+
+                    <i class="fas fa-smile"></i>
+
+                </div>
+
+                <div class="stat-label">
+
+                    Positive Reviews
+
+                </div>
+
+                <div class="stat-value">
+
+                    {{ positive_count }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         SENTIMENT CARDS
+    ================================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- POSITIVE -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="stat-icon icon-green mb-0">
+
+                        <i class="fas fa-thumbs-up"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="stat-label">
+
+                            Positive
+
+                        </div>
+
+                        <div class="stat-value">
+
+                            {{ positive_count }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEUTRAL -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="stat-icon icon-gray mb-0">
+
+                        <i class="fas fa-meh"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="stat-label">
+
+                            Neutral
+
+                        </div>
+
+                        <div class="stat-value">
+
+                            {{ neutral_count }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEGATIVE -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="stat-icon icon-red mb-0">
+
+                        <i class="fas fa-thumbs-down"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="stat-label">
+
+                            Negative
+
+                        </div>
+
+                        <div class="stat-value">
+
+                            {{ negative_count }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         CHARTS
+    ================================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- RATING CHART -->
+
+        <div class="col-lg-7">
+
+            <div class="dashboard-card">
+
+                <h5 class="card-title">
+
+                    <i class="fas fa-star me-2"></i>
+
+                    Rating Distribution
+
+                </h5>
+
+                <div class="chart-container">
+
+                    <canvas id="ratingChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SENTIMENT CHART -->
+
+        <div class="col-lg-5">
+
+            <div class="dashboard-card">
+
+                <h5 class="card-title">
+
+                    <i class="fas fa-chart-pie me-2"></i>
+
+                    Sentiment Overview
+
+                </h5>
+
+                <div class="chart-container">
+
+                    <canvas id="sentimentChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         STUDENT REVIEWS
+    ================================================== -->
+
+    <div class="reviews-card">
+
+
+        <!-- HEADER -->
+
+       <div class="reviews-header">
+
+    <!-- TITLE -->
+
+    <div>
+
+        <h5 class="card-title mb-1">
+
+            <i class="fas fa-comments me-2"></i>
+
+            Student Reviews
+
+        </h5>
+
+        <small class="text-muted">
+
+            Search and filter student feedback
+
+        </small>
+
+    </div>
+
+
+    <!-- EXPORT BUTTONS -->
+
+    <div class="export-buttons">
+
+        <!-- CSV -->
+
+        <a
+            href="{% url 'export_reviews_csv' %}?search={{ search_query|urlencode }}&course={{ selected_course|urlencode }}&rating={{ selected_rating }}&sentiment={{ selected_sentiment }}"
+            class="btn btn-outline-success"
+        >
+
+            <i class="fas fa-file-csv me-1"></i>
+
+            CSV
+
+        </a>
+
+
+        <!-- EXCEL -->
+
+        <a
+            href="{% url 'export_reviews_excel' %}?search={{ search_query|urlencode }}&course={{ selected_course|urlencode }}&rating={{ selected_rating }}&sentiment={{ selected_sentiment }}"
+            class="btn btn-success"
+        >
+
+            <i class="fas fa-file-excel me-1"></i>
+
+            Excel
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+        <!-- ==================================================
+             FILTER FORM
+        ================================================== -->
+
+        <form
+            method="GET"
+            class="review-filter-form"
+        >
+
+            <div class="row g-3">
+
+
+                <!-- SEARCH -->
+
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="filter-label">
+
+                        <i class="fas fa-search me-1"></i>
+
+                        Search
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control filter-input"
+                        placeholder="Name, email, course, feedback..."
+                        value="{{ search_query }}"
+                    >
+
+                </div>
+
+
+                <!-- COURSE -->
+
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="filter-label">
+
+                        Course
+
+                    </label>
+
+                    <select
+                        name="course"
+                        class="form-select filter-input"
+                    >
+
+                        <option value="">
+
+                            All Courses
+
+                        </option>
+
+
+                        {% for course in courses %}
+
+                            <option
+                                value="{{ course }}"
+                                {% if selected_course == course %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ course }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- RATING -->
+
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="filter-label">
+
+                        Rating
+
+                    </label>
+
+                    <select
+                        name="rating"
+                        class="form-select filter-input"
+                    >
+
+                        <option value="">
+
+                            All Ratings
+
+                        </option>
+
+                        <option
+                            value="5"
+                            {% if selected_rating == "5" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            ⭐⭐⭐⭐⭐ 5
+
+                        </option>
+
+                        <option
+                            value="4"
+                            {% if selected_rating == "4" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            ⭐⭐⭐⭐ 4
+
+                        </option>
+
+                        <option
+                            value="3"
+                            {% if selected_rating == "3" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            ⭐⭐⭐ 3
+
+                        </option>
+
+                        <option
+                            value="2"
+                            {% if selected_rating == "2" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            ⭐⭐ 2
+
+                        </option>
+
+                        <option
+                            value="1"
+                            {% if selected_rating == "1" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            ⭐ 1
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SENTIMENT -->
+
+                <div class="col-lg-2 col-md-6">
+
+                    <label class="filter-label">
+
+                        Sentiment
+
+                    </label>
+
+                    <select
+                        name="sentiment"
+                        class="form-select filter-input"
+                    >
+
+                        <option value="">
+
+                            All Sentiments
+
+                        </option>
+
+                        <option
+                            value="positive"
+                            {% if selected_sentiment == "positive" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            😊 Positive
+
+                        </option>
+
+                        <option
+                            value="neutral"
+                            {% if selected_sentiment == "neutral" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            😐 Neutral
+
+                        </option>
+
+                        <option
+                            value="negative"
+                            {% if selected_sentiment == "negative" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            😞 Negative
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="col-lg-2 col-md-12">
+
+                    <label class="filter-label">
+
+                        &nbsp;
+
+                    </label>
+
+                    <div class="d-flex gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn filter-btn"
+                        >
+
+                            <i class="fas fa-filter me-1"></i>
+
+                            Filter
+
+                        </button>
+
+
+                        <a
+                            href="{% url 'admin_dashboard' %}"
+                            class="clear-btn"
+                            title="Clear Filters"
+                        >
+
+                            <i class="fas fa-times"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+
+        <!-- ==================================================
+             RESULTS INFO
+        ================================================== -->
+
+        <div class="results-info">
+
+            Showing
+
+            <strong>
+                {{ recent_reviews.start_index }}
+            </strong>
+
+            to
+
+            <strong>
+                {{ recent_reviews.end_index }}
+            </strong>
+
+            of
+
+            <strong>
+                {{ recent_reviews.paginator.count }}
+            </strong>
+
+            reviews
+
+        </div>
+
+
+
+        <!-- ==================================================
+             REVIEWS TABLE
+        ================================================== -->
+
+        {% if recent_reviews %}
+
+            <div class="table-responsive">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Course
+                            </th>
+
+                            <th>
+                                Batch
+                            </th>
+
+                            <th>
+                                Rating
+                            </th>
+
+                            <th>
+                                Sentiment
+                            </th>
+
+                            <th>
+                                Feedback
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for review in recent_reviews %}
+
+                            <tr>
+
+
+                                <!-- STUDENT -->
+
+                                <td>
+
+                                    <div class="student-name">
+
+                                        {{ review.student_name }}
+
+                                    </div>
+
+                                    <div class="student-email">
+
+                                        {{ review.student_email }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- COURSE -->
+
+                                <td>
+
+                                    {{ review.course }}
+
+                                </td>
+
+
+                                <!-- BATCH -->
+
+                                <td>
+
+                                    {{ review.batch|default:"-" }}
+
+                                </td>
+
+
+                                <!-- RATING -->
+
+                                <td>
+
+                                    <span class="rating-stars">
+
+                                        {% for i in "12345" %}
+
+                                            {% if forloop.counter <= review.rating %}
+
+                                                <i class="fas fa-star"></i>
+
+                                            {% else %}
+
+                                                <i class="far fa-star"></i>
+
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- SENTIMENT -->
+
+                                <td>
+
+                                    {% if review.sentiment == "positive" %}
+
+                                        <span class="sentiment-badge sentiment-positive">
+
+                                            <i class="fas fa-smile me-1"></i>
+
+                                            Positive
+
+                                        </span>
+
+
+                                    {% elif review.sentiment == "negative" %}
+
+                                        <span class="sentiment-badge sentiment-negative">
+
+                                            <i class="fas fa-frown me-1"></i>
+
+                                            Negative
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="sentiment-badge sentiment-neutral">
+
+                                            <i class="fas fa-meh me-1"></i>
+
+                                            Neutral
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- FEEDBACK -->
+
+                                <td>
+
+                                    <div
+                                        class="feedback-text"
+                                        title="{{ review.feedback }}"
+                                    >
+
+                                        {{ review.feedback }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- DATE -->
+
+                                <td>
+
+                                    {{ review.created_at|date:"d M Y" }}
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                   <button
+    type="button"
+    class="view-review-btn"
+    data-review-id="{{ review.id }}"
+    data-student-name="{{ review.student_name|escape }}"
+    data-student-email="{{ review.student_email|escape }}"
+    data-course="{{ review.course|escape }}"
+    data-batch="{{ review.batch|default:'-'|escape }}"
+    data-rating="{{ review.rating }}"
+    data-teaching="{{ review.teaching_quality }}"
+    data-communication="{{ review.communication }}"
+    data-practical="{{ review.practical_knowledge }}"
+    data-doubt="{{ review.doubt_solving }}"
+    data-sentiment="{{ review.sentiment|default:'neutral'|escape }}"
+    data-feedback="{{ review.feedback|escape }}"
+    data-created-at="{{ review.created_at|date:"d M Y, h:i A" }}"
+>
+    <i class="fas fa-eye me-1"></i>View
+</button>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 PAGINATION
+            ================================================== -->
+
+            {% if recent_reviews.paginator.num_pages > 1 %}
+
+                <div class="pagination-wrapper">
+
+                    <nav>
+
+                        <ul class="pagination">
+
+
+                            <!-- PREVIOUS -->
+
+                            {% if recent_reviews.has_previous %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="?page={{ recent_reviews.previous_page_number }}&search={{ search_query|urlencode }}&course={{ selected_course|urlencode }}&rating={{ selected_rating }}&sentiment={{ selected_sentiment }}"
+                                    >
+
+                                        <i class="fas fa-chevron-left"></i>
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+
+                                        <i class="fas fa-chevron-left"></i>
+
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+
+
+                            <!-- PAGE NUMBERS -->
+
+                            {% for num in recent_reviews.paginator.page_range %}
+
+                                {% if num == recent_reviews.number %}
+
+                                    <li class="page-item active">
+
+                                        <span class="page-link">
+
+                                            {{ num }}
+
+                                        </span>
+
+                                    </li>
+
+                                {% else %}
+
+                                    <li class="page-item">
+
+                                        <a
+                                            class="page-link"
+                                            href="?page={{ num }}&search={{ search_query|urlencode }}&course={{ selected_course|urlencode }}&rating={{ selected_rating }}&sentiment={{ selected_sentiment }}"
+                                        >
+
+                                            {{ num }}
+
+                                        </a>
+
+                                    </li>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+
+                            <!-- NEXT -->
+
+                            {% if recent_reviews.has_next %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="?page={{ recent_reviews.next_page_number }}&search={{ search_query|urlencode }}&course={{ selected_course|urlencode }}&rating={{ selected_rating }}&sentiment={{ selected_sentiment }}"
+                                    >
+
+                                        <i class="fas fa-chevron-right"></i>
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+
+                                        <i class="fas fa-chevron-right"></i>
+
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+            {% endif %}
+
+
+
+        {% else %}
+
+            <!-- ==================================================
+                 NO RESULTS
+            ================================================== -->
+
+            <div class="empty-state">
+
+                <i class="fas fa-search"></i>
+
+                <h5>
+
+                    No reviews found
+
+                </h5>
+
+                <p>
+
+                    Try changing your search or filters.
+
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+
+<!-- ==================================================
+     FULL REVIEW MODAL
+================================================== -->
+
+<div
+    class="modal fade"
+    id="reviewModal"
+    tabindex="-1"
+    aria-labelledby="reviewModalLabel"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+
+        <div class="modal-content review-modal">
+
+            <!-- HEADER -->
+
+            <div class="modal-header review-modal-header">
+
+                <div>
+
+                    <h5
+                        class="modal-title mb-1"
+                        id="reviewModalLabel"
+                    >
+                        <i class="fas fa-file-alt me-2"></i>
+                        Full Review
+                    </h5>
+
+                    <small>
+                        Complete student feedback · Read only
+                    </small>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="modal-body">
+
+                <!-- LOADING -->
+
+                <div
+                    id="reviewLoading"
+                    class="text-center py-5"
+                >
+
+                    <div
+                        class="spinner-border text-primary"
+                        role="status"
+                    ></div>
+
+                    <p class="mt-3 text-muted mb-0">
+                        Loading review...
+                    </p>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div
+                    id="reviewError"
+                    class="alert alert-danger"
+                    style="display:none;"
+                ></div>
+
+
+                <!-- CONTENT -->
+
+                <div
+                    id="reviewContent"
+                    style="display:none;"
+                >
+
+                    <!-- STUDENT INFORMATION -->
+
+                    <div class="review-detail-card">
+
+                        <div class="detail-title">
+
+                            <i class="fas fa-user-graduate"></i>
+
+                            Student Information
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>
+                                    Student Name
+                                </label>
+
+                                <div
+                                    id="detailStudentName"
+                                    class="detail-value"
+                                ></div>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>
+                                    Email
+                                </label>
+
+                                <div
+                                    id="detailStudentEmail"
+                                    class="detail-value"
+                                ></div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label>
+                                    Course
+                                </label>
+
+                                <div
+                                    id="detailCourse"
+                                    class="detail-value"
+                                ></div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label>
+                                    Batch
+                                </label>
+
+                                <div
+                                    id="detailBatch"
+                                    class="detail-value"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RATING DETAILS -->
+
+                    <div class="review-detail-card">
+
+                        <div class="detail-title">
+
+                            <i class="fas fa-star"></i>
+
+                            Rating Details
+
+                        </div>
+
+                        <div class="rating-grid">
+
+                            <div class="rating-item">
+
+                                <span>
+                                    Overall Rating
+                                </span>
+
+                                <strong id="detailRating"></strong>
+
+                            </div>
+
+
+                            <div class="rating-item">
+
+                                <span>
+                                    Teaching Quality
+                                </span>
+
+                                <strong id="detailTeaching"></strong>
+
+                            </div>
+
+
+                            <div class="rating-item">
+
+                                <span>
+                                    Communication
+                                </span>
+
+                                <strong id="detailCommunication"></strong>
+
+                            </div>
+
+
+                            <div class="rating-item">
+
+                                <span>
+                                    Practical Knowledge
+                                </span>
+
+                                <strong id="detailPractical"></strong>
+
+                            </div>
+
+
+                            <div class="rating-item">
+
+                                <span>
+                                    Doubt Solving
+                                </span>
+
+                                <strong id="detailDoubt"></strong>
+
+                            </div>
+
+
+                            <div class="rating-item">
+
+                                <span>
+                                    Sentiment
+                                </span>
+
+                                <strong id="detailSentiment"></strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FEEDBACK -->
+
+                    <div class="review-detail-card">
+
+                        <div class="detail-title">
+
+                            <i class="fas fa-comment-dots"></i>
+
+                            Student Feedback
+
+                        </div>
+
+                        <div
+                            id="detailFeedback"
+                            class="feedback-full"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- SUBMISSION INFORMATION -->
+
+                    <div class="review-detail-card mb-0">
+
+                        <div class="detail-title">
+
+                            <i class="fas fa-calendar-alt"></i>
+
+                            Submission Information
+
+                        </div>
+
+                        <label>
+                            Submitted At
+                        </label>
+
+                        <div
+                            id="detailCreatedAt"
+                            class="detail-value"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <span class="text-muted me-auto small">
+
+                    <i class="fas fa-lock me-1"></i>
+
+                    Admin view · Read only
+
+                </span>
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     CHART.JS
+================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/* =========================================================
+   DASHBOARD CHART CONTROLLER
+   Theme changes recreate charts instead of calling
+   chart.update(), preventing Chart.js label recursion.
+========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const ratingCanvas = document.getElementById("ratingChart");
+    const sentimentCanvas = document.getElementById("sentimentChart");
+    const themeToggle = document.getElementById("dashboardThemeToggle");
+    const themeIcon = document.getElementById("dashboardThemeIcon");
+    const themeText = document.getElementById("dashboardThemeText");
+
+    const ratingLabels = ["1 Star", "2 Stars", "3 Stars", "4 Stars", "5 Stars"];
+    const ratingData = [
+        {{ rating_counts.0 }},
+        {{ rating_counts.1 }},
+        {{ rating_counts.2 }},
+        {{ rating_counts.3 }},
+        {{ rating_counts.4 }}
+    ];
+
+    const sentimentData = [
+        {{ positive_count }},
+        {{ neutral_count }},
+        {{ negative_count }}
+    ];
+
+    let ratingChartInstance = null;
+    let sentimentChartInstance = null;
+    let lastMobileState = window.innerWidth <= 768;
+
+    function getTheme() {
+        return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    }
+
+    function updateThemeButton(theme) {
+        if (!themeToggle || !themeIcon || !themeText) return;
+        if (theme === "dark") {
+            themeIcon.className = "fa-solid fa-sun";
+            themeText.textContent = "Light";
+            themeToggle.setAttribute("aria-label", "Switch to light mode");
+            themeToggle.setAttribute("title", "Switch to light mode");
+        } else {
+            themeIcon.className = "fa-solid fa-moon";
+            themeText.textContent = "Dark";
+            themeToggle.setAttribute("aria-label", "Switch to dark mode");
+            themeToggle.setAttribute("title", "Switch to dark mode");
+        }
+    }
+
+    function destroyCharts() {
+        if (ratingChartInstance) {
+            ratingChartInstance.destroy();
+            ratingChartInstance = null;
+        }
+        if (sentimentChartInstance) {
+            sentimentChartInstance.destroy();
+            sentimentChartInstance = null;
+        }
+    }
+
+    function renderCharts() {
+        if (typeof Chart === "undefined") return;
+
+        const theme = getTheme();
+        const isMobile = window.innerWidth <= 768;
+        const dark = theme === "dark";
+
+        const ratingBg = "#2f6f9f";
+        const ratingBorder = "#3f86ba";
+        const textColor = "#94a3b8";
+        const gridColor = "rgba(71,85,105,0.35)";
+        const borderColor = "#475569";
+
+        destroyCharts();
+
+        if (ratingCanvas) {
+            ratingChartInstance = new Chart(ratingCanvas, {
+                type: "bar",
+                data: {
+                    labels: ratingLabels,
+                    datasets: [{
+                        label: "Number of Reviews",
+                        data: ratingData,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        barThickness: isMobile ? 24 : undefined,
+                        maxBarThickness: isMobile ? 30 : 70,
+                        ...(dark ? {
+                            backgroundColor: ratingBg,
+                            borderColor: ratingBorder
+                        } : {})
+                    }]
+                },
+                options: {
+                    indexAxis: isMobile ? "y" : "x",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: isMobile ? {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                stepSize: 1,
+                                ...(dark ? { color: textColor } : {})
+                            },
+                            ...(dark ? {
+                                grid: { color: gridColor },
+                                border: { color: borderColor }
+                            } : {})
+                        },
+                        y: {
+                            ticks: {
+                                autoSkip: false,
+                                font: { size: 11 },
+                                ...(dark ? { color: textColor } : {})
+                            },
+                            ...(dark ? {
+                                grid: { color: gridColor },
+                                border: { color: borderColor }
+                            } : {})
+                        }
+                    } : {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                ...(dark ? { color: textColor } : {})
+                            },
+                            ...(dark ? {
+                                grid: { color: gridColor },
+                                border: { color: borderColor }
+                            } : {})
+                        },
+                        x: dark ? {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor },
+                            border: { color: borderColor }
+                        } : {}
+                    }
+                }
+            });
+        }
+
+        if (sentimentCanvas) {
+            sentimentChartInstance = new Chart(sentimentCanvas, {
+                type: "doughnut",
+                data: {
+                    labels: ["Positive", "Neutral", "Negative"],
+                    datasets: [{
+                        data: sentimentData,
+                        borderWidth: 3,
+                        ...(dark ? {
+                            backgroundColor: ["#36a4df", "#ff5f7d", "#ff9d42"],
+                            borderColor: "#1e293b"
+                        } : {})
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "65%",
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            ...(dark ? { labels: { color: textColor } } : {})
+                        }
+                    }
+                }
+            });
+        }
+
+        lastMobileState = isMobile;
+    }
+
+    // Backward-compatible hook for any older dashboard code.
+    // Chart rendering is handled only by this page script; the global
+    // theme controller must never mutate Chart.js instances.
+    window.updateDashboardCharts = renderCharts;
+
+    updateThemeButton(getTheme());
+    renderCharts();
+
+    if (themeToggle) {
+        themeToggle.addEventListener("click", function () {
+            const nextTheme = getTheme() === "dark" ? "light" : "dark";
+
+            if (typeof window.applyTheme === "function") {
+                window.applyTheme(nextTheme);
+            } else {
+                document.documentElement.setAttribute("data-theme", nextTheme);
+                localStorage.setItem("portal-theme", nextTheme);
+                window.dispatchEvent(new CustomEvent("portal-theme-change", {
+                    detail: { theme: nextTheme }
+                }));
+            }
+            updateThemeButton(nextTheme);
+        });
+    }
+
+    window.addEventListener("portal-theme-change", function (event) {
+        const theme = event.detail && event.detail.theme ? event.detail.theme : getTheme();
+        updateThemeButton(theme);
+        renderCharts();
+    });
+
+    let resizeTimer;
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            const mobileNow = window.innerWidth <= 768;
+            if (mobileNow !== lastMobileState) renderCharts();
+        }, 150);
+    });
+});
+</script>
+
+<!-- ==================================================
+     FULL REVIEW MODAL JAVASCRIPT
+================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const modalElement =
+        document.getElementById("reviewModal");
+
+    if (!modalElement) {
+        return;
+    }
+
+
+    /* ==================================================
+       BOOTSTRAP MODAL INSTANCE
+    ================================================== */
+
+    const reviewModal =
+        bootstrap.Modal.getOrCreateInstance(
+            modalElement
+        );
+
+
+    const loading =
+        document.getElementById("reviewLoading");
+
+    const content =
+        document.getElementById("reviewContent");
+
+    const errorBox =
+        document.getElementById("reviewError");
+
+
+    /* ==================================================
+       SET TEXT
+    ================================================== */
+
+    function setText(
+        id,
+        value,
+        fallback = "N/A"
+    ) {
+
+        const element =
+            document.getElementById(id);
+
+        if (!element) {
+            return;
+        }
+
+        element.textContent =
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+                ? value
+                : fallback;
+    }
+
+
+    /* ==================================================
+       RESET MODAL
+    ================================================== */
+
+    function resetReviewModal() {
+
+        if (loading) {
+            loading.style.display = "block";
+        }
+
+        if (content) {
+            content.style.display = "none";
+        }
+
+        if (errorBox) {
+            errorBox.style.display = "none";
+            errorBox.textContent = "";
+        }
+    }
+
+
+    /* ==================================================
+       VIEW BUTTON
+    ================================================== */
+
+    document
+        .querySelectorAll(".view-review-btn")
+        .forEach(function (button) {
+
+            button.addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+
+                    try {
+
+                        resetReviewModal();
+
+
+                        /* =========================
+                           READ DATA
+                        ========================= */
+
+                        const studentName =
+                            this.getAttribute(
+                                "data-student-name"
+                            ) || "N/A";
+
+
+                        const studentEmail =
+                            this.getAttribute(
+                                "data-student-email"
+                            ) || "N/A";
+
+
+                        const course =
+                            this.getAttribute(
+                                "data-course"
+                            ) || "N/A";
+
+
+                        const batch =
+                            this.getAttribute(
+                                "data-batch"
+                            ) || "-";
+
+
+                        const rating =
+                            this.getAttribute(
+                                "data-rating"
+                            ) || "0";
+
+
+                        const teaching =
+                            this.getAttribute(
+                                "data-teaching"
+                            ) || "0";
+
+
+                        const communication =
+                            this.getAttribute(
+                                "data-communication"
+                            ) || "0";
+
+
+                        const practical =
+                            this.getAttribute(
+                                "data-practical"
+                            ) || "0";
+
+
+                        const doubt =
+                            this.getAttribute(
+                                "data-doubt"
+                            ) || "0";
+
+
+                        const sentiment =
+                            this.getAttribute(
+                                "data-sentiment"
+                            ) || "neutral";
+
+
+                        const feedback =
+                            this.getAttribute(
+                                "data-feedback"
+                            ) ||
+                            "No feedback provided.";
+
+
+                        const createdAt =
+                            this.getAttribute(
+                                "data-created-at"
+                            ) || "N/A";
+
+
+                        /* =========================
+                           STUDENT INFORMATION
+                        ========================= */
+
+                        setText(
+                            "detailStudentName",
+                            studentName
+                        );
+
+                        setText(
+                            "detailStudentEmail",
+                            studentEmail
+                        );
+
+                        setText(
+                            "detailCourse",
+                            course
+                        );
+
+                        setText(
+                            "detailBatch",
+                            batch,
+                            "-"
+                        );
+
+
+                        /* =========================
+                           RATINGS
+                        ========================= */
+
+                        setText(
+                            "detailRating",
+                            `${rating}/5 ⭐`
+                        );
+
+                        setText(
+                            "detailTeaching",
+                            `${teaching}/5 ⭐`
+                        );
+
+                        setText(
+                            "detailCommunication",
+                            `${communication}/5 ⭐`
+                        );
+
+                        setText(
+                            "detailPractical",
+                            `${practical}/5 ⭐`
+                        );
+
+                        setText(
+                            "detailDoubt",
+                            `${doubt}/5 ⭐`
+                        );
+
+
+                        /* =========================
+                           SENTIMENT
+                        ========================= */
+
+                        const cleanSentiment =
+                            sentiment
+                                .charAt(0)
+                                .toUpperCase()
+                            +
+                            sentiment.slice(1);
+
+
+                        setText(
+                            "detailSentiment",
+                            cleanSentiment
+                        );
+
+
+                        /* =========================
+                           FEEDBACK
+                        ========================= */
+
+                        setText(
+                            "detailFeedback",
+                            feedback,
+                            "No feedback provided."
+                        );
+
+
+                        /* =========================
+                           DATE
+                        ========================= */
+
+                        setText(
+                            "detailCreatedAt",
+                            createdAt
+                        );
+
+
+                        /* =========================
+                           SHOW CONTENT
+                        ========================= */
+
+                        if (loading) {
+                            loading.style.display = "none";
+                        }
+
+                        if (content) {
+                            content.style.display = "block";
+                        }
+
+
+                        /* =========================
+                           OPEN MODAL
+                        ========================= */
+
+                        reviewModal.show();
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Review modal error:",
+                            error
+                        );
+
+
+                        if (loading) {
+                            loading.style.display =
+                                "none";
+                        }
+
+                        if (content) {
+                            content.style.display =
+                                "none";
+                        }
+
+                        if (errorBox) {
+
+                            errorBox.textContent =
+                                "Unable to display this review. Please refresh the page and try again.";
+
+                            errorBox.style.display =
+                                "block";
+                        }
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* ==================================================
+       EXPLICIT CLOSE BUTTON HANDLER
+       Handles BOTH X and Close
+    ================================================== */
+
+    modalElement
+        .querySelectorAll(
+            '[data-bs-dismiss="modal"]'
+        )
+        .forEach(function (closeButton) {
+
+            closeButton.addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    reviewModal.hide();
+
+                },
+                true
+            );
+
+        });
+
+
+    /* ==================================================
+       MODAL CLOSED
+       IMPORTANT CLEANUP
+    ================================================== */
+
+    modalElement.addEventListener(
+        "hidden.bs.modal",
+        function () {
+
+            /* Remove Bootstrap modal lock */
+
+            document.body.classList.remove(
+                "modal-open"
+            );
+
+
+            /* Restore body scrolling */
+
+            document.body.style.removeProperty(
+                "overflow"
+            );
+
+
+            document.body.style.removeProperty(
+                "padding-right"
+            );
+
+
+            /* Remove any remaining Bootstrap backdrop */
+
+            document
+                .querySelectorAll(
+                    ".modal-backdrop"
+                )
+                .forEach(function (backdrop) {
+
+                    backdrop.remove();
+
+                });
+
+
+            /* Restore modal element */
+
+            modalElement.classList.remove(
+                "show"
+            );
+
+            modalElement.style.removeProperty(
+                "display"
+            );
+
+            modalElement.removeAttribute(
+                "aria-modal"
+            );
+
+            modalElement.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            /* Reset content */
+
+            resetReviewModal();
+
+
+            /* Reset scroll position inside modal */
+
+            const modalBody =
+                modalElement.querySelector(
+                    ".modal-body"
+                );
+
+            if (modalBody) {
+
+                modalBody.scrollTop = 0;
+
+            }
+
+        }
+    );
+
+
+    /* ==================================================
+       EXTRA SAFETY
+       If backdrop somehow remains
+    ================================================== */
+
+    modalElement.addEventListener(
+        "hide.bs.modal",
+        function () {
+
+            setTimeout(function () {
+
+                if (
+                    !modalElement.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    document.body.classList.remove(
+                        "modal-open"
+                    );
+
+                }
+
+            }, 50);
+
+        }
+    );
+
+});
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const countdownElement =
+        document.getElementById("sessionCountdown");
+
+    const timerElement =
+        document.getElementById("sessionTimer");
+
+    if (!countdownElement || !timerElement) return;
+
+    // ==================================================
+    // SESSION TIMER
+    // ==================================================
+
+    const TIMER_DURATION = 60 * 60 * 1000; // 1 hour
+
+    // Django session key
+    // Every new login gets a new session key
+    const SESSION_KEY =
+        "{{ request.session.session_key }}";
+
+    const STORAGE_KEY =
+        "adminSessionExpiry_" + SESSION_KEY;
+
+
+    // ==================================================
+    // GET / CREATE EXPIRY TIME
+    // ==================================================
+
+    let expiryTime =
+        localStorage.getItem(STORAGE_KEY);
+
+
+    // New login / new session
+    if (!expiryTime) {
+
+        expiryTime =
+            Date.now() + TIMER_DURATION;
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            expiryTime
+        );
+    }
+
+
+    expiryTime = Number(expiryTime);
+
+
+    // ==================================================
+    // UPDATE COUNTDOWN
+    // ==================================================
+
+    function updateCountdown() {
+
+        const remainingMilliseconds =
+            expiryTime - Date.now();
+
+
+        const remainingSeconds =
+            Math.max(
+                0,
+                Math.floor(
+                    remainingMilliseconds / 1000
+                )
+            );
+
+
+        const hours =
+            Math.floor(
+                remainingSeconds / 3600
+            );
+
+
+        const minutes =
+            Math.floor(
+                (remainingSeconds % 3600) / 60
+            );
+
+
+        const seconds =
+            remainingSeconds % 60;
+
+
+        countdownElement.textContent =
+            String(hours).padStart(2, "0")
+            + ":"
+            + String(minutes).padStart(2, "0")
+            + ":"
+            + String(seconds).padStart(2, "0");
+
+
+        // Last 10 seconds warning
+        if (remainingSeconds <= 10) {
+
+            timerElement.classList.add(
+                "warning"
+            );
+
+        }
+
+
+        // ==================================================
+        // AUTO LOGOUT
+        // ==================================================
+
+        if (remainingMilliseconds <= 0) {
+
+            localStorage.removeItem(
+                STORAGE_KEY
+            );
+
+            countdownElement.textContent =
+                "00:00:00";
+
+
+            window.location.href =
+                "{% url 'admin_logout' %}";
+
+            return;
+        }
+    }
+
+
+    // First update
+    updateCountdown();
+
+
+    // Update every second
+    const countdownInterval =
+        setInterval(function () {
+
+            updateCountdown();
+
+            if (
+                Date.now() >= expiryTime
+            ) {
+
+                clearInterval(
+                    countdownInterval
+                );
+
+            }
+
+        }, 1000);
+
+});
+
+</script>
+{% endblock %}

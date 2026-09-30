@@ -1,0 +1,1175 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Give Feedback | Faculty Review Portal
+{% endblock %}
+
+{% block content %}
+
+<div class="review-page">
+
+    <div class="container py-5">
+
+        <!-- ================================
+             PAGE HEADER
+        ================================= -->
+
+        <div class="review-header text-center">
+
+            <div class="hero-badge">
+                <i class="fa-solid fa-star"></i>
+                Student Feedback
+            </div>
+
+            <h1>
+                Share Your Experience
+            </h1>
+
+            <p>
+                Please provide honest and constructive feedback.
+            </p>
+
+        </div>
+
+
+        <!-- ================================
+             REVIEW FORM
+        ================================= -->
+
+        <div class="review-container">
+
+            <form
+                method="POST"
+                id="reviewForm"
+                novalidate
+            >
+
+                {% csrf_token %}
+
+
+                <!-- ================================
+                     SECTION 01 - STUDENT INFORMATION
+                ================================= -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <div class="section-number">
+                            01
+                        </div>
+
+                        <div>
+                            <h3>
+                                Your Information
+                            </h3>
+
+                            <p>
+                                Tell us a little about yourself.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+                        <!-- Student Name -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Your Name
+                            </label>
+
+                            {{ form.student_name }}
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            {{ form.student_email }}
+
+                        </div>
+
+
+                        <!-- Course -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.course.id_for_label }}"
+                                class="form-label"
+                            >
+                                Course
+                            </label>
+
+                            {{ form.course }}
+
+                            {% if form.course.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.course.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Batch -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.batch.id_for_label }}"
+                                class="form-label"
+                            >
+                                Batch
+                            </label>
+
+                            {{ form.batch }}
+
+                            {% if form.batch.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.batch.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================
+                     SECTION 02 - RATING
+                ================================= -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <div class="section-number">
+                            02
+                        </div>
+
+                        <div>
+                            <h3>
+                                Rate Your Experience
+                            </h3>
+
+                            <p>
+                                Rate each area from 1 to 5.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="rating-grid">
+
+
+                        <!-- Overall Rating -->
+
+                        <div class="rating-item">
+
+                            <div>
+
+                                <h5>
+                                    Overall Rating
+                                </h5>
+
+                                <small>
+                                    Overall teaching experience
+                                </small>
+
+                            </div>
+
+                            <div class="rating-select">
+                                {{ form.rating }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Teaching Quality -->
+
+                        <div class="rating-item">
+
+                            <div>
+
+                                <h5>
+                                    Teaching Quality
+                                </h5>
+
+                                <small>
+                                    Clarity and quality of teaching
+                                </small>
+
+                            </div>
+
+                            <div class="rating-select">
+                                {{ form.teaching_quality }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Communication -->
+
+                        <div class="rating-item">
+
+                            <div>
+
+                                <h5>
+                                    Communication
+                                </h5>
+
+                                <small>
+                                    Explanation and communication
+                                </small>
+
+                            </div>
+
+                            <div class="rating-select">
+                                {{ form.communication }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Practical Knowledge -->
+
+                        <div class="rating-item">
+
+                            <div>
+
+                                <h5>
+                                    Practical Knowledge
+                                </h5>
+
+                                <small>
+                                    Real-world examples and projects
+                                </small>
+
+                            </div>
+
+                            <div class="rating-select">
+                                {{ form.practical_knowledge }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Doubt Solving -->
+
+                        <div class="rating-item">
+
+                            <div>
+
+                                <h5>
+                                    Doubt Solving
+                                </h5>
+
+                                <small>
+                                    Support when solving doubts
+                                </small>
+
+                            </div>
+
+                            <div class="rating-select">
+                                {{ form.doubt_solving }}
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================
+                     SECTION 03 - WRITTEN FEEDBACK
+                ================================= -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <div class="section-number">
+                            03
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Written Feedback
+                            </h3>
+
+                            <p>
+                                Tell us what you think.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Feedback -->
+
+                    <label class="form-label">
+                        Your Feedback
+                    </label>
+
+                    {{ form.feedback }}
+
+
+                    <!-- Anonymous -->
+
+                    <div class="anonymous-box mt-4">
+
+                        {{ form.is_anonymous }}
+
+                        <div>
+
+                            <label
+                                for="{{ form.is_anonymous.id_for_label }}"
+                                class="anonymous-label"
+                            >
+                                Submit anonymously
+                            </label>
+
+                            <p>
+                                Your name will not be displayed publicly.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================
+                     SUBMIT SECTION
+                ================================= -->
+
+                <div class="submit-section">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary-custom submit-btn"
+                    >
+
+                        <i class="fa-solid fa-paper-plane me-2"></i>
+
+                        Submit Feedback
+
+                    </button>
+
+                    <p>
+                        Please make sure your feedback is honest
+                        before submitting.
+                    </p>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     FLOATING BACK TO HOME BUTTON
+================================================== -->
+
+<a
+    href="{% url 'home' %}"
+    class="floating-back-home"
+    aria-label="Back to Home"
+    title="Back to Home"
+>
+
+    <i class="fa-solid fa-arrow-left"></i>
+
+    <span>
+        Back to Home
+    </span>
+
+</a>
+
+
+
+<style>
+
+/* ==================================================
+   REVIEW PAGE
+================================================== */
+
+.review-page {
+
+    min-height: 100vh;
+
+    background: var(--portal-bg);
+
+    color: var(--portal-text);
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+}
+
+
+/* ==================================================
+   REVIEW CONTAINER
+================================================== */
+
+.review-container {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin: 35px auto 0;
+
+    background: var(--portal-surface);
+
+    border-radius: 20px;
+
+    border: 2px solid var(--portal-border-strong);
+
+    box-shadow:
+        0 18px 50px var(--portal-shadow-strong);
+
+    overflow: hidden;
+
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* ==================================================
+   LIGHT MODE
+================================================== */
+
+html[data-theme="light"] .review-container {
+
+    background: #ffffff;
+
+    border: 2px solid #cbd5e1;
+
+    box-shadow:
+        0 15px 45px rgba(15, 23, 42, 0.10),
+        0 0 0 1px rgba(37, 99, 235, 0.03);
+}
+
+
+/* ==================================================
+   DARK MODE
+================================================== */
+
+html[data-theme="dark"] .review-container {
+
+    background: #1e293b;
+
+    border: 2px solid #334155;
+
+    box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ==================================================
+   FORM SECTION
+================================================== */
+
+.form-section {
+
+    padding: 35px 26px;
+
+    border-bottom:
+        1px solid var(--portal-border);
+}
+
+
+.form-section:last-child {
+
+    border-bottom: none;
+}
+
+
+/* ==================================================
+   SECTION TITLE
+================================================== */
+
+.form-section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 28px;
+}
+
+
+.section-number {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #6d45d8
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 5px 15px rgba(37, 99, 235, 0.20);
+}
+
+
+.form-section-title h3 {
+
+    margin: 0;
+
+    color: var(--portal-text);
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+
+.form-section-title p {
+
+    margin: 3px 0 0;
+
+    color: var(--portal-muted);
+
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   LABEL
+================================================== */
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--portal-text);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* ==================================================
+   INPUTS
+================================================== */
+
+.review-page input[type="text"],
+.review-page input[type="email"],
+.review-page input[type="number"],
+.review-page select,
+.review-page textarea {
+
+    width: 100%;
+
+    background: var(--portal-input-bg);
+
+    color: var(--portal-input-text);
+
+    border: 1px solid var(--portal-border-strong);
+
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.review-page input::placeholder,
+.review-page textarea::placeholder {
+
+    color: var(--portal-placeholder);
+}
+
+
+.review-page input:focus,
+.review-page select:focus,
+.review-page textarea:focus {
+
+    border-color: var(--portal-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+
+    outline: none;
+}
+
+
+/* ==================================================
+   TEXTAREA
+================================================== */
+
+.review-page textarea {
+
+    min-height: 150px;
+
+    resize: vertical;
+}
+
+
+/* ==================================================
+   RATING GRID
+================================================== */
+
+.rating-grid {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.rating-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 15px;
+
+    background: var(--portal-surface-2);
+
+    border: 1px solid var(--portal-border);
+
+    border-radius: 10px;
+
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.rating-item h5 {
+
+    margin: 0 0 3px;
+
+    color: var(--portal-text);
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.rating-item small {
+
+    color: var(--portal-muted);
+
+    font-size: 11px;
+}
+
+
+.rating-select {
+
+    min-width: 145px;
+}
+
+
+.rating-select select {
+
+    width: 100%;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   ANONYMOUS BOX
+================================================== */
+
+.anonymous-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    background: var(--portal-surface-2);
+
+    border: 1px solid var(--portal-border);
+
+    border-radius: 10px;
+}
+
+
+.anonymous-box input[type="checkbox"] {
+
+    width: 16px;
+
+    height: 16px;
+
+    accent-color: var(--portal-primary);
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+.anonymous-label {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--portal-text);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.anonymous-box p {
+
+    margin: 0;
+
+    color: var(--portal-muted);
+
+    font-size: 11px;
+}
+
+
+/* ==================================================
+   SUBMIT SECTION
+================================================== */
+
+.submit-section {
+
+    padding: 28px;
+
+    text-align: center;
+
+    border-top:
+        1px solid var(--portal-border);
+}
+
+
+.submit-btn {
+
+    min-width: 170px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #6d45d8
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.submit-btn:hover {
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(37, 99, 235, 0.30);
+}
+
+
+.submit-section p {
+
+    margin: 10px 0 0;
+
+    color: var(--portal-muted);
+
+    font-size: 11px;
+}
+
+
+/* ==================================================
+   FLOATING BACK TO HOME
+================================================== */
+
+.floating-back-home {
+
+    position: fixed;
+
+    right: 24px;
+
+    bottom: 24px;
+
+    left: auto;
+
+    z-index: 9999;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 17px;
+
+    background: var(--portal-surface);
+
+    color: var(--portal-primary);
+
+    border: 1px solid var(--portal-border-strong);
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 8px 25px var(--portal-shadow-strong);
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.floating-back-home i {
+
+    font-size: 13px;
+}
+
+
+/* ==================================================
+   FLOATING BUTTON - LIGHT MODE
+================================================== */
+
+html[data-theme="light"] .floating-back-home {
+
+    background: #ffffff;
+
+    color: #2563eb;
+
+    border: 1px solid #cbd5e1;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.12);
+}
+
+
+/* ==================================================
+   FLOATING BUTTON - DARK MODE
+================================================== */
+
+html[data-theme="dark"] .floating-back-home {
+
+    background: #1e293b;
+
+    color: #60a5fa;
+
+    border: 1px solid #475569;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ==================================================
+   HOVER
+================================================== */
+
+.floating-back-home:hover {
+
+    background: var(--portal-primary);
+
+    color: #ffffff;
+
+    border-color: var(--portal-primary);
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 28px rgba(37, 99, 235, 0.28);
+
+    text-decoration: none;
+}
+
+
+html[data-theme="dark"] .floating-back-home:hover {
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    border-color: #2563eb;
+}
+
+
+/* ==================================================
+   DARK MODE FORM ELEMENTS
+================================================== */
+
+html[data-theme="dark"] .review-page input,
+html[data-theme="dark"] .review-page select,
+html[data-theme="dark"] .review-page textarea {
+
+    background: #0f172a;
+
+    color: #f8fafc;
+
+    border-color: #475569;
+}
+
+
+html[data-theme="dark"] .review-page input::placeholder,
+html[data-theme="dark"] .review-page textarea::placeholder {
+
+    color: #64748b;
+}
+
+
+html[data-theme="dark"] .rating-item,
+html[data-theme="dark"] .anonymous-box {
+
+    background: #172033;
+
+    border-color: #334155;
+}
+
+
+/* ==================================================
+   LIGHT MODE FORM ELEMENTS
+================================================== */
+
+html[data-theme="light"] .review-page input,
+html[data-theme="light"] .review-page select,
+html[data-theme="light"] .review-page textarea {
+
+    background: #ffffff;
+
+    color: #172033;
+
+    border-color: #cbd5e1;
+}
+
+
+html[data-theme="light"] .rating-item,
+html[data-theme="light"] .anonymous-box {
+
+    background: #f8fafc;
+
+    border-color: #d5deea;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 768px) {
+
+    .review-container {
+
+        margin-top: 25px;
+
+        border-radius: 16px;
+    }
+
+
+    .form-section {
+
+        padding: 28px 18px;
+    }
+
+
+    .rating-item {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+
+    .rating-select {
+
+        width: 100%;
+
+        min-width: 0;
+    }
+
+
+    .submit-section {
+
+        padding: 24px 18px;
+    }
+
+}
+
+
+/* ==================================================
+   SMALL MOBILE
+================================================== */
+
+@media (max-width: 576px) {
+
+    .review-page .container {
+
+        padding-left: 12px !important;
+
+        padding-right: 12px !important;
+    }
+
+
+    .form-section-title {
+
+        gap: 10px;
+    }
+
+
+    .section-number {
+
+        width: 34px;
+
+        height: 34px;
+
+        font-size: 12px;
+    }
+
+
+    .form-section-title h3 {
+
+        font-size: 16px;
+    }
+
+
+    /* Bottom-right floating button */
+
+    .floating-back-home {
+
+        right: 16px;
+
+        bottom: 16px;
+
+        left: auto;
+
+        width: 44px;
+
+        height: 44px;
+
+        padding: 0;
+
+        border-radius: 50%;
+    }
+
+
+    .floating-back-home span {
+
+        display: none;
+    }
+
+
+    .floating-back-home i {
+
+        font-size: 14px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

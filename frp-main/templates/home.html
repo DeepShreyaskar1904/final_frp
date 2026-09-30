@@ -1,0 +1,3721 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Faculty Feedback | {{ profile.name|default:"Faculty" }}
+{% endblock %}
+
+{% block body_class %}
+home-page
+{% endblock %}
+
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+{% block content %}
+
+<!-- ===================== TOP BAR ===================== -->
+<div class="home-topbar">
+    <div class="container d-flex justify-content-between align-items-center">
+
+        <div class="portal-brand">
+            <i class="fa-solid fa-comments"></i>
+            Faculty Feedback
+        </div>
+
+        <!-- RIGHT SIDE CONTROLS -->
+        <div class="home-topbar-actions">
+
+            <a href="{% url 'admin_login' %}" class="admin-login-link">
+                <i class="fa-solid fa-lock"></i>
+                <span>Admin Login</span>
+            </a>
+
+            <!-- Theme Toggle -->
+            <div class="home-theme-toggle">
+                <button
+                    type="button"
+                    id="homeThemeToggle"
+                    class="home-theme-btn"
+                    aria-label="Toggle dark and light mode"
+                    title="Toggle theme"
+                >
+                    <i id="homeThemeIcon" class="fa-solid fa-moon"></i>
+                    <span id="homeThemeText">Dark</span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+
+<section class="hero-section">
+
+    <div class="container">
+        <div class="row align-items-center min-vh-100 hero-row">
+
+            <!-- LEFT -->
+
+            <div class="col-lg-7 hero-content">
+
+                <div class="hero-badge">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    A quick word from me
+                </div>
+
+                <h1 class="hero-title">
+                    How was your
+                    <span>learning experience?</span>
+                </h1>
+
+                <p class="hero-description">
+                    Tell me honestly what you think about my teaching.
+                    Your feedback helps me understand what is working,
+                    what isn't, and where I can do better.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="{% url 'submit_review' %}"
+                       class="btn btn-primary-custom">
+
+                        Share Your Feedback
+                        <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                    </a>
+
+                    <button
+                        type="button"
+                        class="mentor-outline-btn"
+                        onclick="openMentorProfile()">
+
+                        <i class="fa-solid fa-user"></i>
+                        Meet Your Mentor
+
+                    </button>
+
+                </div>
+
+
+                <div class="hero-note">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <span>
+                        Be honest. Your feedback is handled privately.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="col-lg-5">
+
+                <div
+                    class="faculty-card"
+                    onclick="openMentorProfile()"
+                    role="button"
+                    tabindex="0"
+                    onkeydown="if(event.key === 'Enter') openMentorProfile()"
+                >
+
+                    <div class="faculty-photo-wrapper">
+
+                        <div class="photo-glow"></div>
+
+                        <!-- DYNAMIC PROFILE IMAGE -->
+                        <img
+                            src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% else %}{% static 'images/deep_shreyaskar.png' %}{% endif %}"
+                            alt="{{ profile.name|default:'Faculty' }}"
+                            class="faculty-photo"
+                        >
+
+                        <div class="photo-arrow">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </div>
+
+                    </div>
+
+
+                    <!-- DYNAMIC NAME -->
+
+                    <h3>
+                        {{ profile.name|default:"Faculty Name" }}
+                    </h3>
+
+                    <!-- DYNAMIC DESIGNATION -->
+
+                    <p class="faculty-role">
+                        {{ profile.designation|default:"Faculty" }}
+                    </p>
+
+
+                    <div class="faculty-divider"></div>
+
+
+                    <div class="faculty-message">
+
+                        <i class="fa-regular fa-face-smile"></i>
+
+                        <span>
+                            I'm always learning too —
+                            and your feedback is a big part of that.
+                        </span>
+
+                    </div>
+
+
+                    <div class="faculty-private">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Your feedback stays private.
+
+                    </div>
+
+
+                    <div class="profile-hint">
+
+                        <i class="fa-solid fa-hand-pointer"></i>
+
+                        Want to know a little more about me?
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ===================== HOW IT WORKS ===================== -->
+
+<section class="info-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                IT'S PRETTY SIMPLE
+            </span>
+
+            <h2>
+                Tell me what you think.
+            </h2>
+
+            <p>
+                There is no right or wrong answer.
+                Just share your real experience.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- 01 -->
+
+            <div class="col-md-4">
+
+                <div class="info-card">
+
+                    <div class="info-number">
+                        01
+                    </div>
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+
+                    <h4>
+                        Tell me what you think
+                    </h4>
+
+                    <p>
+                        Rate your experience and write
+                        whatever you genuinely feel about
+                        the classes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 02 -->
+
+            <div class="col-md-4">
+
+                <div class="info-card">
+
+                    <div class="info-number">
+                        02
+                    </div>
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-ear-listen"></i>
+                    </div>
+
+                    <h4>
+                        I'll take it seriously
+                    </h4>
+
+                    <p>
+                        Your feedback helps me understand
+                        what I should continue, change,
+                        or improve.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 03 -->
+
+            <div class="col-md-4">
+
+                <div class="info-card">
+
+                    <div class="info-number">
+                        03
+                    </div>
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </div>
+
+                    <h4>
+                        We keep getting better
+                    </h4>
+
+                    <p>
+                        Good teaching is a continuous process.
+                        Your feedback helps me become a
+                        better teacher.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===================== SMALL POPUP ===================== -->
+
+<div id="mentorNotification" class="mentor-notification">
+
+    <div class="notification-icon">
+        <i class="fa-solid fa-user"></i>
+    </div>
+
+    <div class="notification-content">
+
+        <strong>
+            Hey! Want to know who I am?
+        </strong>
+
+        <span>
+            Take a quick look at my profile.
+        </span>
+
+    </div>
+
+    <button
+        type="button"
+        class="notification-close"
+        onclick="closeMentorNotification(event)">
+
+        <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+</div>
+
+
+<!-- ===================== MENTOR MODAL ===================== -->
+
+<div
+    id="mentorModal"
+    class="mentor-modal"
+    onclick="closeMentorOnOutside(event)"
+>
+
+    <div
+        class="mentor-modal-card"
+        onclick="event.stopPropagation()"
+    >
+
+        <!-- CLOSE -->
+
+        <button
+            type="button"
+            class="mentor-modal-close"
+            onclick="closeMentorProfile()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <!-- PROFILE HEADER -->
+
+        <div class="mentor-modal-header">
+
+            <div class="mentor-large-photo-wrapper">
+
+                <!-- DYNAMIC PROFILE IMAGE -->
+
+                <img
+                    src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% else %}{% static 'images/deep_shreyaskar.png' %}{% endif %}"
+                    alt="{{ profile.name|default:'Faculty' }}"
+                    class="mentor-large-photo"
+                >
+
+                <div class="verified-badge">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+            </div>
+
+
+            <div class="mentor-header-info">
+
+                <span class="mentor-label">
+                    YOUR MENTOR
+                </span>
+
+                <!-- DYNAMIC NAME -->
+
+                <h2>
+                    {{ profile.name|default:"Faculty Name" }}
+                </h2>
+
+                <!-- DYNAMIC DESIGNATION -->
+
+                <p>
+                    {{ profile.designation|default:"Faculty" }}
+                </p>
+
+                <!-- DYNAMIC LOCATION -->
+
+                <div class="mentor-location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    {{ profile.location|default:"Gujarat, India" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ABOUT -->
+
+        <div class="mentor-section">
+
+            <div class="mentor-section-title">
+
+                <i class="fa-solid fa-user"></i>
+
+                A little about me
+
+            </div>
+
+
+            <div>
+
+                {% if profile and profile.about %}
+
+                    {{ profile.about|linebreaks }}
+
+                {% else %}
+
+                    <p>
+                        Profile information will be updated soon.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="mentor-stats">
+
+            <div class="mentor-stat-box">
+
+                <div class="mentor-stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <strong>
+                    {{ profile.students_trained|default:"0" }}
+                </strong>
+
+                <span>
+                    Students & Interns Trained
+                </span>
+
+            </div>
+
+
+            <!-- FIRST EDUCATION -->
+
+            <div class="mentor-stat-box">
+
+                <div class="mentor-stat-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                {% with first_education=profile.educations.all|first %}
+
+                    {% if first_education %}
+
+                        <strong>
+                            {{ first_education.degree }}
+                        </strong>
+
+                        <span>
+                            {{ first_education.field_of_study }}
+                        </span>
+
+                    {% else %}
+
+                        <strong>
+                            —
+                        </strong>
+
+                        <span>
+                            Education
+                        </span>
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+
+            <!-- SECOND EDUCATION -->
+
+            <div class="mentor-stat-box">
+
+                <div class="mentor-stat-icon">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+
+                {% with education_count=profile.educations.all.count %}
+
+                    {% if education_count > 1 %}
+
+                        {% for education in profile.educations.all %}
+
+                            {% if forloop.counter == 2 %}
+
+                                <strong>
+                                    {{ education.degree }}
+                                </strong>
+
+                                <span>
+                                    {{ education.status|default:education.field_of_study }}
+                                </span>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <strong>
+                            —
+                        </strong>
+
+                        <span>
+                            Education
+                        </span>
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+        </div>
+
+
+        <!-- EDUCATION -->
+
+        <div class="mentor-section">
+
+            <div class="mentor-section-title">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+                Education
+
+            </div>
+
+
+            {% for education in profile.educations.all %}
+
+                <div
+                    class="detail-item"
+                    {% if not forloop.first %}
+                        style="margin-top: 12px;"
+                    {% endif %}
+                >
+
+                    <div class="detail-icon">
+
+                        {% if forloop.first %}
+
+                            <i class="fa-solid fa-university"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-user-graduate"></i>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+
+                            {{ education.degree }}
+
+                            {% if education.field_of_study %}
+
+                                in {{ education.field_of_study }}
+
+                            {% endif %}
+
+                        </strong>
+
+
+                        <span>
+
+                            {% if education.status %}
+                                {{ education.status }}
+                            {% endif %}
+
+                            {% if education.institution %}
+
+                                {% if education.status %}
+                                    •
+                                {% endif %}
+
+                                {{ education.institution }}
+
+                            {% endif %}
+
+
+                            {% if education.start_year and education.end_year %}
+
+                                • {{ education.start_year }} -
+                                {{ education.end_year }}
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            {% empty %}
+
+                <div class="detail-item">
+
+                    <div class="detail-icon">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            No education information added yet.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- WHAT I TEACH -->
+
+        <div class="mentor-section">
+
+            <div class="mentor-section-title">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                What I teach
+
+            </div>
+
+
+            <div class="skill-tags">
+
+                {% for skill in profile.skills.all %}
+
+                    <span>
+                        {{ skill.name }}
+                    </span>
+
+                {% empty %}
+
+                    <span>
+                        No skills added yet
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- APPROACH -->
+
+        <div class="mentor-approach">
+
+            <div class="approach-icon">
+
+                <i class="fa-solid fa-lightbulb"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    How I like to teach
+                </strong>
+
+                <p>
+                    {{ profile.teaching_approach|default:"Learn something → Try it yourself → Build something → Improve it." }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PHILOSOPHY -->
+
+        <div class="mentor-quote">
+
+            <i class="fa-solid fa-quote-left"></i>
+
+            <p>
+
+                “{{ profile.quote|default:"If you can understand it, explain it simply, and build something with it — you've actually learned it." }}”
+
+            </p>
+
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div class="mentor-contact">
+
+            <div class="mentor-contact-icon">
+
+                <i class="fa-solid fa-envelope"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Want to get in touch?
+                </span>
+
+                {% if profile and profile.email %}
+
+                    <a href="mailto:{{ profile.email }}">
+                        {{ profile.email }}
+                    </a>
+
+                {% else %}
+
+                    <a href="#">
+                        Email not available
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="mentor-modal-footer">
+
+            <button
+                type="button"
+                class="mentor-close-btn"
+                onclick="closeMentorProfile()">
+
+                Maybe Later
+
+            </button>
+
+
+            <a
+                href="{% url 'submit_review' %}"
+                class="mentor-feedback-btn">
+
+                Share Your Feedback
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================== CSS ===================== -->
+
+<style>
+
+/* ================= TOP BAR ================= */
+
+.home-topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 22px 0;
+    z-index: 20;
+}
+
+.portal-brand {
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.portal-brand i {
+    color: #2563eb;
+    margin-right: 6px;
+}
+
+.admin-login-link {
+    text-decoration: none;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 15px;
+    border: 1px solid #dbeafe;
+    border-radius: 30px;
+    background: rgba(255,255,255,.75);
+    transition: .25s ease;
+}
+
+.admin-login-link:hover {
+    color: #2563eb;
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37,99,235,.12);
+}
+
+
+/* ================= HERO ================= */
+
+.hero-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(59,130,246,.12),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef6ff
+        );
+}
+
+.hero-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 50%;
+
+    background: rgba(37,99,235,.04);
+
+    top: -220px;
+    right: -180px;
+}
+
+.hero-row {
+    position: relative;
+    z-index: 2;
+
+    padding-top: 45px;
+}
+
+
+/* ================= HERO CONTENT ================= */
+
+.hero-content {
+    animation: fadeUp .8s ease;
+
+}
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 14px;
+
+    border-radius: 30px;
+
+    background: #eaf3ff;
+    color: #2563eb;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    margin-bottom: 22px;
+}
+
+.hero-title {
+    color: #0f172a;
+
+    font-size: clamp(45px, 6vw, 72px);
+
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+
+    font-weight: 800;
+
+    margin-bottom: 23px;
+}
+
+.hero-title span {
+    display: block;
+
+    color: #2563eb;
+}
+
+.hero-description {
+    max-width: 570px;
+
+    color: #64748b;
+
+    font-size: 17px;
+
+    line-height: 1.75;
+
+    margin-bottom: 28px;
+}
+
+
+/* ================= BUTTONS ================= */
+
+.hero-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-primary-custom {
+    border: none;
+
+    padding: 13px 22px;
+
+    border-radius: 12px;
+
+    color: #fff;
+
+    background: #2563eb;
+
+    font-weight: 700;
+
+    box-shadow: 0 10px 25px rgba(37,99,235,.20);
+
+    transition: .25s ease;
+}
+
+.btn-primary-custom:hover {
+    color: #fff;
+
+    background: #1d4ed8;
+
+    transform: translateY(-3px);
+}
+
+.mentor-outline-btn {
+    padding: 12px 19px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: #475569;
+
+    font-weight: 700;
+
+    transition: .25s ease;
+}
+
+.mentor-outline-btn:hover {
+    color: #2563eb;
+
+    border-color: #93c5fd;
+
+    transform: translateY(-2px);
+}
+
+
+/* ================= HERO NOTE ================= */
+
+.hero-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 24px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+.hero-note i {
+    color: #2563eb;
+}
+
+
+/* ================= FACULTY CARD ================= */
+
+.faculty-card {
+    max-width: 410px;
+
+    margin: auto;
+
+    padding: 32px 30px;
+
+    text-align: center;
+
+    border-radius: 26px;
+
+    background: rgba(255,255,255,.86);
+
+    border: 1px solid #fff;
+
+    box-shadow:
+        0 25px 70px rgba(15,23,42,.12);
+
+    backdrop-filter: blur(12px);
+
+    cursor: pointer;
+
+    transition: .35s ease;
+}
+
+.faculty-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 30px 80px rgba(15,23,42,.17);
+}
+
+
+/* ================= PHOTO ================= */
+
+.faculty-photo-wrapper {
+    position: relative;
+
+    width: 185px;
+    height: 185px;
+
+    margin: 0 auto 20px;
+}
+
+.photo-glow {
+    position: absolute;
+
+    inset: -8px;
+
+    border-radius: 50%;
+
+    background: #dbeafe;
+
+    filter: blur(5px);
+}
+
+.faculty-photo {
+    position: relative;
+
+    width: 185px;
+    height: 185px;
+
+    object-fit: cover;
+
+    /* CENTER IMAGE */
+    object-position: center center;
+
+    border-radius: 50%;
+
+    border: 5px solid #fff;
+
+    box-shadow:
+        0 15px 35px rgba(15,23,42,.17);
+
+    transition: .4s ease;
+}
+
+.faculty-card:hover .faculty-photo {
+    transform: scale(1.03);
+}
+
+.photo-arrow {
+    position: absolute;
+
+    right: 4px;
+    bottom: 5px;
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #fff;
+
+    background: #2563eb;
+
+    border: 3px solid #fff;
+
+    font-size: 12px;
+}
+
+
+/* ================= CARD TEXT ================= */
+
+.faculty-card h3 {
+    color: #0f172a;
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    margin-bottom: 4px;
+}
+
+.faculty-role {
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+.faculty-divider {
+    height: 1px;
+
+    background: #e2e8f0;
+
+    margin: 18px 0;
+}
+
+.faculty-message {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    text-align: left;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.faculty-message i {
+    color: #2563eb;
+
+    margin-top: 3px;
+}
+
+.faculty-private {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 16px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.faculty-private i {
+    color: #2563eb;
+}
+
+.profile-hint {
+    margin-top: 20px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* ================= INFO SECTION ================= */
+
+.info-section {
+    padding: 95px 0;
+
+    background: #fff;
+}
+
+.section-heading {
+    text-align: center;
+
+    margin-bottom: 48px;
+}
+
+.section-heading span {
+    color: #2563eb;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    color: #0f172a;
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    margin: 8px 0 10px;
+}
+
+.section-heading p {
+    color: #64748b;
+
+    max-width: 550px;
+
+    margin: auto;
+
+    font-size: 14px;
+}
+
+
+/* ================= INFO CARDS ================= */
+
+.info-card {
+    position: relative;
+
+    height: 100%;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    border: 1px solid #e2e8f0;
+
+    transition: .3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-6px);
+
+    border-color: #bfdbfe;
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.08);
+}
+
+.info-number {
+    position: absolute;
+
+    top: 20px;
+    right: 22px;
+
+    color: #e2e8f0;
+
+    font-size: 30px;
+
+    font-weight: 800;
+}
+
+.info-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    margin-bottom: 20px;
+}
+
+.info-card h4 {
+    color: #0f172a;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    color: #64748b;
+
+    line-height: 1.7;
+
+    font-size: 13px;
+
+    margin: 0;
+}
+
+
+/* ================= NOTIFICATION ================= */
+
+.mentor-notification {
+    position: fixed;
+
+    right: 24px;
+    bottom: 24px;
+
+    z-index: 9998;
+
+    width: 350px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border-radius: 16px;
+
+    background: #fff;
+
+    border: 1px solid #dbeafe;
+
+    box-shadow:
+        0 20px 50px rgba(15,23,42,.17);
+
+    transform: translateY(30px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: .4s ease;
+}
+
+.mentor-notification.show {
+    transform: translateY(0);
+
+    opacity: 1;
+
+    visibility: visible;
+}
+
+.notification-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+.notification-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.notification-content strong {
+    color: #0f172a;
+
+    font-size: 12px;
+}
+
+.notification-content span {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.notification-close {
+    margin-left: auto;
+
+    border: none;
+
+    background: transparent;
+
+    color: #94a3b8;
+}
+
+
+/* ================= MODAL ================= */
+
+.mentor-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(15,23,42,.65);
+
+    backdrop-filter: blur(8px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition: .3s ease;
+}
+
+.mentor-modal.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+.mentor-modal-card {
+    position: relative;
+
+    width: min(880px, 100%);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    background: #fff;
+
+    border-radius: 26px;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.25);
+
+    transform: scale(.94) translateY(20px);
+
+    transition: .35s ease;
+}
+
+.mentor-modal.active .mentor-modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.mentor-modal-close {
+    position: absolute;
+
+    top: 17px;
+    right: 17px;
+
+    z-index: 5;
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.9);
+
+    color: #475569;
+}
+
+
+/* ================= MODAL HEADER ================= */
+
+.mentor-modal-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 28px;
+
+    padding: 38px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef6ff
+        );
+}
+
+.mentor-large-photo-wrapper {
+    position: relative;
+
+    flex-shrink: 0;
+}
+
+.mentor-large-photo {
+    width: 170px;
+    height: 170px;
+
+    object-fit: cover;
+
+    /* CENTER IMAGE */
+    object-position: center center;
+
+    border-radius: 50%;
+
+    border: 5px solid #fff;
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.16);
+}
+
+.verified-badge {
+    position: absolute;
+
+    right: 7px;
+    bottom: 10px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+
+    color: #fff;
+
+    border: 4px solid #fff;
+}
+
+.mentor-label {
+    color: #2563eb;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.mentor-header-info h2 {
+    color: #0f172a;
+
+    font-size: 34px;
+
+    font-weight: 800;
+
+    margin: 6px 0 4px;
+}
+
+.mentor-header-info p {
+    color: #2563eb;
+
+    font-weight: 700;
+
+    font-size: 14px;
+
+    margin-bottom: 12px;
+}
+
+.mentor-location {
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* ================= MODAL SECTIONS ================= */
+
+.mentor-section {
+    padding: 27px 38px 0;
+}
+
+.mentor-section-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #0f172a;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    margin-bottom: 13px;
+}
+
+.mentor-section-title i {
+    color: #2563eb;
+}
+
+.mentor-section p {
+    color: #64748b;
+
+    font-size: 13px;
+
+    line-height: 1.75;
+
+    margin-bottom: 8px;
+}
+
+
+/* ================= STATS ================= */
+
+.mentor-stats {
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 14px;
+
+    padding: 28px 38px 0;
+}
+
+.mentor-stat-box {
+    padding: 18px;
+
+    border-radius: 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+}
+
+.mentor-stat-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    margin-bottom: 9px;
+}
+
+.mentor-stat-box strong {
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+.mentor-stat-box span {
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+
+/* ================= EDUCATION ================= */
+
+.detail-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 13px;
+
+    background: #f8fafc;
+}
+
+.detail-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    flex-shrink: 0;
+}
+
+.detail-item strong {
+    display: block;
+
+    color: #334155;
+
+    font-size: 12px;
+}
+
+.detail-item span {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    margin-top: 3px;
+}
+
+
+/* ================= SKILLS ================= */
+
+.skill-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+.skill-tags span {
+    padding: 7px 11px;
+
+    border-radius: 20px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* ================= APPROACH ================= */
+
+.mentor-approach {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin: 27px 38px 0;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+}
+
+.approach-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    flex-shrink: 0;
+}
+
+.mentor-approach strong {
+    color: #334155;
+
+    font-size: 12px;
+}
+
+.mentor-approach p {
+    color: #64748b;
+
+    font-size: 12px;
+
+    margin: 3px 0 0;
+}
+
+
+/* ================= QUOTE ================= */
+
+.mentor-quote {
+    display: flex;
+
+    gap: 14px;
+
+    margin: 25px 38px 0;
+
+    padding: 20px;
+
+    border-left: 4px solid #2563eb;
+
+    border-radius: 0 14px 14px 0;
+
+    background: #eff6ff;
+}
+
+.mentor-quote i {
+    color: #2563eb;
+
+    font-size: 19px;
+}
+
+.mentor-quote p {
+    color: #475569;
+
+    font-size: 13px;
+
+    font-style: italic;
+
+    line-height: 1.6;
+
+    margin: 0;
+}
+
+
+/* ================= CONTACT ================= */
+
+.mentor-contact {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 25px 38px 0;
+
+    padding: 14px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 14px;
+}
+
+.mentor-contact-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+.mentor-contact span {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+.mentor-contact a {
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+/* ================= FOOTER ================= */
+
+.mentor-modal-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 25px 38px 32px;
+}
+
+.mentor-close-btn {
+    padding: 10px 17px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #fff;
+
+    color: #475569;
+
+    font-weight: 700;
+}
+
+.mentor-feedback-btn {
+    padding: 10px 17px;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.mentor-feedback-btn:hover {
+    color: #fff;
+
+    background: #1d4ed8;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 991px) {
+
+    .hero-content {
+        text-align: center;
+
+        margin-bottom: 50px;
+    }
+
+    .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-note {
+        justify-content: center;
+    }
+
+}
+
+
+@media (max-width: 767px) {
+
+    .home-topbar {
+        padding: 15px 0;
+    }
+
+    .portal-brand {
+        font-size: 11px;
+    }
+
+    .admin-login-link {
+        padding: 7px 10px;
+
+        font-size: 10px;
+    }
+
+    .hero-row {
+        padding-top: 90px;
+    }
+
+    .hero-title {
+        font-size: 43px;
+    }
+
+    .hero-description {
+        font-size: 14px;
+    }
+
+    .faculty-card {
+        padding: 27px 20px;
+    }
+
+    .faculty-photo-wrapper,
+    .faculty-photo {
+        width: 155px;
+        height: 155px;
+    }
+
+    .section-heading h2 {
+        font-size: 30px;
+    }
+
+    .info-section {
+        padding: 70px 0;
+    }
+
+
+    /* MODAL */
+
+    .mentor-modal {
+        padding: 8px;
+    }
+
+    .mentor-modal-card {
+        max-height: 95vh;
+
+        border-radius: 20px;
+    }
+
+    .mentor-modal-header {
+        flex-direction: column;
+
+        text-align: center;
+
+        padding: 35px 20px 25px;
+    }
+
+    .mentor-large-photo {
+        width: 145px;
+        height: 145px;
+    }
+
+    .mentor-header-info h2 {
+        font-size: 28px;
+    }
+
+    .mentor-section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .mentor-stats {
+        grid-template-columns: 1fr;
+
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .mentor-approach,
+    .mentor-quote,
+    .mentor-contact {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .mentor-modal-footer {
+        flex-direction: column-reverse;
+
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .mentor-close-btn,
+    .mentor-feedback-btn {
+        width: 100%;
+
+        text-align: center;
+    }
+
+    .mentor-notification {
+        left: 15px;
+        right: 15px;
+
+        bottom: 15px;
+
+        width: auto;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .hero-title {
+        font-size: 38px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .btn-primary-custom,
+    .mentor-outline-btn {
+        width: 100%;
+    }
+
+}
+
+
+/* =====================================================
+   SMOOTH INTERACTION ANIMATIONS
+===================================================== */
+
+/* All clickable elements */
+
+.admin-login-link,
+.btn-primary-custom,
+.mentor-outline-btn,
+.faculty-card,
+.mentor-feedback-btn,
+.mentor-close-btn,
+.notification-close {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ===============================
+   ADMIN LOGIN
+================================ */
+
+.admin-login-link {
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform .3s cubic-bezier(.4,0,.2,1),
+        box-shadow .3s ease,
+        background-color .3s ease,
+        color .3s ease;
+}
+
+.admin-login-link::before {
+    content: "";
+
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    left: 50%;
+    top: 50%;
+
+    border-radius: 50%;
+
+    background: rgba(37,99,235,.08);
+
+    transform: translate(-50%, -50%);
+
+    transition:
+        width .45s ease,
+        height .45s ease;
+}
+
+.admin-login-link:hover::before {
+    width: 250px;
+    height: 250px;
+}
+
+.admin-login-link:hover {
+    transform: translateY(-3px);
+}
+
+.admin-login-link:active {
+    transform: scale(.95);
+}
+
+
+/* ===============================
+   SHARE YOUR FEEDBACK
+=============================== */
+
+.btn-primary-custom {
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform .3s cubic-bezier(.4,0,.2,1),
+        box-shadow .3s ease;
+}
+
+.btn-primary-custom::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 70%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.28),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    transition: left .6s ease;
+}
+
+.btn-primary-custom:hover::before {
+    left: 130%;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 15px 32px rgba(37,99,235,.28);
+}
+
+.btn-primary-custom:active {
+    transform: translateY(-1px) scale(.97);
+}
+
+
+/* ===============================
+   KNOW YOUR MENTOR
+=============================== */
+
+.mentor-outline-btn {
+    position: relative;
+
+    transition:
+        transform .3s cubic-bezier(.4,0,.2,1),
+        box-shadow .3s ease,
+        border-color .3s ease,
+        color .3s ease;
+}
+
+.mentor-outline-btn:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,.10);
+}
+
+.mentor-outline-btn:active {
+    transform: scale(.96);
+}
+
+
+/* ===============================
+   MENTOR CARD
+=============================== */
+
+.faculty-card {
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease;
+}
+
+.faculty-card:hover {
+    transform:
+        translateY(-10px)
+        scale(1.015);
+
+    box-shadow:
+        0 35px 85px rgba(15,23,42,.18);
+}
+
+.faculty-card:active {
+    transform:
+        translateY(-3px)
+        scale(.985);
+}
+
+
+/* ===============================
+   PHOTO ANIMATION
+=============================== */
+
+.faculty-photo {
+    transition:
+        transform .55s cubic-bezier(.2,.8,.2,1),
+        box-shadow .4s ease;
+}
+
+.faculty-card:hover .faculty-photo {
+    transform: scale(1.045);
+}
+
+.photo-arrow {
+    transition:
+        transform .35s ease,
+        background-color .3s ease;
+}
+
+.faculty-card:hover .photo-arrow {
+    transform:
+        rotate(8deg)
+        scale(1.08);
+
+    background: #1d4ed8;
+}
+
+
+/* ===============================
+   PROFILE MODAL SMOOTH OPEN
+=============================== */
+
+.mentor-modal {
+    transition:
+        opacity .35s ease,
+        visibility .35s ease,
+        backdrop-filter .4s ease;
+}
+
+.mentor-modal-card {
+    transform:
+        translateY(35px)
+        scale(.94);
+
+    opacity: 0;
+
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        opacity .35s ease;
+}
+
+.mentor-modal.active .mentor-modal-card {
+    transform:
+        translateY(0)
+        scale(1);
+
+    opacity: 1;
+}
+
+
+/* ===============================
+   MODAL CLOSE BUTTON
+=============================== */
+
+.mentor-modal-close {
+    transition:
+        transform .3s ease,
+        background-color .3s ease,
+        color .3s ease;
+}
+
+.mentor-modal-close:hover {
+    transform: rotate(90deg);
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+/* ===============================
+   PROFILE FOOTER BUTTON
+=============================== */
+
+.mentor-feedback-btn {
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        background-color .3s ease;
+}
+
+.mentor-feedback-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,.20);
+}
+
+.mentor-feedback-btn:active {
+    transform: scale(.96);
+}
+
+
+/* ===============================
+   INFO CARDS
+=============================== */
+
+.info-card {
+    transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        box-shadow .35s ease,
+        border-color .35s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 45px rgba(15,23,42,.09);
+}
+
+
+/* ===============================
+   NOTIFICATION
+=============================== */
+
+.mentor-notification {
+    transition:
+        transform .5s cubic-bezier(.2,.8,.2,1),
+        opacity .35s ease;
+}
+
+.notification-close {
+    transition:
+        transform .25s ease,
+        color .25s ease;
+}
+
+.notification-close:hover {
+    transform: rotate(90deg);
+
+    color: #0f172a;
+}
+
+
+/* ===============================
+   GLOBAL CLICK FEEDBACK
+=============================== */
+
+button,
+a {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(37,99,235,.25);
+    outline-offset: 3px;
+}
+
+
+/* =====================================================
+   PAGE LEAVE ANIMATION
+===================================================== */
+
+body {
+    opacity: 1;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+body.page-leaving {
+    opacity: 0;
+
+    transform: translateY(-8px);
+}
+
+
+/* =====================================================
+   IMAGE CENTER FIX
+===================================================== */
+
+.faculty-photo,
+.mentor-large-photo {
+    object-position: center center;
+}
+/* =====================================================
+   HOME PAGE — DARK / LIGHT THEME SUPPORT
+===================================================== */
+
+
+/* ===============================
+   LIGHT THEME
+================================ */
+
+html[data-theme="light"] .home-topbar .portal-brand {
+    color: #475569;
+}
+
+html[data-theme="light"] .admin-login-link {
+    color: #475569;
+    background: rgba(255, 255, 255, 0.85);
+    border-color: #dbeafe;
+}
+
+html[data-theme="light"] .hero-section {
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(59,130,246,.12),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef6ff
+        );
+}
+
+html[data-theme="light"] .faculty-card {
+    background: rgba(255,255,255,.86);
+    border-color: #ffffff;
+}
+
+html[data-theme="light"] .mentor-outline-btn {
+    background: #ffffff;
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .info-section {
+    background: #ffffff;
+}
+
+html[data-theme="light"] .info-card {
+    background: #ffffff;
+}
+
+html[data-theme="light"] .mentor-notification {
+    background: #ffffff;
+    border-color: #dbeafe;
+}
+
+html[data-theme="light"] .mentor-modal-card {
+    background: #ffffff;
+}
+
+html[data-theme="light"] .mentor-modal-header {
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef6ff
+        );
+}
+
+html[data-theme="light"] .mentor-stat-box,
+html[data-theme="light"] .detail-item,
+html[data-theme="light"] .mentor-approach,
+html[data-theme="light"] .mentor-contact {
+    background: #f8fafc;
+}
+
+html[data-theme="light"] .mentor-quote {
+    background: #eff6ff;
+}
+
+html[data-theme="light"] .mentor-close-btn {
+    background: #ffffff;
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+
+/* ===============================
+   DARK THEME
+================================ */
+
+html[data-theme="dark"] .home-topbar .portal-brand {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .portal-brand i {
+    color: #60a5fa;
+}
+
+
+/* ---------- ADMIN LOGIN ---------- */
+
+html[data-theme="dark"] .admin-login-link {
+    color: #e2e8f0;
+    background: rgba(30,41,59,.88);
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-login-link:hover {
+    color: #93c5fd;
+    background: #1e293b;
+    border-color: #475569;
+}
+
+
+/* ---------- HERO ---------- */
+
+html[data-theme="dark"] .hero-section {
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(59,130,246,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #172554
+        );
+}
+
+html[data-theme="dark"] .hero-section::before {
+    background: rgba(59,130,246,.06);
+}
+
+html[data-theme="dark"] .hero-badge {
+    background: rgba(37,99,235,.16);
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] .hero-title {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .hero-title span {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .hero-description {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .hero-note {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .hero-note i {
+    color: #60a5fa;
+}
+
+
+/* ---------- HERO BUTTONS ---------- */
+
+html[data-theme="dark"] .btn-primary-custom {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .btn-primary-custom:hover {
+    background: #3b82f6;
+}
+
+html[data-theme="dark"] .mentor-outline-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .mentor-outline-btn:hover {
+    color: #93c5fd;
+    border-color: #60a5fa;
+    background: #243247;
+}
+
+
+/* ---------- FACULTY CARD ---------- */
+
+html[data-theme="dark"] .faculty-card {
+    background: rgba(30,41,59,.92);
+    border-color: #334155;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.35);
+}
+
+html[data-theme="dark"] .faculty-card:hover {
+    box-shadow:
+        0 35px 85px rgba(0,0,0,.48);
+}
+
+html[data-theme="dark"] .photo-glow {
+    background: rgba(59,130,246,.25);
+}
+
+html[data-theme="dark"] .faculty-photo {
+    border-color: #475569;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35);
+}
+
+html[data-theme="dark"] .photo-arrow {
+    border-color: #1e293b;
+}
+
+html[data-theme="dark"] .faculty-card h3 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .faculty-role {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .faculty-divider {
+    background: #334155;
+}
+
+html[data-theme="dark"] .faculty-message {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .faculty-message i,
+html[data-theme="dark"] .faculty-private i {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .faculty-private {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .profile-hint {
+    color: #64748b;
+}
+
+
+/* ---------- INFO SECTION ---------- */
+
+html[data-theme="dark"] .info-section {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .section-heading span {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .section-heading h2 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .section-heading p {
+    color: #94a3b8;
+}
+
+
+/* ---------- INFO CARDS ---------- */
+
+html[data-theme="dark"] .info-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .info-card:hover {
+    border-color: #475569;
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.28);
+}
+
+html[data-theme="dark"] .info-number {
+    color: #334155;
+}
+
+html[data-theme="dark"] .info-icon {
+    background: rgba(37,99,235,.16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .info-card h4 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .info-card p {
+    color: #94a3b8;
+}
+
+
+/* ---------- NOTIFICATION ---------- */
+
+html[data-theme="dark"] .mentor-notification {
+    background: #1e293b;
+    border-color: #334155;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.40);
+}
+
+html[data-theme="dark"] .notification-icon {
+    background: rgba(37,99,235,.16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .notification-content strong {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .notification-content span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .notification-close {
+    color: #64748b;
+}
+
+html[data-theme="dark"] .notification-close:hover {
+    color: #f8fafc;
+}
+
+
+/* ---------- MODAL ---------- */
+
+html[data-theme="dark"] .mentor-modal {
+    background: rgba(2,6,23,.78);
+}
+
+html[data-theme="dark"] .mentor-modal-card {
+    background: #1e293b;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.55);
+}
+
+html[data-theme="dark"] .mentor-modal-close {
+    background: rgba(30,41,59,.94);
+    color: #cbd5e1;
+    border: 1px solid #475569;
+}
+
+html[data-theme="dark"] .mentor-modal-close:hover {
+    background: #243247;
+    color: #60a5fa;
+}
+
+
+/* ---------- MODAL HEADER ---------- */
+
+html[data-theme="dark"] .mentor-modal-header {
+    background:
+        linear-gradient(
+            135deg,
+            #172033,
+            #172554
+        );
+}
+
+html[data-theme="dark"] .mentor-large-photo {
+    border-color: #475569;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.40);
+}
+
+html[data-theme="dark"] .verified-badge {
+    border-color: #1e293b;
+}
+
+html[data-theme="dark"] .mentor-label {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-header-info h2 {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .mentor-header-info p {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-location {
+    color: #94a3b8;
+}
+
+
+/* ---------- MODAL SECTIONS ---------- */
+
+html[data-theme="dark"] .mentor-section-title {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .mentor-section-title i {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-section p {
+    color: #cbd5e1;
+}
+
+
+/* ---------- STATS ---------- */
+
+html[data-theme="dark"] .mentor-stat-box {
+    background: #172033;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .mentor-stat-icon {
+    background: rgba(37,99,235,.16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-stat-box strong {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .mentor-stat-box span {
+    color: #94a3b8;
+}
+
+
+/* ---------- EDUCATION ---------- */
+
+html[data-theme="dark"] .detail-item {
+    background: #172033;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .detail-icon {
+    background: rgba(37,99,235,.16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .detail-item strong {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .detail-item span {
+    color: #94a3b8;
+}
+
+
+/* ---------- SKILLS ---------- */
+
+html[data-theme="dark"] .skill-tags span {
+    background: rgba(37,99,235,.16);
+    color: #93c5fd;
+}
+
+
+/* ---------- APPROACH ---------- */
+
+html[data-theme="dark"] .mentor-approach {
+    background: #172033;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .approach-icon {
+    background: rgba(37,99,235,.16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-approach strong {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .mentor-approach p {
+    color: #94a3b8;
+}
+
+
+/* ---------- QUOTE ---------- */
+
+html[data-theme="dark"] .mentor-quote {
+    background: rgba(37,99,235,.12);
+    border-left-color: #3b82f6;
+}
+
+html[data-theme="dark"] .mentor-quote i {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-quote p {
+    color: #cbd5e1;
+}
+
+
+/* ---------- CONTACT ---------- */
+
+html[data-theme="dark"] .mentor-contact {
+    background: #172033;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .mentor-contact-icon {
+    background: rgba(37,99,235,.16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .mentor-contact span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .mentor-contact a {
+    color: #60a5fa;
+}
+
+
+/* ---------- MODAL FOOTER ---------- */
+
+html[data-theme="dark"] .mentor-close-btn {
+    background: #1e293b;
+    color: #cbd5e1;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .mentor-close-btn:hover {
+    background: #243247;
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] .mentor-feedback-btn {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .mentor-feedback-btn:hover {
+    background: #3b82f6;
+}
+
+
+/* =====================================================
+   DARK MODE — INLINE / FALLBACK CONTENT
+===================================================== */
+
+html[data-theme="dark"] .mentor-section strong,
+html[data-theme="dark"] .mentor-section h1,
+html[data-theme="dark"] .mentor-section h2,
+html[data-theme="dark"] .mentor-section h3,
+html[data-theme="dark"] .mentor-section h4,
+html[data-theme="dark"] .mentor-section h5,
+html[data-theme="dark"] .mentor-section h6 {
+    color: #f8fafc;
+}
+
+
+/* =====================================================
+   DARK MODE — SCROLLBAR
+===================================================== */
+
+html[data-theme="dark"] .mentor-modal-card::-webkit-scrollbar {
+    width: 8px;
+}
+
+html[data-theme="dark"] .mentor-modal-card::-webkit-scrollbar-track {
+    background: #172033;
+}
+
+html[data-theme="dark"] .mentor-modal-card::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 10px;
+}
+
+html[data-theme="dark"] .mentor-modal-card::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+
+/* =====================================================
+   MOBILE DARK MODE
+===================================================== */
+
+@media (max-width: 767px) {
+
+    html[data-theme="dark"] .mentor-modal-header {
+        background:
+            linear-gradient(
+                135deg,
+                #172033,
+                #172554
+            );
+    }
+
+    html[data-theme="dark"] .faculty-card {
+        background: rgba(30,41,59,.95);
+    }
+
+}
+
+/* =====================================================
+   HOME TOPBAR CONTROLS — THEME TOGGLE
+===================================================== */
+
+.home-topbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.home-theme-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.home-theme-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    min-width: 82px;
+    height: 38px;
+    padding: 0 13px;
+
+    border: 1px solid #dbeafe;
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, .88);
+    color: #475569;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .06);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition:
+        transform .25s ease,
+        background-color .25s ease,
+        border-color .25s ease,
+        color .25s ease,
+        box-shadow .25s ease;
+}
+
+.home-theme-btn i {
+    font-size: 12px;
+    line-height: 1;
+}
+
+.home-theme-btn:hover {
+    transform: translateY(-2px);
+    color: #2563eb;
+    background: #ffffff;
+    border-color: #93c5fd;
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .14);
+}
+
+.home-theme-btn:active {
+    transform: scale(.95);
+}
+
+.home-theme-btn:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .25);
+    outline-offset: 3px;
+}
+
+/* LIGHT MODE */
+
+html[data-theme="light"] .home-theme-btn {
+    background: rgba(255, 255, 255, .88);
+    color: #475569;
+    border-color: #dbeafe;
+}
+
+/* DARK MODE */
+
+html[data-theme="dark"] .home-theme-btn {
+    background: rgba(30, 41, 59, .94);
+    color: #e2e8f0;
+    border-color: #475569;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+}
+
+html[data-theme="dark"] .home-theme-btn:hover {
+    background: #243247;
+    color: #93c5fd;
+    border-color: #60a5fa;
+}
+
+/* Hide the floating/global theme button ONLY on Home.
+   The Home page has its own button beside Admin Login. */
+
+body.home-page #themeToggleWrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* =====================================================
+   TOPBAR RESPONSIVE
+===================================================== */
+
+@media (max-width: 767px) {
+
+    .home-topbar {
+        padding: 15px 0;
+    }
+
+    .home-topbar .container {
+        padding-left: 15px;
+        padding-right: 15px;
+        gap: 10px;
+    }
+
+    .home-topbar-actions {
+        gap: 7px;
+    }
+
+    .portal-brand {
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .admin-login-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        height: 34px;
+        padding: 0 10px;
+
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .admin-login-link i {
+        margin-right: 4px;
+    }
+
+    .home-theme-btn {
+        min-width: 34px;
+        width: 34px;
+        height: 34px;
+
+        padding: 0;
+        gap: 0;
+    }
+
+    .home-theme-btn span {
+        display: none;
+    }
+
+    .home-theme-btn i {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .home-topbar .container {
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 7px;
+    }
+
+    .portal-brand {
+        font-size: 10px;
+    }
+
+    .portal-brand i {
+        margin-right: 3px;
+    }
+
+    .home-topbar-actions {
+        gap: 6px;
+    }
+
+    .admin-login-link {
+        width: 34px;
+        padding: 0;
+    }
+
+    .admin-login-link span {
+        display: none;
+    }
+
+    .admin-login-link i {
+        margin: 0;
+    }
+
+    .home-theme-btn {
+        width: 34px;
+        min-width: 34px;
+    }
+}
+
+@media (max-width: 360px) {
+
+    .home-topbar .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .portal-brand {
+        font-size: 9px;
+    }
+
+    .home-topbar-actions {
+        gap: 5px;
+    }
+
+    .admin-login-link,
+    .home-theme-btn {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+    }
+
+    .home-theme-btn i,
+    .admin-login-link i {
+        font-size: 11px;
+    }
+}
+/* =====================================================
+   HIDE GLOBAL THEME BUTTON ON HOME PAGE
+   Home page already has its own theme button
+===================================================== */
+
+body:has(.home-theme-btn) #themeToggleWrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+</style>
+
+
+<!-- ===================== JAVASCRIPT ===================== -->
+
+<script>
+
+let mentorNotificationTimer;
+
+
+/* OPEN PROFILE */
+
+function openMentorProfile() {
+
+    const modal = document.getElementById("mentorModal");
+
+    if (!modal) return;
+
+    modal.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+    closeMentorNotification();
+
+}
+
+
+/* CLOSE PROFILE */
+
+function closeMentorProfile() {
+
+    const modal = document.getElementById("mentorModal");
+
+    if (!modal) return;
+
+    modal.classList.remove("active");
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* OUTSIDE CLICK */
+
+function closeMentorOnOutside(event) {
+
+    if (event.target.id === "mentorModal") {
+
+        closeMentorProfile();
+
+    }
+
+}
+
+
+/* CLOSE NOTIFICATION */
+
+function closeMentorNotification(event) {
+
+    if (event) {
+        event.stopPropagation();
+    }
+
+    const notification =
+        document.getElementById("mentorNotification");
+
+    if (!notification) return;
+
+    notification.classList.remove("show");
+
+    clearTimeout(mentorNotificationTimer);
+
+}
+
+
+/* SHOW POPUP AFTER 2.5 SECONDS */
+
+window.addEventListener("load", function() {
+
+    const notification =
+        document.getElementById("mentorNotification");
+
+    if (!notification) return;
+
+    setTimeout(function() {
+
+        notification.classList.add("show");
+
+        mentorNotificationTimer = setTimeout(function() {
+
+            notification.classList.remove("show");
+
+        }, 7000);
+
+    }, 2500);
+
+});
+
+
+/* CLICK POPUP */
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const notification =
+        document.getElementById("mentorNotification");
+
+    if (!notification) return;
+
+    notification.addEventListener("click", function(event) {
+
+        if (
+            event.target.closest(".notification-close")
+        ) {
+            return;
+        }
+
+        openMentorProfile();
+
+    });
+
+});
+
+
+/* ESCAPE KEY */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+
+        closeMentorProfile();
+
+    }
+
+});
+
+
+/* =====================================================
+   SMOOTH PAGE TRANSITION
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const pageLinks = document.querySelectorAll(
+        'a[href]:not([href^="#"]):not([target="_blank"])'
+    );
+
+
+    pageLinks.forEach(function (link) {
+
+        link.addEventListener("click", function (event) {
+
+            const href = link.getAttribute("href");
+
+            /*
+             * Ignore empty/javascript/mailto links
+             */
+
+            if (
+                !href ||
+                href.startsWith("javascript:") ||
+                href.startsWith("mailto:") ||
+                href.startsWith("tel:")
+            ) {
+                return;
+            }
+
+
+            /*
+             * Don't animate if opening
+             * mentor profile
+             */
+
+            if (
+                link.classList.contains("mentor-feedback-btn")
+                ||
+                link.classList.contains("btn-primary-custom")
+                ||
+                link.classList.contains("admin-login-link")
+            ) {
+
+                event.preventDefault();
+
+                document.body.classList.add("page-leaving");
+
+                setTimeout(function () {
+
+                    window.location.href = href;
+
+                }, 250);
+
+            }
+
+        });
+
+    });
+
+});
+
+
+/* =====================================================
+   FIX: BACK BUTTON / BFCache
+===================================================== */
+
+window.addEventListener("pageshow", function (event) {
+
+    // Remove page transition class
+    document.body.classList.remove("page-leaving");
+
+    // Make sure homepage is visible again
+    document.body.style.opacity = "1";
+    document.body.style.transform = "none";
+
+    // Restore normal scrolling
+    document.body.style.overflow = "";
+
+});
+
+
+/* =====================================================
+   HOME PAGE THEME TOGGLE
+   Keeps the button beside Admin Login synchronized
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const homeToggle = document.getElementById("homeThemeToggle");
+    const homeIcon = document.getElementById("homeThemeIcon");
+    const homeText = document.getElementById("homeThemeText");
+
+    if (!homeToggle) return;
+
+    function updateHomeThemeButton(theme) {
+
+        if (theme === "dark") {
+
+            if (homeIcon) {
+                homeIcon.className = "fa-solid fa-sun";
+            }
+
+            if (homeText) {
+                homeText.textContent = "Light";
+            }
+
+            homeToggle.setAttribute(
+                "aria-label",
+                "Switch to light mode"
+            );
+
+            homeToggle.setAttribute(
+                "title",
+                "Switch to light mode"
+            );
+
+        } else {
+
+            if (homeIcon) {
+                homeIcon.className = "fa-solid fa-moon";
+            }
+
+            if (homeText) {
+                homeText.textContent = "Dark";
+            }
+
+            homeToggle.setAttribute(
+                "aria-label",
+                "Switch to dark mode"
+            );
+
+            homeToggle.setAttribute(
+                "title",
+                "Switch to dark mode"
+            );
+        }
+    }
+
+    function getCurrentTheme() {
+
+        return (
+            document.documentElement.getAttribute("data-theme")
+            || localStorage.getItem("portal-theme")
+            || "light"
+        );
+    }
+
+    /* Set correct icon/text on first load */
+    updateHomeThemeButton(getCurrentTheme());
+
+    homeToggle.addEventListener("click", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentTheme = getCurrentTheme();
+
+        const newTheme =
+            currentTheme === "dark"
+                ? "light"
+                : "dark";
+
+        /*
+         * Use the global theme.js function when available.
+         * This keeps every page using the same saved theme.
+         */
+        if (typeof window.applyTheme === "function") {
+
+            window.applyTheme(newTheme);
+
+        } else {
+
+            /* Safe fallback */
+            document.documentElement.setAttribute(
+                "data-theme",
+                newTheme
+            );
+
+            localStorage.setItem(
+                "portal-theme",
+                newTheme
+            );
+        }
+
+        updateHomeThemeButton(newTheme);
+    });
+
+    /*
+     * If the global theme script broadcasts a theme change,
+     * keep this Home button synchronized.
+     */
+    window.addEventListener(
+        "portal-theme-change",
+        function (event) {
+
+            if (
+                event.detail &&
+                event.detail.theme
+            ) {
+                updateHomeThemeButton(
+                    event.detail.theme
+                );
+            } else {
+                updateHomeThemeButton(
+                    getCurrentTheme()
+                );
+            }
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}

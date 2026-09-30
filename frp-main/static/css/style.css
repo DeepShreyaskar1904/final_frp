@@ -1,0 +1,1160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero-section {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top right,
+            #dbeafe,
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #eef4ff
+        );
+
+    display: flex;
+    align-items: center;
+}
+
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 15px;
+
+    background: #e8f0ff;
+
+    color: #2563eb;
+
+    border-radius: 50px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 20px;
+}
+
+
+.hero-title {
+    font-size: clamp(45px, 6vw, 75px);
+
+    font-weight: 800;
+
+    line-height: 1.05;
+
+    letter-spacing: -3px;
+
+    margin-bottom: 25px;
+}
+
+
+.hero-title span {
+    color: #2563eb;
+}
+
+
+.hero-description {
+    max-width: 600px;
+
+    font-size: 18px;
+
+    line-height: 1.7;
+
+    color: #64748b;
+
+    margin-bottom: 35px;
+}
+
+
+.btn-primary-custom {
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 14px 25px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+
+.btn-primary-custom:hover {
+    background: #1d4ed8;
+
+    color: white;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   FACULTY CARD
+========================= */
+
+.faculty-card {
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.10);
+
+    text-align: center;
+
+    border: 1px solid #e2e8f0;
+}
+
+
+.faculty-icon {
+    width: 90px;
+    height: 90px;
+
+    margin: auto auto 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 35px;
+}
+
+
+.faculty-card h3 {
+    font-weight: 700;
+}
+
+
+.faculty-card p {
+    color: #64748b;
+}
+
+
+.faculty-divider {
+    height: 1px;
+
+    background: #e2e8f0;
+
+    margin: 25px 0;
+}
+
+
+.faculty-stat {
+    display: flex;
+
+    gap: 12px;
+
+    text-align: left;
+
+    margin: 15px 0;
+
+    color: #475569;
+
+    font-size: 14px;
+}
+
+
+.faculty-stat i {
+    color: #2563eb;
+
+    margin-top: 3px;
+}
+
+
+/* =========================
+   INFO SECTION
+========================= */
+
+.info-section {
+    padding: 100px 0;
+}
+
+
+.section-heading {
+    text-align: center;
+
+    margin-bottom: 50px;
+}
+
+
+.section-heading span {
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+
+.section-heading h2 {
+    font-size: 40px;
+
+    font-weight: 800;
+
+    margin-top: 10px;
+}
+
+
+.info-card {
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    padding: 35px;
+
+    height: 100%;
+
+    transition: 0.3s;
+}
+
+
+.info-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 20px 40px rgba(15, 23, 42, 0.08);
+}
+
+
+.info-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border-radius: 15px;
+
+    font-size: 20px;
+
+    margin-bottom: 20px;
+}
+
+
+.info-card h4 {
+    font-weight: 700;
+
+    margin-bottom: 12px;
+}
+
+
+.info-card p {
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   REVIEW PAGE
+========================= */
+
+.review-page {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            #dbeafe,
+            transparent 30%
+        ),
+        #f8fafc;
+}
+
+
+.review-header {
+    margin-bottom: 45px;
+}
+
+
+.review-header h1 {
+    font-weight: 800;
+
+    font-size: 45px;
+
+    margin-bottom: 12px;
+}
+
+
+.review-header p {
+    color: #64748b;
+}
+
+
+.review-container {
+    max-width: 850px;
+
+    margin: auto;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 25px;
+
+    padding: 45px;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-section {
+    padding-bottom: 40px;
+
+    margin-bottom: 40px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+.form-section-title {
+    display: flex;
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+}
+
+
+.section-number {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-weight: 700;
+}
+
+
+.form-section-title h3 {
+    font-size: 20px;
+
+    font-weight: 700;
+
+    margin: 0 0 5px;
+}
+
+
+.form-section-title p {
+    color: #64748b;
+
+    font-size: 14px;
+
+    margin: 0;
+}
+
+
+.form-label {
+    font-weight: 600;
+
+    margin-bottom: 8px;
+}
+
+
+.form-control,
+.form-select {
+    border-radius: 10px;
+
+    border: 1px solid #dbe2ea;
+
+    padding: 12px 14px;
+}
+
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* =========================
+   RATINGS
+========================= */
+
+.rating-grid {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+.rating-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border-radius: 15px;
+
+    border: 1px solid #e2e8f0;
+}
+
+
+.rating-item h5 {
+    margin: 0 0 4px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+.rating-item small {
+    color: #64748b;
+}
+
+
+.rating-select {
+    width: 180px;
+}
+
+
+/* =========================
+   ANONYMOUS
+========================= */
+
+.anonymous-box {
+    display: flex;
+
+    gap: 12px;
+
+    align-items: flex-start;
+
+    padding: 18px;
+
+    background: #f8fafc;
+
+    border-radius: 12px;
+}
+
+
+.anonymous-label {
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.anonymous-box p {
+    margin: 3px 0 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   SUBMIT
+========================= */
+
+.submit-section {
+    text-align: center;
+}
+
+
+.submit-btn {
+    min-width: 220px;
+}
+
+
+.submit-section p {
+    margin-top: 15px;
+
+    font-size: 13px;
+
+    color: #64748b;
+}
+
+
+/* =========================
+   THANK YOU
+========================= */
+
+.thank-you-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            #dbeafe,
+            transparent 35%
+        ),
+        #f8fafc;
+}
+
+
+.thank-you-card {
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 25px;
+
+    padding: 60px 40px;
+
+    text-align: center;
+
+    max-width: 550px;
+
+    width: 100%;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.08);
+}
+
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+
+    margin: auto auto 25px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    color: #16a34a;
+
+    font-size: 32px;
+}
+
+
+.thank-you-card h1 {
+    font-size: 40px;
+
+    font-weight: 800;
+
+    margin-bottom: 12px;
+}
+
+
+.thank-you-card p {
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+
+.small-text {
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .hero-title {
+        font-size: 48px;
+
+        letter-spacing: -2px;
+    }
+
+
+    .faculty-card {
+        margin-top: 40px;
+    }
+
+
+    .review-container {
+        padding: 25px 20px;
+    }
+
+
+    .review-header h1 {
+        font-size: 35px;
+    }
+
+
+    .rating-item {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+    .rating-select {
+        width: 100%;
+    }
+}
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+.admin-login-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            #dbeafe,
+            transparent 35%
+        ),
+        #f8fafc;
+}
+
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+
+    background: white;
+
+    padding: 45px 40px;
+
+    border-radius: 24px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.09);
+}
+
+
+.login-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 28px;
+}
+
+
+.login-card h1 {
+    font-size: 30px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+
+.login-card p {
+    color: #64748b;
+}
+
+
+.input-group-text {
+    background: #f8fafc;
+
+    border-color: #dbe2ea;
+
+    color: #64748b;
+}
+
+
+.input-group .form-control {
+    border-left: none;
+}
+
+
+.password-toggle {
+    border: 1px solid #dbe2ea;
+
+    background: white;
+
+    color: #64748b;
+}
+
+
+.password-toggle:hover {
+    background: #f8fafc;
+
+    color: #2563eb;
+}
+
+
+.forgot-password-link {
+    text-align: center;
+
+    margin-top: 22px;
+}
+
+
+.forgot-password-link a {
+    color: #2563eb;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.forgot-password-link a:hover {
+    text-decoration: underline;
+}
+
+
+.login-security {
+    margin-top: 25px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+
+.login-security i {
+    margin-right: 5px;
+
+    color: #2563eb;
+}
+
+
+@media (max-width: 576px) {
+
+    .login-card {
+        padding: 35px 22px;
+    }
+
+}
+/* =========================
+   GOOGLE AUTH
+========================= */
+
+.google-login-btn {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    padding: 13px 20px;
+
+    border: 1px solid #dbe2ea;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #172033;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+
+}
+
+
+.google-login-btn:hover {
+
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+
+    color: #172033;
+
+}
+
+
+.google-logo {
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    font-family: Arial, sans-serif;
+
+}
+/* =========================
+   REVIEW FILTERS
+========================= */
+
+.review-filter-form {
+    background: #f8f9fc;
+    border: 1px solid #edf0f5;
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #5f6877;
+    margin-bottom: 7px;
+}
+
+.filter-input {
+    height: 43px;
+    border-radius: 9px;
+    border: 1px solid #dfe4ea;
+    font-size: 13px;
+}
+
+.filter-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.08);
+}
+
+.filter-btn {
+    height: 43px;
+    background: linear-gradient(
+        135deg,
+        #0d6efd,
+        #6f42c1
+    );
+    color: white;
+    border: none;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 17px;
+}
+
+.filter-btn:hover {
+    color: white;
+    transform: translateY(-1px);
+}
+
+.clear-btn {
+    height: 43px;
+    width: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: white;
+    border: 1px solid #dfe4ea;
+    color: #6c757d;
+}
+
+.clear-btn:hover {
+    background: #f1f3f5;
+}
+
+
+/* =========================
+   RESULTS INFO
+========================= */
+
+.results-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #7a8494;
+    font-size: 12px;
+    margin: 15px 0;
+}
+
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.pagination .page-link {
+    border: 1px solid #e1e5ea;
+    color: #0d6efd;
+    margin: 0 3px;
+    border-radius: 8px !important;
+    min-width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(
+        135deg,
+        #0d6efd,
+        #6f42c1
+    );
+    border-color: transparent;
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #adb5bd;
+    background: #f8f9fa;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .review-filter-form {
+        padding: 15px;
+    }
+
+    .results-info {
+        font-size: 11px;
+    }
+
+    .pagination .page-link {
+        min-width: 34px;
+        height: 34px;
+    }
+
+}
+/* ================= REVIEW MODAL ================= */
+
+.review-modal {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.review-modal-header {
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    color: white;
+    border: none;
+    padding: 20px 24px;
+}
+
+.review-modal-header .modal-title {
+    font-weight: 700;
+}
+
+.review-modal-header small {
+    opacity: 0.85;
+}
+
+
+/* Detail Cards */
+
+.review-detail-card {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.detail-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 18px;
+    color: #374151;
+}
+
+.detail-title i {
+    margin-right: 8px;
+    color: #6366f1;
+}
+
+.review-detail-card label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    word-break: break-word;
+}
+
+
+/* Rating Grid */
+
+.rating-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.rating-grid > div {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.rating-grid span {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 5px;
+}
+
+.rating-grid strong {
+    color: #111827;
+    font-size: 15px;
+}
+
+
+/* Full Feedback */
+
+.feedback-full {
+    background: white;
+    border-left: 4px solid #6366f1;
+    border-radius: 8px;
+    padding: 16px;
+    line-height: 1.7;
+    color: #374151;
+    white-space: pre-wrap;
+}
+
+
+/* Mobile */
+
+@media (max-width: 576px) {
+
+    .rating-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .review-modal-header {
+        padding: 16px;
+    }
+
+    .review-detail-card {
+        padding: 14px;
+    }
+/* ================================
+   CARD BORDER VISIBILITY
+================================ */
+
+.stat-card,
+.dashboard-card,
+.reviews-card {
+    border: 2px solid #a5b4fc;
+}
+}

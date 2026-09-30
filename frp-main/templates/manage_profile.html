@@ -1,0 +1,7640 @@
+{% extends "base.html" %}
+{% block title %}
+Manage Faculty Profile
+{% endblock %}
+{% block content %}
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+<style>
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.profile-page {
+
+    max-width: 1150px;
+
+    margin: 0 auto;
+
+    padding: 35px 20px 60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.profile-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 28px;
+}
+
+
+.profile-header-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.header-icon {
+
+    width: 50px;
+    height: 50px;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    box-shadow:
+        0 8px 20px rgba(79,70,229,.20);
+}
+
+
+.profile-header h1 {
+    margin: 0;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.7px;
+    line-height: 1.1;
+
+    color: #ffffff;
+}
+
+
+.profile-header p {
+
+    margin: 5px 0 0;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
+
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow:
+        0 15px 40px rgba(15,23,42,.08),
+        0 0 0 1px rgba(148,163,184,.10);
+        border: 3px solid #a5b4fc;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.section {
+
+    margin-bottom: 40px;
+}
+
+
+.section:last-child {
+
+    margin-bottom: 0;
+}
+
+
+.section-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+
+    padding-bottom: 14px;
+
+    border-bottom: 1.5px solid #cbd5e1;
+}
+
+
+.section-heading-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 11px;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 17px;
+}
+
+
+.section-heading h2 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 750;
+
+    color: #111827;
+}
+
+
+.section-heading p {
+
+    margin: 3px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+.form-group {
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.form-group.full {
+
+    grid-column: 1 / -1;
+}
+
+
+.form-label {
+
+    font-size: 14px;
+
+    font-weight: 650;
+
+    color: #374151;
+
+    margin-bottom: 7px;
+}
+
+
+.required {
+
+    color: #ef4444;
+}
+
+
+.help-text {
+
+    margin-top: 6px;
+
+    font-size: 12px;
+
+    color: #6b7280;
+}
+
+
+.form-control {
+    width: 100%;
+
+    min-height: 44px;
+
+    border: 1.5px solid #94a3b8;
+
+    border-radius: 10px;
+
+    padding: 10px 13px;
+
+    font-size: 14px;
+
+    color: #111827;
+
+    background: #fff;
+
+    outline: none;
+
+    transition: .2s;
+
+    box-sizing: border-box;
+}
+
+
+textarea.form-control {
+
+    min-height: auto;
+
+    resize: vertical;
+}
+
+
+.form-control:focus {
+
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 3px rgba(99,102,241,.12);
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.image-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+}
+
+
+.image-preview {
+    width: 125px;
+
+    height: 125px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    border: 3px solid #c7d2fe;
+
+    background: #f8fafc;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.image-preview img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center center;
+}
+
+
+.image-placeholder {
+
+    color: #94a3b8;
+
+    font-size: 35px;
+}
+
+
+.image-input {
+
+    flex: 1;
+
+    min-width: 250px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.image-input input[type="file"] {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #475569;
+}
+
+.image-input input[type="file"]::file-selector-button {
+    background: #4f46e5;
+    color: #ffffff;
+    border: none;
+    border-right: 1px solid #6366f1;
+    padding: 8px 14px;
+    margin-right: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+
+.image-input .form-label {
+
+    margin-bottom: 8px;
+}
+
+
+.image-input input[type="file"] {
+
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   DYNAMIC SECTION
+   ========================================================= */
+
+.dynamic-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+.add-button {
+
+    border: none;
+
+    background: #4f46e5;
+
+    color: white;
+
+    border-radius: 10px;
+
+    padding: 10px 15px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    transition: .2s;
+}
+
+
+.add-button:hover {
+
+    background: #4338ca;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DYNAMIC ITEM
+   ========================================================= */
+
+.dynamic-item {
+    background: #f8fafc;
+
+    border: 2px solid #a5b4fc;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    transition: .2s;
+}
+.dynamic-item:hover {
+
+    border-color: #c7d2fe;
+
+    box-shadow:
+        0 8px 20px rgba(15,23,42,.05);
+}
+
+
+.item-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1.5px solid #cbd5e1;
+}
+
+.item-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 15px;
+
+    font-weight: 750;
+
+    color: #1f2937;
+}
+
+
+.item-title i {
+
+    color: #4f46e5;
+}
+
+
+.remove-button {
+
+    border: none;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    border-radius: 8px;
+
+    padding: 8px 11px;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+}
+
+
+.remove-button:hover {
+
+    background: #fecaca;
+}
+
+
+/* =========================================================
+   SKILL
+   ========================================================= */
+
+.skill-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 130px auto;
+
+    gap: 15px;
+
+    align-items: end;
+}
+
+
+.delete-existing {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #dc2626;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    padding-bottom: 10px;
+}
+
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+
+.error-message {
+
+    margin-top: 6px;
+
+    color: #dc2626;
+
+    font-size: 12px;
+}
+
+
+.form-errors {
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    border-radius: 10px;
+
+    padding: 12px 15px;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.action-area {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding-top: 25px;
+
+    border-top: 1.5px solid #cbd5e1;
+
+    margin-top: 35px;
+}
+
+.btn-custom {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 12px 20px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    transition: .2s;
+}
+
+
+.btn-cancel {
+
+    background: #f1f5f9;
+
+    color: #334155;
+}
+
+
+.btn-cancel:hover {
+
+    background: #e2e8f0;
+
+    color: #1e293b;
+}
+
+
+.btn-save {
+
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    color: white;
+
+    box-shadow:
+        0 7px 18px rgba(79,70,229,.22);
+}
+
+
+.btn-save:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 24px rgba(79,70,229,.30);
+}
+
+
+/* =========================================================
+   IMAGE CROPPER MODAL
+========================================================= */
+
+/* IMAGE VIEWER */
+.image-viewer-modal{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:25px;background:rgba(15,23,42,.82);backdrop-filter:blur(8px);opacity:0;visibility:hidden;pointer-events:none;transition:.25s ease}
+.image-viewer-modal.active{opacity:1;visibility:visible;pointer-events:auto}
+.image-viewer-card{position:relative;max-width:min(850px,94vw);max-height:90vh;display:flex;align-items:center;justify-content:center;transform:scale(.94);transition:.25s ease}
+.image-viewer-modal.active .image-viewer-card{transform:scale(1)}
+.image-viewer-image{display:block;max-width:88vw;max-height:86vh;width:auto;height:auto;object-fit:contain;border-radius:16px;box-shadow:0 30px 90px rgba(0,0,0,.40);background:#fff}
+.image-viewer-close{position:absolute;top:-18px;right:-18px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#111827;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:.2s ease;z-index:2}
+.image-viewer-close:hover{background:#fee2e2;color:#dc2626;transform:rotate(90deg)}
+#profilePreview{cursor:zoom-in}
+@media (max-width:768px){.image-viewer-modal{padding:18px}.image-viewer-image{max-width:90vw;max-height:82vh;border-radius:12px}.image-viewer-close{top:-12px;right:-12px;width:38px;height:38px}}
+
+.image-crop-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15,23,42,.75);
+
+    backdrop-filter: blur(8px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition: .25s ease;
+}
+
+
+.image-crop-modal.active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+.image-crop-card {
+
+    width: min(760px, 100%);
+
+    max-height: 94vh;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.30);
+
+    transform:
+        scale(.94)
+        translateY(20px);
+
+    transition: .25s ease;
+}
+
+
+.image-crop-modal.active
+.image-crop-card {
+
+    transform:
+        scale(1)
+        translateY(0);
+}
+
+
+/* =========================================================
+   CROPPER HEADER
+========================================================= */
+
+.image-crop-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.image-crop-header h3 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+
+.image-crop-header p {
+
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.crop-close-btn {
+
+    width: 36px;
+
+    height: 36px;
+
+    flex-shrink: 0;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: .2s ease;
+}
+
+
+.crop-close-btn:hover {
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   CROPPER AREA
+========================================================= */
+
+.cropper-wrapper {
+
+    width: 100%;
+
+    height: 470px;
+
+    background: #111827;
+
+    overflow: hidden;
+}
+
+
+.cropper-wrapper img {
+
+    display: block;
+
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   CROPPER CONTROLS
+========================================================= */
+
+.crop-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.crop-control-btn {
+
+    min-width: 42px;
+
+    height: 38px;
+
+    padding: 0 12px;
+
+    border: 1px solid #dbe1ea;
+
+    border-radius: 9px;
+
+    background: #fff;
+
+    color: #475569;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    transition: .2s ease;
+}
+
+
+.crop-control-btn:hover {
+
+    border-color: #6366f1;
+
+    color: #4f46e5;
+
+    background: #eef2ff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CROPPER FOOTER
+========================================================= */
+
+.crop-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 16px 24px;
+
+    background: #fff;
+}
+
+
+.crop-cancel-btn,
+.crop-apply-btn {
+
+    border: 0;
+
+    border-radius: 9px;
+
+    padding: 11px 18px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.crop-cancel-btn {
+
+    background: #f1f5f9;
+
+    color: #334155;
+}
+
+
+.crop-cancel-btn:hover {
+
+    background: #e2e8f0;
+}
+
+
+.crop-apply-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
+    color: #fff;
+
+    box-shadow:
+        0 7px 18px rgba(79,70,229,.22);
+}
+
+
+.crop-apply-btn:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 24px rgba(79,70,229,.30);
+}
+
+
+/* =========================================================
+   CIRCULAR CROP GUIDE
+========================================================= */
+
+.cropper-view-box {
+
+    border-radius: 50%;
+}
+
+
+.cropper-face {
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .profile-page {
+
+        padding: 20px 12px 40px;
+    }
+
+
+    .profile-card {
+
+        padding: 20px;
+
+        border-width: 2px;
+    }
+
+
+    /* =========================================================
+       MOBILE PROFILE IMAGE
+       ========================================================= */
+
+    .image-area {
+
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 16px;
+
+        text-align: center;
+    }
+
+
+    .image-preview {
+
+        flex-shrink: 0;
+
+        margin: 0 auto;
+    }
+
+
+    .image-input {
+
+        width: 100%;
+
+        min-width: 0;
+
+        flex: none;
+
+        text-align: center;
+    }
+
+
+    .image-input .form-label {
+
+        display: block;
+
+        text-align: center;
+    }
+
+
+    .image-input .help-text {
+
+        text-align: center;
+    }
+
+
+    .profile-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .form-group.full {
+
+        grid-column: auto;
+    }
+
+
+    .dynamic-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .add-button {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .skill-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .action-area {
+
+        flex-direction: column-reverse;
+    }
+
+
+    .btn-custom {
+
+        justify-content: center;
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+
+    .cropper-wrapper {
+
+        height: 55vh;
+
+        min-height: 320px;
+
+        max-height: 500px;
+    }
+
+
+    .image-crop-modal {
+
+        padding: 10px;
+    }
+
+
+    .image-crop-card {
+
+        border-radius: 16px;
+    }
+
+
+    .image-crop-header {
+
+        padding: 18px;
+    }
+
+
+    .crop-footer {
+
+        padding: 14px 18px;
+    }
+
+
+    .crop-cancel-btn,
+    .crop-apply-btn {
+
+        flex: 1;
+    }
+
+}
+/* =========================================================
+   MANAGE PROFILE — DARK / LIGHT THEME FIX
+========================================================= */
+
+/* ---------- LIGHT MODE ---------- */
+
+html[data-theme="light"] .profile-page {
+    background: #f5f7fb !important;
+    color: #172033 !important;
+}
+
+html[data-theme="light"] .profile-header h1 {
+    color: #172033 !important;
+}
+
+html[data-theme="light"] .profile-header p {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .profile-card {
+    background: #ffffff !important;
+    border-color: #dbe3ef !important;
+}
+
+html[data-theme="light"] .section-heading h2 {
+    color: #172033 !important;
+}
+
+html[data-theme="light"] .section-heading p {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .form-label {
+    color: #334155 !important;
+}
+
+html[data-theme="light"] .form-control,
+html[data-theme="light"] .profile-card input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] .profile-card select {
+    background: #ffffff !important;
+    color: #172033 !important;
+    border-color: #cbd5e1 !important;
+}
+
+
+/* ---------- DARK MODE ---------- */
+
+html[data-theme="dark"] .profile-page {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .profile-header h1 {
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .profile-header p {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .profile-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.28) !important;
+}
+
+html[data-theme="dark"] .section-heading {
+    border-bottom-color: #475569 !important;
+}
+
+html[data-theme="dark"] .section-heading h2 {
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .section-heading p {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .form-label {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .help-text {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .profile-card input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] .profile-card select,
+html[data-theme="dark"] .profile-card textarea {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+html[data-theme="dark"] .form-control::placeholder,
+html[data-theme="dark"] .profile-card input::placeholder,
+html[data-theme="dark"] .profile-card textarea::placeholder {
+    color: #64748b !important;
+}
+
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .profile-card input:focus,
+html[data-theme="dark"] .profile-card select:focus,
+html[data-theme="dark"] .profile-card textarea:focus {
+    border-color: #818cf8 !important;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18) !important;
+}
+
+html[data-theme="dark"] .section-heading-icon {
+    background: #312e81 !important;
+    color: #c7d2fe !important;
+}
+
+html[data-theme="dark"] .image-preview {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .image-placeholder {
+    color: #64748b !important;
+}
+
+/* Dynamic  n / skills sections */
+
+html[data-theme="dark"] .dynamic-item,
+html[data-theme="dark"] .education-item,
+html[data-theme="dark"] .skill-item {
+    background: #172033 !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Required star */
+
+html[data-theme="dark"] .required {
+    color: #f87171 !important;
+}
+
+/* Error text */
+
+html[data-theme="dark"] .error-message,
+html[data-theme="dark"] .form-errors {
+    color: #fca5a5 !important;
+}
+
+/* Success message */
+
+html[data-theme="dark"] .success-message {
+    background: #052e1b !important;
+    color: #6ee7b7 !important;
+    border-color: #065f46 !important;
+}
+/* =========================================================
+   DARK THEME - MANAGE PROFILE FIX
+   ========================================================= */
+
+/* Main profile headings */
+html[data-theme="dark"] .profile-header h1,
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .section-heading p,
+html[data-theme="dark"] .item-title,
+html[data-theme="dark"] .item-title i,
+html[data-theme="dark"] .dynamic-header,
+html[data-theme="dark"] .form-label {
+    color: #f8fafc !important;
+}
+
+
+/* Section subtitles */
+html[data-theme="dark"] .section-heading p {
+    color: #94a3b8 !important;
+}
+
+
+/* Dynamic item / Education / Skill cards */
+html[data-theme="dark"] .dynamic-item {
+    background: #172033 !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+
+/* Hover effect */
+html[data-theme="dark"] .dynamic-item:hover {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+
+/* Skill / Education title */
+html[data-theme="dark"] .item-title {
+    color: #f8fafc !important;
+}
+
+
+html[data-theme="dark"] .item-title i {
+    color: #818cf8 !important;
+}
+
+
+/* Horizontal lines */
+html[data-theme="dark"] .item-top {
+    border-bottom-color: #475569 !important;
+}
+
+
+html[data-theme="dark"] .action-area {
+    border-top-color: #475569 !important;
+}
+
+
+/* Labels */
+html[data-theme="dark"] .form-label {
+    color: #e2e8f0 !important;
+}
+
+
+/* Inputs */
+html[data-theme="dark"] .dynamic-item input,
+html[data-theme="dark"] .dynamic-item textarea,
+html[data-theme="dark"] .dynamic-item select,
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+
+/* Input focus */
+html[data-theme="dark"] .dynamic-item input:focus,
+html[data-theme="dark"] .dynamic-item textarea:focus,
+html[data-theme="dark"] .dynamic-item select:focus,
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] select:focus {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    border-color: #818cf8 !important;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15) !important;
+}
+
+
+/* Placeholder */
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #64748b !important;
+}
+
+
+/* Delete checkbox + text */
+html[data-theme="dark"] .delete-existing {
+    color: #e2e8f0 !important;
+}
+
+
+/* Delete / Remove buttons */
+html[data-theme="dark"] .remove-button {
+    background: #3f1d25 !important;
+    color: #fca5a5 !important;
+    border: 1px solid #7f1d1d !important;
+}
+
+
+html[data-theme="dark"] .remove-button:hover {
+    background: #7f1d1d !important;
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON - DARK THEME
+   ========================================================= */
+
+html[data-theme="dark"] .btn-cancel {
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #475569 !important;
+    box-shadow: none !important;
+}
+
+
+html[data-theme="dark"] .btn-cancel i {
+    color: #93c5fd !important;
+}
+
+
+html[data-theme="dark"] .btn-cancel:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+    border-color: #64748b !important;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+html[data-theme="dark"] .btn-save {
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   ADD SKILL BUTTON
+   ========================================================= */
+
+html[data-theme="dark"] .add-button {
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+html[data-theme="dark"] .error-message {
+    color: #fca5a5 !important;
+}
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+   ========================================================= */
+
+html[data-theme="dark"] .success-message {
+    background: #052e1b !important;
+    color: #86efac !important;
+    border-color: #166534 !important;
+}
+
+
+/* =========================================================
+   PROFILE CARD / MAIN CONTAINER
+   ========================================================= */
+
+html[data-theme="dark"] .profile-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+
+/* Section backgrounds */
+html[data-theme="dark"] .section {
+    color: #f8fafc !important;
+}
+
+
+/* Required star */
+html[data-theme="dark"] .required {
+    color: #f87171 !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    html[data-theme="dark"] .btn-cancel {
+        background: #1e293b !important;
+        color: #cbd5e1 !important;
+        border-color: #475569 !important;
+    }
+
+    html[data-theme="dark"] .btn-cancel:hover {
+        background: #334155 !important;
+        color: #ffffff !important;
+    }
+}
+/* =========================================================
+   EDUCATION ACCORDION
+   ========================================================= */
+
+.education-item {
+    padding: 0;
+    overflow: hidden;
+}
+
+.education-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 20px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.education-summary::-webkit-details-marker {
+    display: none;
+}
+
+.education-summary::marker {
+    display: none;
+}
+
+.education-summary-left {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.education-summary .item-title {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.education-summary-info {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.education-summary-degree {
+    font-weight: 700;
+    color: #374151;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+}
+/* Dark mode */
+[data-theme="dark"] .education-summary-degree {
+    color: #ffffff;
+}
+
+.education-summary-field {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+}
+
+.education-summary-separator {
+    color: #94a3b8;
+}
+
+.education-summary-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.education-chevron {
+    color: #4f46e5;
+    font-size: 13px;
+    transition: transform 0.2s ease;
+}
+
+.education-item[open] .education-chevron {
+    transform: rotate(180deg);
+}
+
+.education-form-body {
+    padding: 0 20px 20px;
+}
+
+.education-item[open] .education-summary {
+    border-bottom: 1.5px solid #cbd5e1;
+}
+
+.education-delete {
+    padding-bottom: 0;
+}
+
+.education-delete input {
+    accent-color: #4f46e5;
+}
+/* =========================================================
+   NEW EDUCATION CARD ALIGNMENT
+   ========================================================= */
+
+.education-item:not([open]) {
+    padding: 0;
+}
+
+.education-item[open] {
+    padding: 0;
+}
+
+.education-item[open] > .education-summary {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.education-item[open] > .education-form-body {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SKILL CARD + EDIT POPUP
+   ========================================================= */
+
+.skill-item {
+    padding: 0;
+    overflow: hidden;
+}
+
+.skill-card-trigger {
+    width: 100%;
+    min-height: 88px;
+    padding: 18px 20px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.skill-card-trigger:hover {
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.skill-card-left {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.skill-card-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 9px;
+    background: rgba(79, 70, 229, 0.15);
+    color: #818cf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-card-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 750;
+    color: #1f2937;
+}
+
+.skill-card-arrow {
+    color: #6366f1;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: transform .2s ease;
+}
+
+.skill-card-trigger:hover .skill-card-arrow {
+    transform: translateX(3px);
+}
+
+.skill-edit-source {
+    display: none;
+}
+
+.skill-edit-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, .72);
+    backdrop-filter: blur(7px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, visibility .2s ease;
+}
+
+.skill-edit-modal.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.skill-edit-modal-card {
+    width: min(620px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    transform: translateY(16px) scale(.97);
+    transition: transform .2s ease;
+}
+
+.skill-edit-modal.active .skill-edit-modal-card {
+    transform: translateY(0) scale(1);
+}
+
+.skill-edit-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.skill-edit-modal-header h3 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    color: #111827;
+}
+
+.skill-edit-modal-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.skill-edit-modal-close {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border: 0;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #475569;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-edit-modal-close:hover {
+    background: #e2e8f0;
+    color: #dc2626;
+}
+
+.skill-edit-modal-body .skill-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    align-items: end;
+}
+
+.skill-modal-delete {
+    grid-column: 1 / -1;
+    padding-bottom: 0;
+    color: #dc2626;
+}
+
+.skill-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.skill-modal-cancel,
+.skill-modal-save {
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.skill-modal-cancel {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+}
+
+.skill-modal-save {
+    border: 0;
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.skill-modal-save:hover {
+    background: #4338ca;
+}
+
+html[data-theme="dark"] .skill-card-name {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .skill-card-trigger:hover {
+    background: rgba(99, 102, 241, .10);
+}
+
+html[data-theme="dark"] .skill-edit-modal-card {
+    background: #1e293b;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .skill-edit-modal-header h3 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .skill-edit-modal-header p {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .skill-edit-modal-close {
+    background: #0f172a;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .skill-edit-modal-close:hover {
+    background: #334155;
+}
+
+html[data-theme="dark"] .skill-modal-footer {
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .skill-modal-cancel {
+    background: #0f172a;
+    border-color: #475569;
+    color: #e2e8f0;
+}
+
+@media (max-width: 600px) {
+    .skill-edit-modal {
+        padding: 12px;
+    }
+
+    .skill-edit-modal-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .skill-edit-modal-body .skill-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .skill-modal-delete {
+        grid-column: auto;
+    }
+}
+.education-item,
+.skill-item {
+    border: 1px solid #cbd5e1 !important;
+}
+[data-theme="dark"] .education-item,
+[data-theme="dark"] .skill-item {
+    border: 1px solid #475569 !important;
+}
+/* =========================================================
+   EDUCATION CARD
+   ========================================================= */
+
+.education-item {
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.education-card-trigger {
+
+    width: 100%;
+
+    min-height: 82px;
+
+    padding: 18px 20px;
+
+    border: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background 0.2s ease;
+}
+
+
+.education-card-trigger:hover {
+
+    background: rgba(99, 102, 241, 0.06);
+
+}
+
+
+.education-card-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+
+}
+
+
+.education-card-icon {
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 10px;
+
+    background: rgba(79, 70, 229, 0.12);
+
+    color: #6366f1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+}
+
+
+.education-card-icon i {
+
+    font-size: 15px;
+
+}
+
+
+.education-card-info {
+
+    min-width: 0;
+
+}
+
+
+.education-card-title {
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    color: #1f2937;
+
+    margin-bottom: 3px;
+
+}
+
+
+.education-card-details {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+
+    font-size: 13px;
+
+    color: #64748b;
+
+}
+
+
+.education-card-degree {
+
+    font-weight: 700;
+
+    color: #374151;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    max-width: 180px;
+
+}
+
+
+.education-card-field {
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    max-width: 220px;
+
+}
+
+
+.education-card-dot {
+
+    color: #94a3b8;
+
+}
+
+
+.education-card-arrow {
+
+    color: #6366f1;
+
+    font-size: 14px;
+
+    flex-shrink: 0;
+
+    transition: transform 0.2s ease;
+
+}
+
+
+.education-card-trigger:hover
+.education-card-arrow {
+
+    transform: translateX(3px);
+
+}
+
+
+/* =========================================================
+   EDUCATION POPUP
+   ========================================================= */
+
+.education-edit-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.68);
+
+    backdrop-filter: blur(7px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+
+}
+
+
+.education-edit-modal.active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+
+.education-edit-modal-card {
+
+    width: min(720px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 20px;
+
+    padding: 26px;
+
+    box-shadow:
+        0 30px 80px rgba(15, 23, 42, 0.30);
+
+    transform:
+        translateY(20px)
+        scale(0.97);
+
+    transition:
+        transform 0.25s ease;
+
+}
+
+
+.education-edit-modal.active
+.education-edit-modal-card {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* HEADER */
+
+.education-edit-modal-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.education-edit-modal-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+
+.education-edit-modal-icon {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 12px;
+
+    background: #4f46e5;
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.education-edit-modal-title {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    color: #111827;
+
+}
+
+
+.education-edit-modal-subtitle {
+
+    margin: 3px 0 0;
+
+    font-size: 13px;
+
+    color: #64748b;
+
+}
+
+
+.education-edit-modal-close {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.education-edit-modal-close:hover {
+
+    background: #e2e8f0;
+
+}
+
+
+/* BODY */
+
+.education-edit-modal-body {
+
+    width: 100%;
+
+}
+
+
+.education-edit-modal-body .form-grid {
+
+    width: 100%;
+
+}
+
+
+/* DELETE AREA */
+
+.education-modal-delete-area {
+
+    grid-column: 1 / -1;
+
+    margin-top: 4px;
+
+}
+
+
+.education-modal-delete {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #dc2626;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.education-modal-delete input {
+
+    accent-color: #dc2626;
+
+}
+
+
+/* FOOTER */
+
+.education-edit-modal-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 24px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e2e8f0;
+
+}
+
+
+.education-modal-cancel {
+
+    padding: 10px 18px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.education-modal-done {
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #4f46e5;
+
+    color: #ffffff;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.education-modal-done:hover {
+
+    background: #4338ca;
+
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+[data-theme="dark"]
+.education-card-title {
+
+    color: #ffffff;
+
+}
+
+
+[data-theme="dark"]
+.education-card-degree {
+
+    color: #ffffff;
+
+}
+
+
+[data-theme="dark"]
+.education-edit-modal-card {
+
+    background: #1e293b;
+
+    border-color: #475569;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.45);
+
+}
+
+
+[data-theme="dark"]
+.education-edit-modal-title {
+
+    color: #ffffff;
+
+}
+
+
+[data-theme="dark"]
+.education-edit-modal-subtitle {
+
+    color: #94a3b8;
+
+}
+
+
+[data-theme="dark"]
+.education-edit-modal-close {
+
+    background: #0f172a;
+
+    color: #cbd5e1;
+
+}
+
+
+[data-theme="dark"]
+.education-edit-modal-close:hover {
+
+    background: #334155;
+
+}
+
+
+[data-theme="dark"]
+.education-edit-modal-footer {
+
+    border-color: #475569;
+
+}
+
+
+[data-theme="dark"]
+.education-modal-cancel {
+
+    background: #0f172a;
+
+    border-color: #475569;
+
+    color: #e2e8f0;
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .education-edit-modal {
+
+        padding: 12px;
+
+    }
+
+
+    .education-edit-modal-card {
+
+        padding: 20px;
+
+        border-radius: 16px;
+
+    }
+
+
+    .education-card-details {
+
+        max-width: 220px;
+
+    }
+
+
+    .education-card-field {
+
+        max-width: 100px;
+
+    }
+
+}
+/* =========================================================
+   EDUCATION POPUP
+   ========================================================= */
+
+.education-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+
+.education-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.education-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(4px);
+}
+
+.education-modal-card {
+    position: relative;
+    width: min(850px, calc(100% - 30px));
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 18px;
+
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+
+    z-index: 2;
+}
+
+.education-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid #334155;
+}
+
+.education-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 20px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.education-modal-title i {
+    color: #818cf8;
+}
+
+.education-modal-header p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.education-modal-close {
+    width: 38px;
+    height: 38px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+    color: #cbd5e1;
+
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.education-modal-close:hover {
+    background: #334155;
+    color: #ffffff;
+}
+
+.education-modal-body {
+    padding: 24px;
+}
+
+.education-modal-body .education-form-body {
+    padding: 0;
+}
+
+.education-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 24px;
+
+    border-top: 1px solid #334155;
+}
+
+.education-modal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.education-delete-btn,
+.education-cancel-btn,
+.education-done-btn {
+    border-radius: 9px;
+    padding: 10px 16px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.education-delete-btn {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #f87171;
+}
+
+.education-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.education-cancel-btn {
+    background: transparent;
+    border: 1px solid #475569;
+    color: #cbd5e1;
+}
+
+.education-cancel-btn:hover {
+    background: #334155;
+}
+
+.education-done-btn {
+    background: #4f46e5;
+    border: 1px solid #4f46e5;
+    color: white;
+}
+
+.education-done-btn:hover {
+    background: #4338ca;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .education-modal-card {
+        width: calc(100% - 20px);
+        max-height: 92vh;
+        border-radius: 14px;
+    }
+
+    .education-modal-header {
+        padding: 18px;
+    }
+
+    .education-modal-body {
+        padding: 18px;
+    }
+
+    .education-modal-footer {
+        padding: 15px 18px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .education-modal-actions {
+        margin-left: auto;
+    }
+
+}
+/* =========================================================
+   EDUCATION MODAL — LIGHT MODE COLOR FIX
+   ========================================================= */
+
+html[data-theme="light"] .education-modal-card {
+    background: #ffffff !important;
+    border: 1px solid #dbe3ef !important;
+    box-shadow: 0 25px 70px rgba(15, 23, 42, 0.18) !important;
+}
+
+html[data-theme="light"] .education-modal-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme="light"] .education-modal-header h3 {
+    color: #172033 !important;
+}
+
+html[data-theme="light"] .education-modal-header p {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .education-modal-close {
+    background: #f8fafc !important;
+    border: 1px solid #dbe3ef !important;
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .education-modal-close:hover {
+    background: #eef2ff !important;
+    color: #4f46e5 !important;
+}
+
+html[data-theme="light"] .education-modal-body {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] .education-modal-body .education-item {
+    background: #f8fafc !important;
+    border-color: #dbe3ef !important;
+}
+
+html[data-theme="light"] .education-modal-footer {
+    background: #ffffff !important;
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme="light"] .education-delete-btn {
+    background: #ffffff !important;
+    border: 1px solid #ef4444 !important;
+    color: #dc2626 !important;
+}
+
+html[data-theme="light"] .education-delete-btn:hover {
+    background: #fef2f2 !important;
+}
+
+html[data-theme="light"] .education-cancel-btn {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .education-cancel-btn:hover {
+    background: #f8fafc !important;
+}
+
+html[data-theme="light"] .education-done-btn {
+    background: #4f46e5 !important;
+    border: 1px solid #4f46e5 !important;
+    color: #ffffff !important;
+}
+/* =========================================================
+   EDUCATION POPUP — LIGHT MODE COLOR FIX
+   ========================================================= */
+
+html[data-theme="light"] .education-modal-card {
+    background: #ffffff !important;
+    border-color: #dbe3ef !important;
+    color: #172033 !important;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18) !important;
+}
+
+html[data-theme="light"] .education-modal-header {
+    background: #ffffff !important;
+    border-bottom-color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .education-modal-title,
+html[data-theme="light"] .education-modal-title span {
+    color: #172033 !important;
+}
+
+html[data-theme="light"] .education-modal-title i {
+    color: #6366f1 !important;
+}
+
+html[data-theme="light"] .education-modal-header p {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .education-modal-card .form-label {
+    color: #334155 !important;
+}
+
+html[data-theme="light"] .education-modal-card .form-control,
+html[data-theme="light"] .education-modal-card input,
+html[data-theme="light"] .education-modal-card select,
+html[data-theme="light"] .education-modal-card textarea {
+    background: #ffffff !important;
+    color: #334155 !important;
+    border-color: #cbd5e1 !important;
+}
+
+html[data-theme="light"] .education-modal-card input::placeholder,
+html[data-theme="light"] .education-modal-card textarea::placeholder {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .education-modal-card input:focus,
+html[data-theme="light"] .education-modal-card select:focus,
+html[data-theme="light"] .education-modal-card textarea:focus {
+    border-color: #818cf8 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12) !important;
+}
+
+html[data-theme="light"] .education-modal-footer {
+    background: #ffffff !important;
+    border-top-color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .education-modal-close,
+html[data-theme="light"] #closeEducationModal {
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .education-modal-close:hover,
+html[data-theme="light"] #closeEducationModal:hover {
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+}
+
+html[data-theme="light"] .education-modal-card .btn-cancel {
+    background: #ffffff !important;
+    color: #475569 !important;
+    border-color: #cbd5e1 !important;
+}
+
+html[data-theme="light"] .education-modal-card .btn-cancel:hover {
+    background: #f8fafc !important;
+}
+
+html[data-theme="light"] .education-modal-card .btn-delete {
+    background: #ffffff !important;
+    color: #dc2626 !important;
+    border-color: #fca5a5 !important;
+}
+
+html[data-theme="light"] .education-modal-card .btn-delete:hover {
+    background: #fef2f2 !important;
+}
+/* =========================================================
+   YEAR PICKER - FINAL UI
+   ========================================================= */
+
+.year-picker-popup {
+    position: fixed !important;
+    display: none;
+
+    width: 300px;
+    min-width: 300px;
+
+    background: #1e293b;
+
+    border: 1px solid #475569;
+    border-radius: 14px;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.45),
+        0 4px 12px rgba(0, 0, 0, 0.25);
+
+    z-index: 999999 !important;
+
+    color: #f8fafc;
+}
+
+.year-picker-popup.active {
+    display: block !important;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.year-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 42px;
+
+    margin-bottom: 10px;
+
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid #334155;
+}
+
+
+/* Year range text */
+
+.year-range {
+    flex: 1;
+
+    text-align: center;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    color: #f8fafc;
+
+    user-select: none;
+}
+
+
+/* Previous / Next buttons */
+
+.year-nav {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #475569;
+    border-radius: 8px;
+
+    background: #273449;
+    color: #e2e8f0;
+
+    font-size: 22px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.year-nav:hover {
+    background: #334155;
+    border-color: #6366f1;
+
+    color: #ffffff;
+}
+
+.year-nav:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   YEAR GRID
+   ========================================================= */
+
+.year-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 7px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   YEAR BUTTON
+   ========================================================= */
+
+.year-option {
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    background: transparent;
+    color: #cbd5e1;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+/* Hover */
+
+.year-option:hover {
+    background: #334155;
+
+    color: #ffffff;
+
+    border-color: #475569;
+}
+
+
+/* Click */
+
+.year-option:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   SELECTED YEAR
+   ========================================================= */
+
+.year-option.selected {
+    background: #6366f1;
+
+    border-color: #818cf8;
+
+    color: #ffffff;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+
+/* Selected + hover */
+
+.year-option.selected:hover {
+    background: #4f46e5;
+
+    border-color: #a5b4fc;
+}
+
+
+/* =========================================================
+   CURRENT YEAR
+   ========================================================= */
+
+.year-option.current:not(.selected) {
+    background: rgba(99, 102, 241, 0.12);
+
+    border-color: rgba(129, 140, 248, 0.35);
+
+    color: #a5b4fc;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   YEAR INPUT
+   ========================================================= */
+
+.year-input {
+    cursor: pointer;
+
+    background: #0f172a !important;
+}
+
+.year-input:focus {
+    cursor: pointer;
+}
+/* =========================================================
+   YEAR PICKER - LIGHT MODE
+   ========================================================= */
+
+html[data-theme="light"] .year-picker-popup {
+    background: #ffffff !important;
+
+    border: 1px solid #d1d5db !important;
+
+    box-shadow:
+        0 15px 35px rgba(15, 23, 42, 0.15),
+        0 4px 10px rgba(15, 23, 42, 0.08) !important;
+
+    color: #1e293b !important;
+}
+
+
+/* Header */
+
+html[data-theme="light"] .year-picker-header {
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+
+/* 2021 - 2032 */
+
+html[data-theme="light"] .year-range {
+    color: #1e293b !important;
+}
+
+
+/* Previous / Next */
+
+html[data-theme="light"] .year-nav {
+    background: #f8fafc !important;
+
+    border: 1px solid #d1d5db !important;
+
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .year-nav:hover {
+    background: #eef2ff !important;
+
+    border-color: #6366f1 !important;
+
+    color: #4f46e5 !important;
+}
+
+
+/* Year buttons */
+
+html[data-theme="light"] .year-option {
+    background: transparent !important;
+
+    border: 1px solid transparent !important;
+
+    color: #475569 !important;
+}
+
+
+/* Hover */
+
+html[data-theme="light"] .year-option:hover {
+    background: #f1f5f9 !important;
+
+    border-color: #cbd5e1 !important;
+
+    color: #1e293b !important;
+}
+
+
+/* Selected year */
+
+html[data-theme="light"] .year-option.selected {
+    background: #6366f1 !important;
+
+    border-color: #6366f1 !important;
+
+    color: #ffffff !important;
+
+    box-shadow:
+        0 4px 10px rgba(99, 102, 241, 0.25) !important;
+}
+
+
+/* Selected hover */
+
+html[data-theme="light"] .year-option.selected:hover {
+    background: #4f46e5 !important;
+
+    border-color: #4f46e5 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* Current year */
+
+html[data-theme="light"] .year-option.current:not(.selected) {
+    background: #eef2ff !important;
+
+    border-color: #c7d2fe !important;
+
+    color: #4f46e5 !important;
+
+    font-weight: 600;
+}
+/* =========================================================
+   CHOOSE IMAGE / FILE INPUT
+   ========================================================= */
+
+input[type="file"] {
+    cursor: pointer;
+}
+
+html[data-theme="dark"] input[type="file"]::file-selector-button {
+    width: 170px !important;
+
+    padding: 10px 0 !important;
+
+    text-align: center;
+
+    background: #334155 !important;
+    color: #f8fafc !important;
+
+    border: none !important;
+    border-radius: 7px !important;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+html[data-theme="dark"] input[type="file"]::file-selector-button:hover {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+/* =========================
+   LIGHT MODE
+   ========================= */
+
+html[data-theme="light"] input[type="file"] {
+    color: #334155;
+    background: #ffffff;
+    border-color: #cbd5e1;
+}
+
+html[data-theme="light"] input[type="file"]::file-selector-button {
+    background: #eef2ff;
+    color: #4338ca;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    margin-right: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+html[data-theme="light"] input[type="file"]::file-selector-button:hover {
+    background: #6366f1;
+    color: #ffffff;
+}
+/* DARK MODE - Choose File button */
+
+html[data-theme="dark"] input[type="file"]::file-selector-button {
+    background: #334155 !important;
+    color: #f8fafc !important;
+    border: none !important;
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+html[data-theme="dark"] input[type="file"]::file-selector-button:hover {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+}
+</style>
+
+
+<div class="profile-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="profile-header">
+
+        <div class="profile-header-left">
+
+            <div class="header-icon">
+
+                <i class="fa-solid fa-user-gear"></i>
+
+            </div>
+
+            <div>
+
+                <h1>
+                    Manage Faculty Profile
+                </h1>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUCCESS / ERROR MESSAGES
+         ===================================================== -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div
+                style="
+                    margin-bottom:20px;
+                    padding:12px 15px;
+                    border-radius:10px;
+                    background:#ecfdf5;
+                    color:#047857;
+                    border:1px solid #a7f3d0;
+                    font-size:14px;
+                "
+            >
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         MAIN FORM
+         ===================================================== -->
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        id="profileForm"
+    >
+
+        {% csrf_token %}
+
+
+        {% if form.non_field_errors %}
+
+            <div class="form-errors">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="profile-card">
+
+
+            <!-- =================================================
+                 BASIC INFORMATION
+                 ================================================= -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-heading-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Basic Information
+                        </h2>
+
+                        <p>
+                            Your name and professional identity.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.name.id_for_label }}"
+                        >
+                            Name
+                            <span class="required">*</span>
+                        </label>
+
+                        {{ form.name }}
+
+                        {% for error in form.name.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- DESIGNATION -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.designation.id_for_label }}"
+                        >
+                            Designation
+                            <span class="required">*</span>
+                        </label>
+
+                        {{ form.designation }}
+
+                        {% for error in form.designation.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- SHORT INTRO -->
+
+                    <div class="form-group full">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.short_intro.id_for_label }}"
+                        >
+                            Short Introduction
+                        </label>
+
+                        {{ form.short_intro }}
+
+                        {% for error in form.short_intro.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- ABOUT -->
+
+                    <div class="form-group full">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.about.id_for_label }}"
+                        >
+                            About
+                        </label>
+
+                        {{ form.about }}
+
+                        {% for error in form.about.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE IMAGE
+                 ================================================= -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-heading-icon">
+
+                        <i class="fa-solid fa-image"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Profile Image
+                        </h2>
+
+                        <p>
+                            Upload and crop your professional profile photo.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="image-area">
+
+
+                    <!-- IMAGE PREVIEW -->
+
+                    <div
+                        class="image-preview"
+                        id="imagePreviewBox"
+                        {% if not profile or not profile.profile_image %}style="display:none;"{% endif %}
+                        title="Click to view image"
+                    >
+
+                        <img
+                            id="profilePreview"
+                            src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% endif %}"
+                            alt="{% if profile %}{{ profile.name }}{% else %}Profile Preview{% endif %}"
+                            {% if not profile or not profile.profile_image %}style="display:none;"{% endif %}
+                        >
+
+                        <i
+                            id="profilePlaceholder"
+                            class="fa-solid fa-user image-placeholder"
+                            style="display:none;"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- IMAGE INPUT -->
+
+                    <div class="image-input">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.profile_image.id_for_label }}"
+                        >
+                            Choose Image
+                        </label>
+
+
+                        <!--
+                            Render the file input manually instead of
+                            {{ form.profile_image }} so Django does not show
+                            the default "Currently: ... Clear" line.
+                        -->
+                        <input
+                            type="file"
+                            name="{{ form.profile_image.html_name }}"
+                            id="{{ form.profile_image.id_for_label }}"
+                            class="form-control"
+                            accept="image/*"
+                        >
+
+
+                        <!-- IMPORTANT:
+                             This stores the final cropped image.
+                        -->
+
+                        <input
+                            type="hidden"
+                            name="cropped_image"
+                            id="croppedImage"
+                            value=""
+                        >
+
+
+                        <div class="help-text">
+
+                            Select an image and crop it before saving.
+
+                            <br>
+
+                            Recommended:
+                            JPG / PNG / WEBP
+
+                        </div>
+
+
+                        {% for error in form.profile_image.errors %}
+
+                            <div class="error-message">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CONTACT / PROFILE DETAILS
+                 ================================================= -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-heading-icon">
+
+                        <i class="fa-solid fa-address-card"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Contact & Profile Details
+                        </h2>
+
+                        <p>
+                            Information shown on your public profile.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- LOCATION -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.location.id_for_label }}"
+                        >
+                            Location
+                        </label>
+
+                        {{ form.location }}
+
+                        {% for error in form.location.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.email.id_for_label }}"
+                        >
+                            Email
+                        </label>
+
+                        {{ form.email }}
+
+                        {% for error in form.email.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- STUDENTS -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.students_trained.id_for_label }}"
+                        >
+                            Students Trained
+                        </label>
+
+                        {{ form.students_trained }}
+
+                        {% for error in form.students_trained.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- TEACHING APPROACH -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.teaching_approach.id_for_label }}"
+                        >
+                            Teaching Approach
+                        </label>
+
+                        {{ form.teaching_approach }}
+
+                        {% for error in form.teaching_approach.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- QUOTE -->
+
+                    <div class="form-group full">
+
+                        <label
+                            class="form-label"
+                            for="{{ form.quote.id_for_label }}"
+                        >
+                            Quote
+                        </label>
+
+                        {{ form.quote }}
+
+                        {% for error in form.quote.errors %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 EDUCATION
+                 ================================================= -->
+
+            <section class="section">
+
+
+                <div class="dynamic-header">
+
+                    <div
+                        class="section-heading"
+                        style="margin:0; border:0; padding:0;"
+                    >
+
+                        <div class="section-heading-icon">
+
+                            <i class="fa-solid fa-graduation-cap"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Education
+                            </h2>
+
+                            <p>
+                                Add your educational qualifications.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="add-button"
+                        id="addEducationBtn"
+                    >
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Add Education
+
+                    </button>
+
+                </div>
+
+
+                {{ education_formset.management_form }}
+
+<!-- =================================================
+     EDUCATION CONTAINER
+     ================================================= -->
+
+<div id="educationContainer">
+
+    {% for education_form in education_formset %}
+
+        <div
+            class="dynamic-item education-item"
+            data-education-item
+        >
+
+            {{ education_form.id }}
+
+
+            <!-- EDUCATION CARD -->
+
+            <button
+                type="button"
+                class="education-card-trigger"
+            >
+
+                <div class="education-card-left">
+
+                    <div class="education-card-icon">
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                    </div>
+
+
+                    <div class="education-card-info">
+
+                        <div class="education-card-title">
+
+    {% if education_form.instance.degree %}
+        {{ education_form.instance.degree }}
+    {% else %}
+        Add degree
+    {% endif %}
+
+</div>
+
+
+                        <div class="education-card-details">
+
+                            <span class="education-card-degree">
+
+                                {% if education_form.instance.degree %}
+                                    {{ education_form.instance.degree }}
+                                {% else %}
+                                    Add degree
+                                {% endif %}
+
+                            </span>
+
+
+                            <span class="education-card-dot">
+                                •
+                            </span>
+
+
+                            <span class="education-card-field">
+
+                                {% if education_form.instance.field_of_study %}
+                                    {{ education_form.instance.field_of_study }}
+                                {% else %}
+                                    Add field of study
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <i
+                    class="fa-solid fa-chevron-right education-card-arrow"
+                ></i>
+
+            </button>
+
+
+            <!-- HIDDEN EDUCATION FORM -->
+
+            <div
+                class="education-edit-source"
+                style="display:none;"
+            >
+
+                {% if education_form.non_field_errors %}
+
+                    <div class="form-errors">
+
+                        {{ education_form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="form-grid">
+
+
+                    <!-- DEGREE -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+
+                            Degree
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        {{ education_form.degree }}
+
+
+                        {% for error in education_form.degree.errors %}
+
+                            <div class="error-message">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- FIELD OF STUDY -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+
+                            Field of Study
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        {{ education_form.field_of_study }}
+
+
+                        {% for error in education_form.field_of_study.errors %}
+
+                            <div class="error-message">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- INSTITUTION -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+
+                            Institution
+
+                        </label>
+
+
+                        {{ education_form.institution }}
+
+
+                        {% for error in education_form.institution.errors %}
+
+                            <div class="error-message">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+
+                            Status
+
+                        </label>
+
+
+                        {{ education_form.status }}
+
+
+                        {% for error in education_form.status.errors %}
+
+                            <div class="error-message">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+<!-- START YEAR -->
+
+<div class="form-group">
+
+    <label class="form-label">
+        Start Year
+    </label>
+
+    <div class="year-picker-wrapper">
+
+        {{ education_formset.empty_form.start_year }}
+
+        <div class="year-picker-popup">
+
+            <div class="year-picker-header">
+
+                <button
+                    type="button"
+                    class="year-nav prev-year"
+                >
+                    ‹
+                </button>
+
+                <span class="year-range">
+                    2020 - 2031
+                </span>
+
+                <button
+                    type="button"
+                    class="year-nav next-year"
+                >
+                    ›
+                </button>
+
+            </div>
+
+            <div class="year-grid"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- END YEAR -->
+
+<div class="form-group">
+
+    <label class="form-label">
+        End Year
+    </label>
+
+    <div class="year-picker-wrapper">
+
+        {{ education_formset.empty_form.end_year }}
+
+        <div class="year-picker-popup">
+
+            <div class="year-picker-header">
+
+                <button
+                    type="button"
+                    class="year-nav prev-year"
+                >
+                    ‹
+                </button>
+
+                <span class="year-range">
+                    2020 - 2031
+                </span>
+
+                <button
+                    type="button"
+                    class="year-nav next-year"
+                >
+                    ›
+                </button>
+
+            </div>
+
+            <div class="year-grid"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+                    <!-- DISPLAY ORDER -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+
+                            Display Order
+
+                        </label>
+
+
+                        {{ education_form.display_order }}
+
+
+                        <div class="help-text">
+
+                            1 = first, 2 = second, etc.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DELETE / REMOVE -->
+
+                    <div class="education-modal-delete-area">
+
+                        {% if education_form.instance.pk %}
+
+                            <label class="education-modal-delete">
+
+                                {{ education_form.DELETE }}
+
+                                <span>
+
+                                    Delete this education
+
+                                </span>
+
+                            </label>
+
+                        {% else %}
+
+                            <button
+                                type="button"
+                                class="remove-button remove-education"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Remove Education
+
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+            </section>
+
+<!-- =================================================
+     EDUCATION EDIT POPUP
+     ================================================= -->
+
+<div
+    id="educationEditModal"
+    class="education-edit-modal"
+    aria-hidden="true"
+>
+
+    <div class="education-edit-modal-card">
+
+
+        <!-- HEADER -->
+
+        <div class="education-edit-modal-header">
+
+            <div class="education-edit-modal-heading">
+
+                <div class="education-edit-modal-icon">
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3
+                        id="educationEditModalTitle"
+                        class="education-edit-modal-title"
+                    >
+                        Edit Education
+                    </h3>
+
+
+                    <p class="education-edit-modal-subtitle">
+
+                        Update your educational qualification.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeEducationEditModal"
+                class="education-edit-modal-close"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div
+            id="educationEditModalBody"
+            class="education-edit-modal-body"
+        >
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="education-edit-modal-footer">
+
+            <button
+                type="button"
+                id="cancelEducationEdit"
+                class="education-modal-cancel"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                id="doneEducationEdit"
+                class="education-modal-done"
+            >
+
+                <i class="fa-solid fa-check"></i>
+
+                Done
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+            <!-- =================================================
+                 SKILLS
+                 ================================================= -->
+
+            <section class="section">
+
+
+                <div class="dynamic-header">
+
+                    <div
+                        class="section-heading"
+                        style="margin:0; border:0; padding:0;"
+                    >
+
+                        <div class="section-heading-icon">
+
+                            <i class="fa-solid fa-code"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Skills & Expertise
+                            </h2>
+
+                            <p>
+                                Add technologies and skills you teach.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="add-button"
+                        id="addSkillBtn"
+                    >
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Add Skill
+
+                    </button>
+
+                </div>
+
+
+                {{ skill_formset.management_form }}
+
+
+                <div id="skillContainer">
+
+                    {% for skill_form in skill_formset %}
+
+                        <div class="dynamic-item skill-item">
+
+                            {{ skill_form.id }}
+
+                            <button
+                                type="button"
+                                class="skill-card-trigger"
+                            >
+
+                                <span class="skill-card-left">
+
+                                    <span class="skill-card-icon">
+                                        <i class="fa-solid fa-code"></i>
+                                    </span>
+
+                                    <span class="skill-card-name">
+                                        {% if skill_form.instance.name %}
+                                            {{ skill_form.instance.name }}
+                                        {% else %}
+                                            Add skill
+                                        {% endif %}
+                                    </span>
+
+                                </span>
+
+                                <i class="fa-solid fa-chevron-right skill-card-arrow"></i>
+
+                            </button>
+
+                            <div class="skill-edit-source">
+
+                                <div class="skill-grid">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+                                            Skill
+                                        </label>
+
+                                        {{ skill_form.name }}
+
+                                        {% for error in skill_form.name.errors %}
+                                            <div class="error-message">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+                                            Display Order
+                                        </label>
+
+                                        {{ skill_form.display_order }}
+
+                                    </div>
+
+                                    {% if skill_form.instance.pk %}
+
+                                        <label class="delete-existing skill-modal-delete">
+                                            {{ skill_form.DELETE }}
+                                            Delete this skill
+                                        </label>
+
+                                    {% else %}
+
+                                        <button
+                                            type="button"
+                                            class="remove-button remove-skill"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                            Remove Skill
+                                        </button>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ACTION BUTTONS
+                 ================================================= -->
+
+            <div class="action-area">
+
+                <a
+                    href="{% url 'admin_dashboard' %}"
+                    class="btn-custom btn-cancel"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-custom btn-save"
+                >
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+<!-- =========================================================
+     SKILL EDIT POPUP
+     ========================================================= -->
+
+<div
+    id="skillEditModal"
+    class="skill-edit-modal"
+    aria-hidden="true"
+>
+
+    <div class="skill-edit-modal-card">
+
+        <div class="skill-edit-modal-header">
+
+            <div>
+                <h3 id="skillEditModalTitle">Edit Skill</h3>
+                <p>Update your skill details.</p>
+            </div>
+
+            <button
+                type="button"
+                class="skill-edit-modal-close"
+                id="closeSkillEditModal"
+                aria-label="Close"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+        <div
+            id="skillEditModalBody"
+            class="skill-edit-modal-body"
+        ></div>
+
+        <div class="skill-modal-footer">
+
+            <button
+                type="button"
+                class="skill-modal-cancel"
+                id="cancelSkillEdit"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="skill-modal-save"
+                id="saveSkillEdit"
+            >
+                <i class="fa-solid fa-check"></i>
+                Done
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </form>
+
+</div>
+
+
+<!-- =================================================
+     EMPTY EDUCATION TEMPLATE
+================================================= -->
+
+<div id="educationEmptyForm" style="display:none;">
+
+    <div
+        class="dynamic-item education-item"
+        data-education-item
+    >
+
+        {{ education_formset.empty_form.id }}
+
+
+        <!-- EDUCATION CARD -->
+
+        <button
+            type="button"
+            class="education-card-trigger"
+        >
+
+            <div class="education-card-left">
+
+                <div class="education-card-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <div class="education-card-info">
+
+                   <div class="education-card-title">
+                        Add degree
+                    </div>
+                    <div class="education-card-details">
+
+                        <span class="education-card-degree">
+                            Add degree
+                        </span>
+
+                        <span class="education-card-dot">
+                            •
+                        </span>
+
+                        <span class="education-card-field">
+                            Add field of study
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <i class="fa-solid fa-chevron-right education-card-arrow"></i>
+
+        </button>
+
+
+        <!-- HIDDEN EDUCATION FORM -->
+
+        <div
+            class="education-edit-source"
+            style="display:none;"
+        >
+
+            <div class="form-grid">
+
+
+                <!-- DEGREE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Degree
+                        <span class="required">*</span>
+                    </label>
+
+                    {{ education_formset.empty_form.degree }}
+
+                </div>
+
+
+                <!-- FIELD OF STUDY -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Field of Study
+                        <span class="required">*</span>
+                    </label>
+
+                    {{ education_formset.empty_form.field_of_study }}
+
+                </div>
+
+
+                <!-- INSTITUTION -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Institution
+                    </label>
+
+                    {{ education_formset.empty_form.institution }}
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    {{ education_formset.empty_form.status }}
+
+                </div>
+
+
+                <!-- START YEAR -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Start Year
+                    </label>
+
+                    {{ education_formset.empty_form.start_year }}
+
+                </div>
+
+
+                <!-- END YEAR -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        End Year
+                    </label>
+
+                    {{ education_formset.empty_form.end_year }}
+
+                </div>
+
+
+                <!-- DISPLAY ORDER -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Display Order
+                    </label>
+
+                    {{ education_formset.empty_form.display_order }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =========================================================
+     EDUCATION POPUP
+     ========================================================= -->
+
+<div id="educationModal" class="education-modal">
+
+    <div class="education-modal-overlay"></div>
+
+    <div class="education-modal-card">
+
+        <div class="education-modal-header">
+
+            <div>
+                <div class="education-modal-title">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span id="educationModalTitle">
+                        Add Education
+                    </span>
+                </div>
+
+                <p>
+                    Enter your educational qualification details.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                id="closeEducationModal"
+                class="education-modal-close"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <div
+            id="educationModalBody"
+            class="education-modal-body"
+        ></div>
+
+
+        <div class="education-modal-footer">
+
+            <button
+                type="button"
+                id="educationDeleteBtn"
+                class="education-delete-btn"
+            >
+                <i class="fa-solid fa-trash"></i>
+                Delete
+            </button>
+
+            <div class="education-modal-actions">
+
+                <button
+                    type="button"
+                    id="educationCancelBtn"
+                    class="education-cancel-btn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    id="educationDoneBtn"
+                    class="education-done-btn"
+                >
+                    <i class="fa-solid fa-check"></i>
+                    Done
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     EMPTY SKILL TEMPLATE
+     ========================================================= -->
+
+<div
+    id="skillEmptyForm"
+    style="display:none;"
+>
+
+    <div class="dynamic-item skill-item">
+
+        {{ skill_formset.empty_form.id }}
+
+        <button
+            type="button"
+            class="skill-card-trigger"
+        >
+
+            <span class="skill-card-left">
+
+                <span class="skill-card-icon">
+                    <i class="fa-solid fa-code"></i>
+                </span>
+
+                <span class="skill-card-name">
+                    Add skill
+                </span>
+
+            </span>
+
+            <i class="fa-solid fa-chevron-right skill-card-arrow"></i>
+
+        </button>
+
+        <div class="skill-edit-source">
+
+            <div class="skill-grid">
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Skill
+                    </label>
+
+                    {{ skill_formset.empty_form.name }}
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Display Order
+                    </label>
+
+                    {{ skill_formset.empty_form.display_order }}
+
+                </div>
+
+                <button
+                    type="button"
+                    class="remove-button remove-skill"
+                >
+                    <i class="fa-solid fa-trash"></i>
+                    Remove Skill
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE VIEWER MODAL
+========================================================= -->
+
+<div
+    class="image-viewer-modal"
+    id="imageViewerModal"
+    aria-hidden="true"
+>
+
+    <div class="image-viewer-card">
+
+        <button
+            type="button"
+            class="image-viewer-close"
+            id="closeImageViewer"
+            aria-label="Close image preview"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <img
+            id="imageViewerImage"
+            class="image-viewer-image"
+            src=""
+            alt="Profile Image"
+        >
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE CROP MODAL
+========================================================= -->
+
+<div
+    id="imageCropModal"
+    class="image-crop-modal"
+>
+
+    <div class="image-crop-card">
+
+
+        <!-- HEADER -->
+
+        <div class="image-crop-header">
+
+            <div>
+
+                <h3>
+                    Crop Profile Image
+                </h3>
+
+                <p>
+                    Drag the image and zoom to position your face
+                    correctly inside the circle.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeCropModal"
+                class="crop-close-btn"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- CROPPER -->
+
+        <div class="cropper-wrapper">
+
+            <img
+                id="cropperImage"
+                src=""
+                alt="Crop Profile Image"
+            >
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="crop-controls">
+
+            <button
+                type="button"
+                id="zoomOutBtn"
+                class="crop-control-btn"
+                title="Zoom Out"
+            >
+
+                <i class="fa-solid fa-minus"></i>
+
+            </button>
+
+
+            <button
+                type="button"
+                id="zoomInBtn"
+                class="crop-control-btn"
+                title="Zoom In"
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+            </button>
+
+
+            <button
+                type="button"
+                id="rotateLeftBtn"
+                class="crop-control-btn"
+                title="Rotate Left"
+            >
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+            </button>
+
+
+            <button
+                type="button"
+                id="rotateRightBtn"
+                class="crop-control-btn"
+                title="Rotate Right"
+            >
+
+                <i class="fa-solid fa-rotate-right"></i>
+
+            </button>
+
+
+            <button
+                type="button"
+                id="resetCropBtn"
+                class="crop-control-btn"
+            >
+
+                <i class="fa-solid fa-arrows-rotate"></i>
+
+                Reset
+
+            </button>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="crop-footer">
+
+            <button
+                type="button"
+                id="cancelCropBtn"
+                class="crop-cancel-btn"
+            >
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                id="applyCropBtn"
+                class="crop-apply-btn"
+            >
+
+                <i class="fa-solid fa-check"></i>
+
+                Apply Crop
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CROPPER.JS
+========================================================= -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"
+></script>
+
+
+<script>
+
+/* =========================================================
+   PROFILE IMAGE CROPPER
+========================================================= */
+
+let profileCropper = null;
+
+let imageNeedsCrop = false;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const imageInput =
+    document.getElementById(
+        "{{ form.profile_image.id_for_label }}"
+    );
+
+
+const profilePreview =
+    document.getElementById(
+        "profilePreview"
+    );
+
+
+const profilePlaceholder =
+    document.getElementById(
+        "profilePlaceholder"
+    );
+
+
+const imagePreviewBox =
+    document.getElementById(
+        "imagePreviewBox"
+    );
+
+const imageViewerModal = document.getElementById("imageViewerModal");
+const imageViewerImage = document.getElementById("imageViewerImage");
+const closeImageViewerBtn = document.getElementById("closeImageViewer");
+
+
+const croppedImageInput =
+    document.getElementById(
+        "croppedImage"
+    );
+
+
+const cropModal =
+    document.getElementById(
+        "imageCropModal"
+    );
+
+
+const cropperImage =
+    document.getElementById(
+        "cropperImage"
+    );
+
+
+const closeCropModalBtn =
+    document.getElementById(
+        "closeCropModal"
+    );
+
+
+const cancelCropBtn =
+    document.getElementById(
+        "cancelCropBtn"
+    );
+
+
+const applyCropBtn =
+    document.getElementById(
+        "applyCropBtn"
+    );
+
+
+const zoomInBtn =
+    document.getElementById(
+        "zoomInBtn"
+    );
+
+
+const zoomOutBtn =
+    document.getElementById(
+        "zoomOutBtn"
+    );
+
+
+const rotateLeftBtn =
+    document.getElementById(
+        "rotateLeftBtn"
+    );
+
+
+const rotateRightBtn =
+    document.getElementById(
+        "rotateRightBtn"
+    );
+
+
+const resetCropBtn =
+    document.getElementById(
+        "resetCropBtn"
+    );
+
+
+const profileForm =
+    document.getElementById(
+        "profileForm"
+    );
+
+
+function openImageViewer() {
+    if (!profilePreview || !profilePreview.src || profilePreview.style.display === "none") return;
+    imageViewerImage.src = profilePreview.src;
+    imageViewerModal.classList.add("active");
+    imageViewerModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeImageViewer() {
+    imageViewerModal.classList.remove("active");
+    imageViewerModal.setAttribute("aria-hidden", "true");
+    imageViewerImage.src = "";
+    if (!cropModal.classList.contains("active")) document.body.style.overflow = "";
+}
+
+if (profilePreview) profilePreview.addEventListener("click", openImageViewer);
+if (closeImageViewerBtn) closeImageViewerBtn.addEventListener("click", closeImageViewer);
+if (imageViewerModal) imageViewerModal.addEventListener("click", function(event){ if(event.target===imageViewerModal) closeImageViewer(); });
+document.addEventListener("keydown", function(event){ if(event.key==="Escape" && imageViewerModal.classList.contains("active")) closeImageViewer(); });
+
+/* =========================================================
+   OPEN CROP MODAL
+========================================================= */
+
+function openCropModal(file) {
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    /*
+     * Validate image.
+     */
+
+    if (!file.type.startsWith("image/")) {
+
+        alert(
+            "Please select a valid image file."
+        );
+
+        if (imageInput) {
+
+            imageInput.value = "";
+
+        }
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(event) {
+
+            cropperImage.src =
+                event.target.result;
+
+
+            cropModal.classList.add(
+                "active"
+            );
+
+
+            document.body.style.overflow =
+                "hidden";
+
+
+            /*
+             * Wait for image to load.
+             */
+
+            cropperImage.onload =
+                function() {
+
+                    if (profileCropper) {
+
+                        profileCropper.destroy();
+
+                        profileCropper = null;
+
+                    }
+
+
+                    profileCropper =
+                        new Cropper(
+                            cropperImage,
+                            {
+
+                                /*
+                                 * Perfect square crop
+                                 */
+
+                                aspectRatio: 1,
+
+                                /*
+                                 * Prevent empty areas
+                                 */
+
+                                viewMode: 1,
+
+                                /*
+                                 * User can drag image
+                                 */
+
+                                dragMode: "move",
+
+                                /*
+                                 * Initial crop size
+                                 */
+
+                                autoCropArea: 0.82,
+
+                                responsive: true,
+
+                                restore: true,
+
+                                guides: false,
+
+                                center: true,
+
+                                highlight: false,
+
+                                background: true,
+
+                                movable: true,
+
+                                zoomable: true,
+
+                                rotatable: true,
+
+                                scalable: false,
+
+                                cropBoxMovable: false,
+
+                                cropBoxResizable: false,
+
+                                toggleDragModeOnDblclick:
+                                    false
+
+                            }
+                        );
+
+                };
+
+        };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================================
+   CLOSE CROP MODAL
+========================================================= */
+
+function closeCropModal() {
+
+    cropModal.classList.remove(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+
+    if (profileCropper) {
+
+        profileCropper.destroy();
+
+        profileCropper = null;
+
+    }
+
+
+    cropperImage.src = "";
+
+}
+
+
+/* =========================================================
+   CANCEL CROP
+========================================================= */
+
+function cancelCrop() {
+
+    /*
+     * Remove selected original file.
+     */
+
+    if (imageInput) {
+
+        imageInput.value = "";
+
+    }
+
+
+    /*
+     * Do not change current preview.
+     */
+
+    croppedImageInput.value = "";
+
+    imageNeedsCrop = false;
+
+
+    closeCropModal();
+
+}
+
+
+/* =========================================================
+   IMAGE SELECT
+========================================================= */
+
+if (imageInput) {
+
+    imageInput.addEventListener(
+        "change",
+        function(event) {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            /*
+             * New image now needs cropping.
+             */
+
+            imageNeedsCrop = true;
+
+
+            /*
+             * Remove any previous crop.
+             */
+
+            croppedImageInput.value = "";
+
+
+            /*
+             * Open cropper.
+             */
+
+            openCropModal(file);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ZOOM IN
+========================================================= */
+
+if (zoomInBtn) {
+
+    zoomInBtn.addEventListener(
+        "click",
+        function() {
+
+            if (profileCropper) {
+
+                profileCropper.zoom(
+                    0.1
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ZOOM OUT
+========================================================= */
+
+if (zoomOutBtn) {
+
+    zoomOutBtn.addEventListener(
+        "click",
+        function() {
+
+            if (profileCropper) {
+
+                profileCropper.zoom(
+                    -0.1
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ROTATE LEFT
+========================================================= */
+
+if (rotateLeftBtn) {
+
+    rotateLeftBtn.addEventListener(
+        "click",
+        function() {
+
+            if (profileCropper) {
+
+                profileCropper.rotate(
+                    -90
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ROTATE RIGHT
+========================================================= */
+
+if (rotateRightBtn) {
+
+    rotateRightBtn.addEventListener(
+        "click",
+        function() {
+
+            if (profileCropper) {
+
+                profileCropper.rotate(
+                    90
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+if (resetCropBtn) {
+
+    resetCropBtn.addEventListener(
+        "click",
+        function() {
+
+            if (profileCropper) {
+
+                profileCropper.reset();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   APPLY CROP
+========================================================= */
+
+if (applyCropBtn) {
+
+    applyCropBtn.addEventListener(
+        "click",
+        function() {
+
+            if (!profileCropper) {
+
+                return;
+
+            }
+
+
+            /*
+             * Generate 600 x 600 final image.
+             */
+
+            const canvas =
+                profileCropper.getCroppedCanvas(
+                    {
+
+                        width: 600,
+
+                        height: 600,
+
+                        imageSmoothingEnabled:
+                            true,
+
+                        imageSmoothingQuality:
+                            "high"
+
+                    }
+                );
+
+
+            if (!canvas) {
+
+                alert(
+                    "Unable to crop this image. Please try again."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Convert to JPEG.
+             */
+
+            const croppedData =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.92
+                );
+
+
+            /*
+             * Put final cropped image
+             * into hidden input.
+             */
+
+            croppedImageInput.value =
+                croppedData;
+
+
+            /*
+             * Show cropped preview.
+             */
+
+            if (profilePreview) {
+
+                profilePreview.src =
+                    croppedData;
+
+                profilePreview.style.display =
+                    "block";
+
+            }
+
+
+            if (imagePreviewBox) {
+
+                imagePreviewBox.style.display =
+                    "flex";
+
+            }
+
+
+            if (profilePlaceholder) {
+
+                profilePlaceholder.style.display =
+                    "none";
+
+            }
+
+
+            /*
+             * Cropping completed.
+             */
+
+            imageNeedsCrop = false;
+
+
+            /*
+             * Close popup.
+             */
+
+            closeCropModal();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CANCEL / CLOSE
+========================================================= */
+
+if (cancelCropBtn) {
+
+    cancelCropBtn.addEventListener(
+        "click",
+        cancelCrop
+    );
+
+}
+
+
+if (closeCropModalBtn) {
+
+    closeCropModalBtn.addEventListener(
+        "click",
+        cancelCrop
+    );
+
+}
+
+
+/* =========================================================
+   CLICK OUTSIDE MODAL
+========================================================= */
+
+if (cropModal) {
+
+    cropModal.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                cropModal
+            ) {
+
+                cancelCrop();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+            &&
+            cropModal.classList.contains(
+                "active"
+            )
+        ) {
+
+            cancelCrop();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+if (profileForm) {
+
+    profileForm.addEventListener(
+        "submit",
+        function(event) {
+
+            /*
+             * New image selected but crop
+             * was not applied.
+             */
+
+            if (
+                imageNeedsCrop
+                &&
+                imageInput
+                &&
+                imageInput.files.length > 0
+            ) {
+
+                event.preventDefault();
+
+
+                alert(
+                    "Please crop the selected image before saving your profile."
+                );
+
+
+                openCropModal(
+                    imageInput.files[0]
+                );
+
+
+                return;
+
+            }
+
+        }
+    );
+
+}
+
+/* =========================================================
+   EDUCATION
+========================================================= */
+
+const educationContainer =
+    document.getElementById("educationContainer");
+
+const addEducationBtn =
+    document.getElementById("addEducationBtn");
+
+const educationTotalForms =
+    document.getElementById("id_education-TOTAL_FORMS");
+
+const educationEmptyForm =
+    document.getElementById("educationEmptyForm");
+
+
+/* =========================================================
+   EDUCATION MODAL
+========================================================= */
+
+const educationModal =
+    document.getElementById("educationModal");
+
+const educationModalBody =
+    document.getElementById("educationModalBody");
+
+const educationModalTitle =
+    document.getElementById("educationModalTitle");
+
+const closeEducationModalBtn =
+    document.getElementById("closeEducationModal");
+
+const cancelEducationModalBtn =
+    document.getElementById("educationCancelBtn");
+
+const doneEducationModalBtn =
+    document.getElementById("educationDoneBtn");
+
+const educationDeleteBtn =
+    document.getElementById("educationDeleteBtn");
+
+
+let activeEducationItem = null;
+let activeEducationSource = null;
+let activeEducationIsNew = false;
+let activeEducationIndex = null;
+let activeEducationSnapshot = null;
+
+
+/* =========================================================
+   UPDATE EDUCATION CARD
+========================================================= */
+
+function updateEducationCard(item) {
+
+    if (!item) return;
+
+    const degreeInput =
+        item.querySelector('input[name$="-degree"]');
+
+    const fieldInput =
+        item.querySelector('input[name$="-field_of_study"]');
+
+    const degreeText =
+        item.querySelector(".education-card-degree");
+
+    const fieldText =
+        item.querySelector(".education-card-field");
+
+    const titleText =
+        item.querySelector(".education-card-title");
+
+
+    if (degreeText) {
+
+        degreeText.textContent =
+            degreeInput &&
+            degreeInput.value.trim()
+                ? degreeInput.value.trim()
+                : "Add degree";
+
+    }
+
+
+    if (fieldText) {
+
+        fieldText.textContent =
+            fieldInput &&
+            fieldInput.value.trim()
+                ? fieldInput.value.trim()
+                : "Add field of study";
+
+    }
+
+
+if (titleText) {
+
+    titleText.textContent =
+        degreeInput &&
+        degreeInput.value.trim()
+            ? degreeInput.value.trim()
+            : "Add degree";
+
+}
+
+}
+
+
+/* =========================================================
+   SNAPSHOT
+========================================================= */
+
+function takeEducationSnapshot(source) {
+
+    if (!source) return null;
+
+    const snapshot = {};
+
+    source
+        .querySelectorAll(
+            "input, select, textarea"
+        )
+        .forEach(function(input) {
+
+            if (
+                input.type === "checkbox" ||
+                input.type === "radio"
+            ) {
+
+                snapshot[input.name] =
+                    input.checked;
+
+            } else {
+
+                snapshot[input.name] =
+                    input.value;
+
+            }
+
+        });
+
+    return snapshot;
+}
+
+
+/* =========================================================
+   RESTORE SNAPSHOT
+========================================================= */
+
+function restoreEducationSnapshot(
+    source,
+    snapshot
+) {
+
+    if (!source || !snapshot) return;
+
+    source
+        .querySelectorAll(
+            "input, select, textarea"
+        )
+        .forEach(function(input) {
+
+            if (
+                snapshot[input.name] === undefined
+            ) {
+                return;
+            }
+
+
+            if (
+                input.type === "checkbox" ||
+                input.type === "radio"
+            ) {
+
+                input.checked =
+                    snapshot[input.name];
+
+            } else {
+
+                input.value =
+                    snapshot[input.name];
+
+            }
+
+        });
+
+}
+
+
+/* =========================================================
+   OPEN EDUCATION MODAL
+========================================================= */
+
+function openEducationModal(
+    item,
+    isNew = false
+) {
+
+    if (
+        !item ||
+        !educationModal ||
+        !educationModalBody
+    ) {
+        return;
+    }
+
+
+    const source =
+        item.querySelector(
+            ".education-edit-source"
+        );
+
+
+    if (!source) {
+        return;
+    }
+
+
+    activeEducationItem = item;
+    activeEducationSource = source;
+    activeEducationIsNew = isNew;
+
+
+    const degreeInput =
+        item.querySelector(
+            'input[name$="-degree"]'
+        );
+
+
+    if (degreeInput) {
+
+        const match =
+            degreeInput.name.match(
+                /education-(\d+)-degree/
+            );
+
+        if (match) {
+
+            activeEducationIndex =
+                parseInt(
+                    match[1],
+                    10
+                );
+
+        }
+
+    }
+
+
+    activeEducationSnapshot =
+        takeEducationSnapshot(source);
+
+
+    if (educationModalTitle) {
+
+        educationModalTitle.textContent =
+            isNew
+                ? "Add Education"
+                : "Edit Education";
+
+    }
+
+
+    educationModalBody.innerHTML = "";
+
+
+    educationModalBody.appendChild(
+        source
+    );
+
+
+    source.style.display = "block";
+
+
+    educationModal.classList.add(
+        "active"
+    );
+
+
+    educationModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    const firstInput =
+        source.querySelector(
+            'input[name$="-degree"]'
+        );
+
+
+    if (firstInput) {
+
+        setTimeout(
+            function() {
+                firstInput.focus();
+            },
+            100
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE EDUCATION MODAL
+========================================================= */
+
+function closeEducationModal(
+    returnToList = true
+) {
+
+    if (!educationModal) {
+        return;
+    }
+
+
+    if (
+        activeEducationSource &&
+        activeEducationItem &&
+        returnToList
+    ) {
+
+        activeEducationSource.style.display =
+            "none";
+
+
+        activeEducationItem.appendChild(
+            activeEducationSource
+        );
+
+
+        educationContainer.appendChild(
+            activeEducationItem
+        );
+
+
+        updateEducationCard(
+            activeEducationItem
+        );
+
+    }
+
+
+    if (educationModalBody) {
+
+        educationModalBody.innerHTML =
+            "";
+
+    }
+
+
+    activeEducationItem = null;
+    activeEducationSource = null;
+    activeEducationIsNew = false;
+    activeEducationIndex = null;
+    activeEducationSnapshot = null;
+
+
+    educationModal.classList.remove(
+        "active"
+    );
+
+
+    educationModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   ADD EDUCATION
+========================================================= */
+
+if (
+    addEducationBtn &&
+    educationTotalForms &&
+    educationEmptyForm
+) {
+
+    addEducationBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const index =
+                parseInt(
+                    educationTotalForms.value,
+                    10
+                );
+
+
+            let html =
+                educationEmptyForm.innerHTML;
+
+
+            html =
+                html.replace(
+                    /__prefix__/g,
+                    index
+                );
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.innerHTML =
+                html;
+
+
+            const newEducationItem =
+                wrapper.firstElementChild;
+
+
+            if (!newEducationItem) {
+                return;
+            }
+
+
+            educationContainer.appendChild(
+                newEducationItem
+            );
+
+
+            educationTotalForms.value =
+                index + 1;
+
+
+            updateEducationCard(
+                newEducationItem
+            );
+
+
+            openEducationModal(
+                newEducationItem,
+                true
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLICK EXISTING EDUCATION CARD
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const trigger =
+            event.target.closest(
+                ".education-card-trigger"
+            );
+
+
+        if (!trigger) {
+            return;
+        }
+
+
+        const item =
+            trigger.closest(
+                ".education-item"
+            );
+
+
+        if (!item) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        const idInput =
+            item.querySelector(
+                'input[name$="-id"]'
+            );
+
+
+        const isNew =
+            !idInput ||
+            !idInput.value;
+
+
+        openEducationModal(
+            item,
+            isNew
+        );
+
+    }
+);
+
+
+/* =========================================================
+   DONE BUTTON
+========================================================= */
+
+if (doneEducationModalBtn) {
+
+    doneEducationModalBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            closeEducationModal(true);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+========================================================= */
+
+if (cancelEducationModalBtn) {
+
+    cancelEducationModalBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+
+            /* New education → remove completely */
+
+            if (
+                activeEducationIsNew &&
+                activeEducationItem
+            ) {
+
+                activeEducationItem.remove();
+
+
+                if (
+                    activeEducationIndex !== null &&
+                    educationTotalForms
+                ) {
+
+                    educationTotalForms.value =
+                        activeEducationIndex;
+
+                }
+
+
+                closeEducationModal(false);
+
+                return;
+
+            }
+
+
+            /* Existing education → restore old values */
+
+            if (
+                activeEducationSource &&
+                activeEducationSnapshot
+            ) {
+
+                restoreEducationSnapshot(
+                    activeEducationSource,
+                    activeEducationSnapshot
+                );
+
+            }
+
+
+            closeEducationModal(true);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DELETE EDUCATION
+========================================================= */
+
+if (educationDeleteBtn) {
+
+    educationDeleteBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+
+            if (!activeEducationItem) {
+                return;
+            }
+
+
+            const idInput =
+                activeEducationItem.querySelector(
+                    'input[name$="-id"]'
+                );
+
+
+            const isNew =
+                !idInput ||
+                !idInput.value;
+
+
+            /* NEW EDUCATION */
+
+            if (isNew) {
+
+                const index =
+                    activeEducationIndex;
+
+
+                activeEducationItem.remove();
+
+
+                if (
+                    index !== null &&
+                    educationTotalForms
+                ) {
+
+                    educationTotalForms.value =
+                        index;
+
+                }
+
+
+                closeEducationModal(false);
+
+                return;
+
+            }
+
+
+            /* EXISTING EDUCATION */
+
+            const deleteCheckbox =
+                activeEducationItem.querySelector(
+                    'input[name$="-DELETE"]'
+                );
+
+
+            if (deleteCheckbox) {
+
+                deleteCheckbox.checked =
+                    true;
+
+            }
+
+
+            closeEducationModal(true);
+
+
+            activeEducationItem.style.display =
+                "none";
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE X BUTTON
+========================================================= */
+
+if (closeEducationModalBtn) {
+
+    closeEducationModalBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            closeEducationModal(true);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE WHEN CLICK OUTSIDE
+========================================================= */
+
+if (educationModal) {
+
+    educationModal.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                educationModal
+            ) {
+
+                closeEducationModal(true);
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape" &&
+            educationModal &&
+            educationModal.classList.contains(
+                "active"
+            )
+        ) {
+
+            closeEducationModal(true);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL EDUCATION CARDS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".education-item"
+    )
+    .forEach(function(item) {
+
+        updateEducationCard(item);
+
+    });
+
+
+/* =========================================================
+   SKILLS — CLICK CARD TO OPEN EDIT POPUP
+========================================================= */
+
+const skillContainer =
+    document.getElementById("skillContainer");
+
+const addSkillBtn =
+    document.getElementById("addSkillBtn");
+
+const skillTotalForms =
+    document.getElementById("id_skill-TOTAL_FORMS");
+
+const skillEmptyForm =
+    document.getElementById("skillEmptyForm");
+
+const skillEditModal =
+    document.getElementById("skillEditModal");
+
+const skillEditModalBody =
+    document.getElementById("skillEditModalBody");
+
+const skillEditModalTitle =
+    document.getElementById("skillEditModalTitle");
+
+const closeSkillEditModal =
+    document.getElementById("closeSkillEditModal");
+
+const cancelSkillEdit =
+    document.getElementById("cancelSkillEdit");
+
+const saveSkillEdit =
+    document.getElementById("saveSkillEdit");
+
+let currentSkillItem = null;
+let currentSkillSource = null;
+let currentSkillSnapshot = null;
+
+
+function updateSkillCard(item) {
+
+    if (!item) return;
+
+    const nameInput =
+        item.querySelector('input[name$="-name"]');
+
+    const nameText =
+        item.querySelector(".skill-card-name");
+
+    if (!nameText) return;
+
+    nameText.textContent =
+        nameInput && nameInput.value.trim()
+            ? nameInput.value.trim()
+            : "Add skill";
+}
+
+
+function takeSkillSnapshot(source) {
+
+    if (!source) return null;
+
+    const values = {};
+
+    source.querySelectorAll("input, select, textarea").forEach(function(input) {
+
+        if (!input.name) return;
+
+        if (input.type === "checkbox" || input.type === "radio") {
+            values[input.name] = input.checked;
+        } else {
+            values[input.name] = input.value;
+        }
+    });
+
+    return values;
+}
+
+
+function restoreSkillSnapshot(source, snapshot) {
+
+    if (!source || !snapshot) return;
+
+    source.querySelectorAll("input, select, textarea").forEach(function(input) {
+
+        if (!input.name || !(input.name in snapshot)) return;
+
+        if (input.type === "checkbox" || input.type === "radio") {
+            input.checked = snapshot[input.name];
+        } else {
+            input.value = snapshot[input.name];
+        }
+    });
+}
+
+
+function openSkillEditModal(item) {
+
+    if (!item || !skillEditModal || !skillEditModalBody) return;
+
+    const source =
+        item.querySelector(".skill-edit-source");
+
+    if (!source) return;
+
+    currentSkillItem = item;
+    currentSkillSource = source;
+    currentSkillSnapshot = takeSkillSnapshot(source);
+
+    const nameInput =
+        source.querySelector('input[name$="-name"]');
+
+    const name =
+        nameInput && nameInput.value.trim()
+            ? nameInput.value.trim()
+            : "New Skill";
+
+    skillEditModalTitle.textContent =
+        name === "New Skill" ? "Add Skill" : "Edit Skill";
+
+    skillEditModalBody.appendChild(source);
+    source.style.display = "block";
+
+    skillEditModal.classList.add("active");
+    skillEditModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    if (nameInput) {
+        nameInput.focus();
+    }
+}
+
+
+function closeSkillEditPopup(restoreChanges) {
+
+    if (!currentSkillItem || !currentSkillSource) return;
+
+    if (restoreChanges) {
+        restoreSkillSnapshot(
+            currentSkillSource,
+            currentSkillSnapshot
+        );
+    }
+
+    currentSkillItem.appendChild(currentSkillSource);
+    currentSkillSource.style.display = "none";
+
+    updateSkillCard(currentSkillItem);
+
+    if (skillEditModal) {
+        skillEditModal.classList.remove("active");
+        skillEditModal.setAttribute("aria-hidden", "true");
+    }
+
+    document.body.style.overflow = "";
+
+    currentSkillItem = null;
+    currentSkillSource = null;
+    currentSkillSnapshot = null;
+}
+
+
+document.addEventListener("click", function(event) {
+
+    const trigger =
+        event.target.closest(".skill-card-trigger");
+
+    if (!trigger) return;
+
+    const item =
+        trigger.closest(".skill-item");
+
+    if (!item) return;
+
+    event.preventDefault();
+    openSkillEditModal(item);
+});
+
+
+if (saveSkillEdit) {
+
+    saveSkillEdit.addEventListener("click", function() {
+
+        if (currentSkillItem) {
+            updateSkillCard(currentSkillItem);
+        }
+
+        closeSkillEditPopup(false);
+    });
+}
+
+
+if (cancelSkillEdit) {
+
+    cancelSkillEdit.addEventListener("click", function() {
+        closeSkillEditPopup(true);
+    });
+}
+
+
+if (closeSkillEditModal) {
+
+    closeSkillEditModal.addEventListener("click", function() {
+        closeSkillEditPopup(true);
+    });
+}
+
+
+if (skillEditModal) {
+
+    skillEditModal.addEventListener("click", function(event) {
+
+        if (event.target === skillEditModal) {
+            closeSkillEditPopup(true);
+        }
+    });
+}
+
+
+document.addEventListener("keydown", function(event) {
+
+    if (
+        event.key === "Escape" &&
+        skillEditModal &&
+        skillEditModal.classList.contains("active")
+    ) {
+        closeSkillEditPopup(true);
+    }
+});
+
+
+document.querySelectorAll(".skill-item").forEach(function(item) {
+    updateSkillCard(item);
+});
+
+
+if (addSkillBtn && skillTotalForms && skillEmptyForm) {
+
+    addSkillBtn.addEventListener("click", function() {
+
+        const index =
+            parseInt(skillTotalForms.value, 10);
+
+        let html =
+            skillEmptyForm.innerHTML.replace(
+                /__prefix__/g,
+                index
+            );
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.innerHTML = html;
+
+        const newSkillItem =
+            wrapper.firstElementChild;
+
+        if (!newSkillItem) return;
+
+        skillContainer.appendChild(newSkillItem);
+
+        skillTotalForms.value = index + 1;
+
+        updateSkillCard(newSkillItem);
+
+        openSkillEditModal(newSkillItem);
+    });
+}
+
+
+/* =========================================================
+   REMOVE NEW SKILL
+========================================================= */
+
+document.addEventListener("click", function(event) {
+
+    const button =
+        event.target.closest(".remove-skill");
+
+    if (!button) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    /*
+        When the skill modal is open, the
+        .skill-edit-source is moved inside the modal.
+
+        Therefore button.closest(".skill-item")
+        becomes null.
+
+        currentSkillItem keeps reference to the
+        original skill card.
+    */
+
+    let item = null;
+    let source = null;
+
+    if (currentSkillItem) {
+
+        item = currentSkillItem;
+        source = currentSkillSource;
+
+    } else {
+
+        item =
+            button.closest(".skill-item");
+
+        if (item) {
+            source =
+                item.querySelector(".skill-edit-source");
+        }
+
+    }
+
+    if (!item) return;
+
+    /*
+        If the source was moved into the modal,
+        remove it separately.
+
+        Otherwise it will remain inside the modal
+        and its inputs will still be submitted.
+    */
+
+    if (source) {
+        source.remove();
+    }
+
+    /*
+        Remove the actual skill card.
+    */
+
+    item.remove();
+
+    /*
+        Close the skill modal.
+    */
+
+    if (skillEditModal) {
+
+        skillEditModal.classList.remove("active");
+
+        skillEditModal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+    }
+
+    document.body.style.overflow = "";
+
+    /*
+        Clear current skill references.
+    */
+
+    currentSkillItem = null;
+    currentSkillSource = null;
+    currentSkillSnapshot = null;
+
+});
+</script>
+
+<script>
+
+/* =========================================================
+   FINAL YEAR PICKER
+   ========================================================= */
+
+(function () {
+
+    const CURRENT_YEAR =
+        new Date().getFullYear();
+
+    let activeInput = null;
+    let activePopup = null;
+    let activeRangeStart = CURRENT_YEAR - 5;
+
+
+    /* =====================================================
+       CREATE / GET POPUP
+    ===================================================== */
+
+    function getYearPopup() {
+
+        let popup =
+            document.getElementById(
+                "globalYearPicker"
+            );
+
+        if (popup) {
+            return popup;
+        }
+
+
+        popup =
+            document.createElement("div");
+
+        popup.id =
+            "globalYearPicker";
+
+        popup.className =
+            "year-picker-popup";
+
+
+        popup.innerHTML = `
+
+            <div class="year-picker-header">
+
+                <button
+                    type="button"
+                    class="year-nav prev-year"
+                >
+                    ‹
+                </button>
+
+                <span class="year-range"></span>
+
+                <button
+                    type="button"
+                    class="year-nav next-year"
+                >
+                    ›
+                </button>
+
+            </div>
+
+            <div class="year-grid"></div>
+
+        `;
+
+
+        document.body.appendChild(
+            popup
+        );
+
+
+        return popup;
+    }
+
+
+    /* =====================================================
+       RENDER YEARS
+    ===================================================== */
+
+    function renderYears() {
+
+        if (
+            !activeInput ||
+            !activePopup
+        ) {
+            return;
+        }
+
+
+        const grid =
+            activePopup.querySelector(
+                ".year-grid"
+            );
+
+        const range =
+            activePopup.querySelector(
+                ".year-range"
+            );
+
+
+        if (!grid || !range) {
+            return;
+        }
+
+
+        range.textContent =
+            activeRangeStart +
+            " - " +
+            (activeRangeStart + 11);
+
+
+        grid.innerHTML = "";
+
+
+        const selected =
+            parseInt(
+                activeInput.value,
+                10
+            );
+
+
+        for (
+            let i = 0;
+            i < 12;
+            i++
+        ) {
+
+            const year =
+                activeRangeStart + i;
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+            button.className =
+                "year-option";
+
+            button.textContent =
+                year;
+
+
+            if (
+                selected === year
+            ) {
+
+                button.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            if (
+                year === CURRENT_YEAR
+            ) {
+
+                button.classList.add(
+                    "current"
+                );
+
+            }
+
+
+            button.dataset.year =
+                year;
+
+
+            grid.appendChild(
+                button
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       POSITION POPUP
+    ===================================================== */
+
+    function positionPopup() {
+
+        if (
+            !activeInput ||
+            !activePopup
+        ) {
+            return;
+        }
+
+
+        const rect =
+            activeInput.getBoundingClientRect();
+
+
+        activePopup.style.position =
+            "fixed";
+
+        activePopup.style.width =
+            rect.width + "px";
+
+        activePopup.style.left =
+            rect.left + "px";
+
+        activePopup.style.zIndex =
+            "999999";
+
+
+        activePopup.style.display =
+            "block";
+
+
+        const popupRect =
+            activePopup.getBoundingClientRect();
+
+
+        const spaceBelow =
+            window.innerHeight -
+            rect.bottom;
+
+
+        if (
+            spaceBelow >=
+            popupRect.height + 10
+        ) {
+
+            activePopup.style.top =
+                (
+                    rect.bottom + 6
+                ) + "px";
+
+        }
+        else {
+
+            activePopup.style.top =
+                Math.max(
+                    8,
+                    rect.top -
+                    popupRect.height -
+                    6
+                ) + "px";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       OPEN
+    ===================================================== */
+
+    function openYearPicker(input) {
+
+        const popup =
+            getYearPopup();
+
+
+        activeInput =
+            input;
+
+        activePopup =
+            popup;
+
+
+        if (
+            /^\d{4}$/.test(
+                String(
+                    input.value || ""
+                ).trim()
+            )
+        ) {
+
+            activeRangeStart =
+                parseInt(
+                    input.value,
+                    10
+                ) - 5;
+
+        }
+        else {
+
+            activeRangeStart =
+                CURRENT_YEAR - 5;
+
+        }
+
+
+        renderYears();
+
+        positionPopup();
+
+
+        popup.classList.add(
+            "active"
+        );
+
+
+        positionPopup();
+
+    }
+
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    function closeYearPicker() {
+
+        if (!activePopup) {
+            return;
+        }
+
+
+        activePopup.classList.remove(
+            "active"
+        );
+
+
+        activePopup.style.display =
+            "none";
+
+
+        activeInput =
+            null;
+
+        activePopup =
+            null;
+
+    }
+
+
+    /* =====================================================
+       INPUT CLICK
+       IMPORTANT: bubble phase
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const input =
+                event.target.closest(
+                    ".year-input"
+                );
+
+
+            if (!input) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            openYearPicker(
+                input
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       YEAR CLICK
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "#globalYearPicker .year-option"
+                );
+
+
+            if (
+                !button ||
+                !activeInput
+            ) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            activeInput.value =
+                button.dataset.year;
+
+
+            activeInput.dispatchEvent(
+                new Event(
+                    "input",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+
+            activeInput.dispatchEvent(
+                new Event(
+                    "change",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+
+            closeYearPicker();
+
+        }
+    );
+
+
+    /* =====================================================
+       PREVIOUS
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "#globalYearPicker .prev-year"
+                );
+
+
+            if (
+                !button ||
+                !activeInput
+            ) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            activeRangeStart -=
+                12;
+
+
+            renderYears();
+
+            positionPopup();
+
+        }
+    );
+
+
+    /* =====================================================
+       NEXT
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "#globalYearPicker .next-year"
+                );
+
+
+            if (
+                !button ||
+                !activeInput
+            ) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            activeRangeStart +=
+                12;
+
+
+            renderYears();
+
+            positionPopup();
+
+        }
+    );
+
+
+    /* =====================================================
+       OUTSIDE CLICK
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                !activePopup
+            ) {
+                return;
+            }
+
+
+            if (
+                event.target.closest(
+                    ".year-input"
+                )
+            ) {
+                return;
+            }
+
+
+            if (
+                event.target.closest(
+                    "#globalYearPicker"
+                )
+            ) {
+                return;
+            }
+
+
+            closeYearPicker();
+
+        }
+    );
+
+
+    /* =====================================================
+       SCROLL
+    ===================================================== */
+
+    window.addEventListener(
+        "scroll",
+        function () {
+
+            if (activeInput) {
+                positionPopup();
+            }
+
+        },
+        true
+    );
+
+
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            if (activeInput) {
+                positionPopup();
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeYearPicker();
+
+            }
+
+        }
+    );
+
+})();
+
+
+</script>
+{% endblock %}

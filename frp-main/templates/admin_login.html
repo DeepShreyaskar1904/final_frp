@@ -1,0 +1,927 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+Admin Login | Faculty Review Portal
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-login-page">
+
+    <div class="login-card">
+
+        <!-- ================= LOGIN ICON ================= -->
+
+        <div class="login-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+
+        <!-- ================= TITLE ================= -->
+
+        <div class="text-center mb-4">
+
+            <h1>
+                Admin Login
+            </h1>
+
+            <p>
+                Faculty Review Portal
+            </p>
+
+        </div>
+
+
+        <!-- ================= LOGIN FORM ================= -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- USERNAME -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Username
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        placeholder="Enter your username"
+                        required
+                        autocomplete="username"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Password
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+
+                    <button
+                        type="button"
+                        class="btn password-toggle"
+                        id="togglePassword"
+                        aria-label="Show password"
+                    >
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="btn btn-primary-custom w-100"
+            >
+
+                <i class="fa-solid fa-right-to-bracket me-2"></i>
+
+                Login
+
+            </button>
+
+        </form>
+
+
+        <!-- ================= FORGOT PASSWORD ================= -->
+
+        <div class="forgot-password-link">
+
+            <a href="{% url 'forgot_password' %}">
+                Forgot Password?
+            </a>
+
+        </div>
+
+
+        <!-- ================= BACK TO FEEDBACK ================= -->
+
+        <div class="back-to-feedback">
+
+            <a href="{% url 'home' %}">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Feedback
+
+            </a>
+
+        </div>
+
+
+        <!-- ================= SECURITY NOTE ================= -->
+
+        <div class="login-security">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            This is a private administrator area.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================== PAGE STYLE ===================== -->
+
+<style>
+
+/* =====================================================
+   ADMIN LOGIN PAGE
+   LIGHT + DARK THEME
+===================================================== */
+
+.admin-login-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px 20px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(59, 130, 246, 0.10),
+            transparent 38%
+        ),
+        var(--portal-bg);
+
+    transition:
+        background-color .3s ease,
+        color .3s ease;
+}
+
+
+/* =====================================================
+   LOGIN CARD
+===================================================== */
+
+.login-card {
+
+    width: 100%;
+    max-width: 344px;
+
+    padding: 36px 32px;
+
+    background: var(--portal-surface);
+
+    border: 1px solid var(--portal-border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 50px var(--portal-shadow-strong);
+
+    color: var(--portal-text);
+
+    transition:
+        background-color .3s ease,
+        border-color .3s ease,
+        color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+/* =====================================================
+   LOGIN ICON
+===================================================== */
+
+.login-icon {
+
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 24px;
+
+    transition:
+        background-color .3s ease,
+        color .3s ease;
+}
+
+
+/* DARK ICON */
+
+html[data-theme="dark"] .login-icon {
+
+    background: #243b63;
+
+    color: #60a5fa;
+
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.login-card h1 {
+
+    margin-bottom: 4px;
+
+    color: var(--portal-text);
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+
+.login-card p {
+
+    margin-bottom: 0;
+
+    color: var(--portal-muted);
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   LABELS
+===================================================== */
+
+.login-card .form-label {
+
+    margin-bottom: 7px;
+
+    color: var(--portal-text);
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   INPUT GROUP
+===================================================== */
+
+.login-card .input-group {
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   ICON BOX
+===================================================== */
+
+.login-card .input-group-text {
+
+    width: 32px;
+
+    justify-content: center;
+
+    padding: 0;
+
+    background: var(--portal-surface-2);
+
+    border: 1px solid var(--portal-border);
+
+    color: var(--portal-muted);
+
+    font-size: 13px;
+
+    transition:
+        background-color .3s ease,
+        border-color .3s ease,
+        color .3s ease;
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.login-card .form-control {
+
+    min-height: 40px;
+
+    background: var(--portal-input-bg);
+
+    border: 1px solid var(--portal-border);
+
+    color: var(--portal-input-text);
+
+    font-size: 13px;
+
+    box-shadow: none;
+
+    transition:
+        background-color .3s ease,
+        border-color .3s ease,
+        color .3s ease;
+}
+
+
+/* Remove duplicate border between icon and input */
+
+.login-card .input-group-text + .form-control {
+
+    border-left: 0;
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.login-card .form-control::placeholder {
+
+    color: var(--portal-placeholder);
+
+    opacity: 1;
+}
+
+
+/* =====================================================
+   INPUT FOCUS
+===================================================== */
+
+.login-card .form-control:focus {
+
+    background: var(--portal-input-bg);
+
+    color: var(--portal-input-text);
+
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, .12);
+
+    outline: none;
+}
+
+
+/* =====================================================
+   PASSWORD TOGGLE
+===================================================== */
+
+.login-card .password-toggle {
+
+    min-width: 36px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--portal-input-bg);
+
+    border: 1px solid var(--portal-border);
+
+    color: var(--portal-muted);
+
+    font-size: 13px;
+
+    transition:
+        background-color .3s ease,
+        border-color .3s ease,
+        color .3s ease;
+}
+
+
+/* Fix border between input and eye button */
+
+.login-card .form-control + .password-toggle {
+
+    border-left: 0;
+}
+
+
+/* Hover */
+
+.login-card .password-toggle:hover {
+
+    background: var(--portal-surface-2);
+
+    color: #3b82f6;
+
+}
+
+
+/* Focus */
+
+.login-card .password-toggle:focus {
+
+    background: var(--portal-input-bg);
+
+    color: #3b82f6;
+
+    box-shadow: none;
+
+    outline: none;
+}
+
+
+
+/* =====================================================
+   EDGE NATIVE PASSWORD EYE
+   In Edge, use Microsoft's native eye.
+   In Chrome/Firefox, use our custom button.
+===================================================== */
+
+@supports selector(input::-ms-reveal) {
+
+    .login-card .password-toggle {
+        display: none !important;
+    }
+}
+
+/* Do not hide Edge's native reveal icon. */
+
+
+/* =====================================================
+   LOGIN BUTTON
+===================================================== */
+
+.login-card .btn-primary-custom {
+
+    min-height: 42px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 7px 18px rgba(37, 99, 235, .20);
+
+    transition:
+        transform .2s ease,
+        background-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.login-card .btn-primary-custom:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 24px rgba(37, 99, 235, .28);
+}
+
+
+.login-card .btn-primary-custom:active {
+
+    transform: scale(.98);
+
+}
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+.forgot-password-link {
+
+    text-align: center;
+
+    margin-top: 18px;
+}
+
+
+.forgot-password-link a {
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: color .2s ease;
+}
+
+
+.forgot-password-link a:hover {
+
+    color: #1d4ed8;
+
+    text-decoration: underline;
+}
+
+
+/* DARK */
+
+html[data-theme="dark"] .forgot-password-link a {
+
+    color: #60a5fa;
+
+}
+
+
+html[data-theme="dark"] .forgot-password-link a:hover {
+
+    color: #93c5fd;
+
+}
+
+
+/* =====================================================
+   BACK TO FEEDBACK
+===================================================== */
+
+.back-to-feedback {
+
+    text-align: center;
+
+    margin-top: 16px;
+}
+
+
+.back-to-feedback a {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--portal-muted);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        color .25s ease,
+        transform .25s ease;
+}
+
+
+.back-to-feedback a:hover {
+
+    color: #2563eb;
+
+    transform: translateX(-3px);
+}
+
+
+html[data-theme="dark"] .back-to-feedback a:hover {
+
+    color: #60a5fa;
+
+}
+
+
+.back-to-feedback a i {
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   SECURITY NOTE
+===================================================== */
+
+.login-security {
+
+    margin-top: 22px;
+
+    min-height: 34px;
+
+    padding: 9px 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 8px;
+
+    background: var(--portal-surface-2);
+
+    color: var(--portal-muted);
+
+    font-size: 10px;
+
+    font-weight: 500;
+
+    text-align: center;
+
+    transition:
+        background-color .3s ease,
+        color .3s ease;
+}
+
+
+.login-security i {
+
+    color: #2563eb;
+
+    font-size: 10px;
+}
+
+
+html[data-theme="dark"] .login-security i {
+
+    color: #60a5fa;
+
+}
+
+
+/* =====================================================
+   DARK MODE CARD
+===================================================== */
+
+html[data-theme="dark"] .login-card {
+
+    background: #1e293b;
+
+    border-color: #334155;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, .38);
+}
+
+
+/* =====================================================
+   DARK MODE INPUTS
+===================================================== */
+
+html[data-theme="dark"] .login-card .input-group-text {
+
+    background: #172033;
+
+    border-color: #475569;
+
+    color: #94a3b8;
+}
+
+
+html[data-theme="dark"] .login-card .form-control {
+
+    background: #0f172a;
+
+    border-color: #475569;
+
+    color: #f8fafc;
+}
+
+
+html[data-theme="dark"] .login-card .form-control::placeholder {
+
+    color: #64748b;
+}
+
+
+html[data-theme="dark"] .login-card .password-toggle {
+
+    background: #0f172a;
+
+    border-color: #475569;
+
+    color: #94a3b8;
+}
+
+
+html[data-theme="dark"] .login-card .password-toggle:hover {
+
+    background: #172033;
+
+    color: #60a5fa;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 575px) {
+
+    .admin-login-page {
+
+        padding: 24px 15px;
+
+    }
+
+    .login-card {
+
+        max-width: 100%;
+
+        padding: 32px 24px;
+
+        border-radius: 16px;
+
+    }
+
+    .login-card h1 {
+
+        font-size: 23px;
+
+    }
+
+}
+
+
+@media (max-width: 360px) {
+
+    .admin-login-page {
+
+        padding: 18px 10px;
+
+    }
+
+    .login-card {
+
+        padding: 28px 18px;
+
+    }
+
+    .login-icon {
+
+        width: 54px;
+        height: 54px;
+
+        font-size: 21px;
+
+    }
+
+    .login-card h1 {
+
+        font-size: 21px;
+
+    }
+
+    .login-card .form-control {
+
+        font-size: 12px;
+
+    }
+
+}
+
+</style>
+
+
+<!-- ===================== PASSWORD TOGGLE ===================== -->
+
+<script>
+/*
+ * Cross-browser password toggle
+ *
+ * Chrome / Firefox:
+ *     Uses our custom eye button.
+ *
+ * Microsoft Edge:
+ *     Uses Edge's native password eye.
+ *
+ * Capture phase + stopImmediatePropagation prevents another
+ * password-toggle listener (for example from main.js) from
+ * toggling the field a second time.
+ */
+
+document.addEventListener("click", function (event) {
+
+    const toggleButton =
+        event.target.closest("#togglePassword");
+
+    if (!toggleButton) {
+        return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const icon =
+        toggleButton.querySelector("i");
+
+    if (!passwordInput) {
+        return;
+    }
+
+    const isHidden =
+        passwordInput.getAttribute("type") === "password";
+
+    if (isHidden) {
+
+        passwordInput.setAttribute(
+            "type",
+            "text"
+        );
+
+        if (icon) {
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        }
+
+        toggleButton.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+
+        toggleButton.setAttribute(
+            "title",
+            "Hide password"
+        );
+
+    } else {
+
+        passwordInput.setAttribute(
+            "type",
+            "password"
+        );
+
+        if (icon) {
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+
+        toggleButton.setAttribute(
+            "aria-label",
+            "Show password"
+        );
+
+        toggleButton.setAttribute(
+            "title",
+            "Show password"
+        );
+    }
+
+}, true);
+</script>
+
+{% endblock %}
