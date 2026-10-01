@@ -3153,7 +3153,7 @@ html[data-theme="dark"] .mentor-modal-card::-webkit-scrollbar-thumb:hover {
     padding: 0 13px;
 
     border: 1px solid #dbeafe;
-    border-radius: 30px;
+    border-radius: 10px;
 
     background: rgba(255, 255, 255, .88);
     color: #475569;
@@ -3177,7 +3177,6 @@ html[data-theme="dark"] .mentor-modal-card::-webkit-scrollbar-thumb:hover {
         color .25s ease,
         box-shadow .25s ease;
 }
-
 .home-theme-btn i {
     font-size: 12px;
     line-height: 1;
@@ -3367,6 +3366,11 @@ body:has(.home-theme-btn) #themeToggleWrapper {
     visibility: hidden !important;
     pointer-events: none !important;
 }
+/* Hide theme toggle while mentor profile is open */
+
+body.mentor-profile-open .home-theme-toggle {
+    display: none !important;
+}
 </style>
 
 
@@ -3387,6 +3391,8 @@ function openMentorProfile() {
 
     modal.classList.add("active");
 
+    document.body.classList.add("mentor-profile-open");
+
     document.body.style.overflow = "hidden";
 
     closeMentorNotification();
@@ -3403,6 +3409,8 @@ function closeMentorProfile() {
     if (!modal) return;
 
     modal.classList.remove("active");
+
+    document.body.classList.remove("mentor-profile-open");
 
     document.body.style.overflow = "";
 
