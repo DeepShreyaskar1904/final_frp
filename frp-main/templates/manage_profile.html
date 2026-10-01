@@ -49,32 +49,37 @@ Manage Faculty Profile
    Same style as the normal portal theme button
 ========================================================= */
 
+/* =========================================================
+   MANAGE PROFILE THEME TOGGLE
+   Same visual style as HOME PAGE
+   NOT FLOATING
+========================================================= */
+
 .profile-theme-toggle {
 
-    min-width: 84px;
-    height: 42px;
+    width: 64px;
+    height: 64px;
+
+    flex-shrink: 0;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    gap: 7px;
+    padding: 0;
 
-    padding: 0 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
 
-    border: 1px solid #475569;
-    border-radius: 10px;
+    background: #f8fafc;
+    color: #172033;
 
-    background: #0f172a;
-    color: #f8fafc;
-
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 22px;
 
     cursor: pointer;
 
     box-shadow:
-        0 5px 14px rgba(15, 23, 42, 0.20);
+        0 8px 22px rgba(15, 23, 42, 0.16);
 
     transition:
         transform 0.2s ease,
@@ -82,6 +87,104 @@ Manage Faculty Profile
         color 0.2s ease,
         border-color 0.2s ease,
         box-shadow 0.2s ease;
+}
+
+
+.profile-theme-toggle:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.22);
+}
+
+
+.profile-theme-toggle:active {
+
+    transform: scale(0.96);
+}
+
+
+/* LIGHT THEME */
+
+html[data-theme="light"] .profile-theme-toggle {
+
+    background: #f8fafc;
+    color: #172033;
+
+    border-color: #cbd5e1;
+}
+
+
+/* DARK THEME */
+
+html[data-theme="dark"] .profile-theme-toggle {
+
+    background: #f8fafc;
+    color: #172033;
+
+    border-color: #cbd5e1;
+}
+
+
+/* =========================================================
+   REMOVE GLOBAL FLOATING TOGGLE ONLY ON MANAGE PROFILE
+========================================================= */
+
+body:has(.profile-page) #themeToggleWrapper {
+
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .profile-header {
+
+        width: 100%;
+
+        flex-direction: row;
+        align-items: flex-start;
+
+        justify-content: space-between;
+
+        gap: 12px;
+    }
+
+
+    .profile-header-left {
+
+        min-width: 0;
+
+        flex: 1;
+
+        align-items: center;
+    }
+
+
+    .profile-header h1 {
+
+        font-size: 28px;
+        line-height: 1.1;
+    }
+
+
+    .profile-theme-toggle {
+
+        width: 64px;
+        height: 64px;
+
+        border-radius: 16px;
+
+        flex-shrink: 0;
+    }
+
 }
 
 
@@ -162,6 +265,7 @@ body:has(.profile-page) #themeToggleWrapper {
 
     gap: 12px;
 }
+
 
 
 .header-icon {
@@ -3488,43 +3592,32 @@ html[data-theme="dark"] input[type="file"]::file-selector-button:hover {
     <div class="profile-header-left">
 
         <div class="header-icon">
-
             <i class="fa-solid fa-user-gear"></i>
-
         </div>
 
         <div>
-
             <h1>
                 Manage Faculty Profile
             </h1>
-
         </div>
 
     </div>
 
-
-    <!-- PROFILE PAGE THEME TOGGLE -->
+    <!-- MANAGE PROFILE THEME TOGGLE -->
     <button
         type="button"
         id="profileThemeToggle"
         class="profile-theme-toggle"
-        aria-label="Switch to dark mode"
-        title="Switch to dark mode"
+        aria-label="Switch theme"
+        title="Switch theme"
     >
         <i
             id="profileThemeIcon"
-            class="fa-solid fa-moon"
+            class="fa-solid fa-sun"
         ></i>
-
-        <span id="profileThemeText">
-            Dark
-        </span>
     </button>
 
 </div>
-
-
     <!-- =====================================================
          SUCCESS / ERROR MESSAGES
          ===================================================== -->
@@ -7758,8 +7851,8 @@ document.addEventListener("click", function(event) {
     );
 
 })();
-</script>
-<script>
+
+
 
 /* =========================================================
    MANAGE PROFILE THEME TOGGLE
@@ -7772,9 +7865,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const themeIcon =
         document.getElementById("profileThemeIcon");
-
-    const themeText =
-        document.getElementById("profileThemeText");
 
 
     if (!themeToggle) {
@@ -7793,7 +7883,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateProfileThemeButton(theme) {
 
-        if (!themeIcon || !themeText) {
+        if (!themeIcon) {
             return;
         }
 
@@ -7802,9 +7892,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             themeIcon.className =
                 "fa-solid fa-sun";
-
-            themeText.textContent =
-                "Light";
 
             themeToggle.setAttribute(
                 "aria-label",
@@ -7821,9 +7908,6 @@ document.addEventListener("DOMContentLoaded", function () {
             themeIcon.className =
                 "fa-solid fa-moon";
 
-            themeText.textContent =
-                "Dark";
-
             themeToggle.setAttribute(
                 "aria-label",
                 "Switch to dark mode"
@@ -7837,14 +7921,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* Initial state */
+    /* INITIAL STATE */
 
     updateProfileThemeButton(
         getCurrentTheme()
     );
 
 
-    /* Toggle */
+    /* TOGGLE */
 
     themeToggle.addEventListener(
         "click",
@@ -7858,11 +7942,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     ? "light"
                     : "dark";
 
-
-            /*
-             * Use the existing global theme controller
-             * if available.
-             */
 
             if (
                 typeof window.applyTheme ===
@@ -7906,10 +7985,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    /*
-     * Keep button synchronized if theme
-     * changes from another controller.
-     */
+    /* KEEP BUTTON SYNCHRONIZED */
 
     window.addEventListener(
         "portal-theme-change",
@@ -7928,6 +8004,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 });
+
 
 </script>
 {% endblock %}
