@@ -80,27 +80,30 @@
     {% endblock %}
 
     <!-- Global theme toggle -->
-    <div
-        id="themeToggleWrapper"
-        aria-label="Theme controls"
+    <!-- Global theme toggle -->
+{% if request.resolver_match.url_name != 'admin_login' %}
+<div
+    id="themeToggleWrapper"
+    aria-label="Theme controls"
+>
+    <button
+        type="button"
+        id="themeToggle"
+        class="theme-toggle"
+        aria-label="Toggle dark and light mode"
+        title="Toggle theme"
     >
-        <button
-            type="button"
-            id="themeToggle"
-            class="theme-toggle"
-            aria-label="Toggle dark and light mode"
-            title="Toggle theme"
-        >
-            <i
-                id="themeIcon"
-                class="fa-solid fa-moon"
-            ></i>
+        <i
+            id="themeIcon"
+            class="fa-solid fa-moon"
+        ></i>
 
-            <span id="themeText">
-                Dark
-            </span>
-        </button>
-    </div>
+        <span id="themeText">
+            Dark
+        </span>
+    </button>
+</div>
+{% endif %}
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
