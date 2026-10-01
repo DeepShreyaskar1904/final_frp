@@ -6,6 +6,24 @@ Give Feedback | Faculty Review Portal
 
 {% block content %}
 
+<div class="home-topbar-actions">
+
+    <div class="home-theme-toggle">
+
+        <button
+            type="button"
+            id="homeThemeToggle"
+            class="home-theme-btn"
+            aria-label="Toggle dark and light mode"
+            title="Toggle theme"
+        >
+            <i id="homeThemeIcon" class="fa-solid fa-moon"></i>
+            <span id="homeThemeText">Dark</span>
+        </button>
+
+    </div>
+
+</div>
 <div class="review-page">
 
     <div class="container py-5">
@@ -1169,7 +1187,35 @@ html[data-theme="light"] .anonymous-box {
     }
 
 }
+/* ==================================================
+   REVIEW PAGE THEME TOGGLE
+================================================== */
 
+.review-topbar {
+    position: relative;
+    z-index: 100;
+}
+
+/* Remove global floating toggle */
+body #themeToggleWrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+@media (max-width: 576px) {
+
+    .review-topbar .home-theme-btn {
+        min-width: 44px;
+        width: 44px;
+        height: 38px;
+        padding: 0;
+    }
+
+    .review-topbar .home-theme-btn span {
+        display: none;
+    }
+}
 </style>
 
 {% endblock %}
