@@ -3375,30 +3375,46 @@ html[data-theme="dark"] input[type="file"]::file-selector-button:hover {
     <!-- =====================================================
          PAGE HEADER
          ===================================================== -->
+<div class="profile-header">
 
-    <div class="profile-header">
+    <div class="profile-header-left">
 
-        <div class="profile-header-left">
+        <div class="header-icon">
 
-            <div class="header-icon">
+            <i class="fa-solid fa-user-gear"></i>
 
-                <i class="fa-solid fa-user-gear"></i>
+        </div>
 
-            </div>
+        <div>
 
-            <div>
-
-                <h1>
-                    Manage Faculty Profile
-                </h1>
-
-
-
-            </div>
+            <h1>
+                Manage Faculty Profile
+            </h1>
 
         </div>
 
     </div>
+
+
+    <!-- PROFILE PAGE THEME TOGGLE -->
+    <button
+        type="button"
+        id="profileThemeToggle"
+        class="profile-theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+    >
+        <i
+            id="profileThemeIcon"
+            class="fa-solid fa-moon"
+        ></i>
+
+        <span id="profileThemeText">
+            Dark
+        </span>
+    </button>
+
+</div>
 
 
     <!-- =====================================================
