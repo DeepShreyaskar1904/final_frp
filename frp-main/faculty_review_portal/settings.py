@@ -124,6 +124,10 @@ ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI')
+GMAIL_REDIRECT_URI = os.getenv(
+    'GMAIL_REDIRECT_URI',
+    'http://127.0.0.1:8000/gmail/callback/'
+)
 OAUTHLIB_INSECURE_TRANSPORT = os.getenv("OAUTHLIB_INSECURE_TRANSPORT", "0")
 # =========================================================
 # ADMIN SESSION TIMEOUT
