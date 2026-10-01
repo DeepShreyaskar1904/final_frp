@@ -3794,11 +3794,11 @@ html[data-theme="dark"] input[type="file"]::file-selector-button:hover {
                         title="Click to view image"
                     >
 
-                        <img
-                            id="profilePreview"
-                            src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% endif %}"
-                            alt="{% if profile %}{{ profile.name }}{% else %}Profile Preview{% endif %}"
-                            {% if not profile or not profile.profile_image %}style="display:none;"{% endif %}
+                       <img
+                           id="profilePreview"
+                        src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}?v={{ profile.updated_at|date:'U' }}{% endif %}"
+                        alt="{% if profile %}{{ profile.name }}{% else %}Profile Preview{% endif %}"
+                        {% if not profile or not profile.profile_image %}style="display:none;"{% endif %}
                         >
 
                         <i
