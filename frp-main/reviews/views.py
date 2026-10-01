@@ -1716,6 +1716,7 @@ def manage_profile(request):
                                         f'{request.user.id}'
                                     ),
                                     overwrite=True,
+                                    invalidate=True,
                                     format='jpg'
                                 )
                             )
