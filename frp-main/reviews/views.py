@@ -32,6 +32,7 @@ from openpyxl.styles import (Font,PatternFill,Alignment)
 from django.urls import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+import cloudinary.uploader
 # =========================================================
 # HOME
 # =========================================================
@@ -1562,6 +1563,10 @@ def reset_password(request):
 # MANAGE PROFILE
 # =========================================================
 
+# =========================================================
+# MANAGE PROFILE
+# =========================================================
+
 @login_required(login_url='admin_login')
 def manage_profile(request):
 
@@ -1601,10 +1606,8 @@ def manage_profile(request):
 
         if cropped_image_data:
 
-            # IMPORTANT:
-            # Do not pass request.FILES here.
-            # We want to save the CROPPED image,
-            # not the original uploaded image.
+            # We are saving the CROPPED image,
+            # so do not pass request.FILES here.
 
             form = FacultyProfileForm(
                 request.POST,
@@ -1636,7 +1639,7 @@ def manage_profile(request):
 
 
                     # =====================================
-                    # SAVE CROPPED IMAGE
+                    # SAVE CROPPED IMAGE TO CLOUDINARY
                     # =====================================
 
                     if cropped_image_data:
@@ -1683,31 +1686,45 @@ def manage_profile(request):
 
 
                             # ---------------------------------
-                            # Keep old image path
+                            # Keep old Cloudinary public ID
                             # ---------------------------------
 
-                            old_image_name = None
+                            old_public_id = None
 
                             if (
                                 profile.pk
                                 and profile.profile_image
                             ):
 
-                                old_image_name = (
-                                    profile.profile_image.name
-                                )
+                                try:
+
+                                    old_public_id = (
+                                        profile.profile_image.public_id
+                                    )
+
+                                except AttributeError:
+
+                                    old_public_id = None
 
 
                             # ---------------------------------
-                            # Create new image file
+                            # Create unique image filename
+                            # ---------------------------------
+
+                            image_name = (
+                                f"faculty_profile_"
+                                f"{request.user.id}_"
+                                f"{int(timezone.now().timestamp())}.jpg"
+                            )
+
+
+                            # ---------------------------------
+                            # Create ContentFile
                             # ---------------------------------
 
                             new_image = ContentFile(
                                 image_bytes,
-                                name=(
-                                    f"faculty_profile_"
-                                    f"{request.user.id}.jpg"
-                                )
+                                name=image_name
                             )
 
 
@@ -1726,22 +1743,25 @@ def manage_profile(request):
 
 
                             # ---------------------------------
-                            # Delete old image
+                            # Delete old Cloudinary image
                             # ---------------------------------
 
-                            if (
-                                old_image_name
-                                and default_storage.exists(
-                                    old_image_name
-                                )
-                                and old_image_name != (
-                                    profile.profile_image.name
-                                )
-                            ):
+                            if old_public_id:
 
-                                default_storage.delete(
-                                    old_image_name
-                                )
+                                try:
+
+                                    cloudinary.uploader.destroy(
+                                        old_public_id,
+                                        resource_type='image'
+                                    )
+
+                                except Exception as delete_error:
+
+                                    print(
+                                        'OLD CLOUDINARY IMAGE '
+                                        'DELETE ERROR:',
+                                        delete_error
+                                    )
 
 
                         except (
@@ -1806,6 +1826,7 @@ def manage_profile(request):
                     else:
 
                         # Re-render with errors
+
                         return render(
                             request,
                             'manage_profile.html',
