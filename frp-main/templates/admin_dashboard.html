@@ -859,8 +859,12 @@ html[data-theme="dark"] .session-timer strong { color:#f87171; }
 html[data-theme="dark"] .session-timer.warning { background:#3b1f24; border-color:#7f1d1d; }
 @media (max-width:768px) { .session-timer { width:100%; } }
 
-/* Hide ONLY the old global floating toggle on this dashboard. */
-body:has(.dashboard-theme-toggle) #themeToggleWrapper {
+/* ==================================================
+   HIDE GLOBAL FLOATING THEME TOGGLE
+   Dashboard uses its own Light/Dark button.
+================================================== */
+
+#themeToggleWrapper {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
