@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 class Review(models.Model):
     RATING_CHOICES = [
         (1, '1 - Very Poor'),
@@ -78,11 +79,17 @@ class FacultyProfile(models.Model):
     name = models.CharField(max_length=150)
     designation = models.CharField(max_length=150)
 
-    profile_image = models.ImageField(
-        upload_to="faculty/profile/",
-        blank=True,
-        null=True
-    )
+    # profile_image = models.ImageField(
+    #     upload_to="faculty/profile/",
+    #     blank=True,
+    #     null=True
+    # )
+    profile_image = CloudinaryField(
+    "profile_image",
+    folder="faculty/profile",
+    blank=True,
+    null=True
+)
 
     short_intro = models.TextField(
         blank=True,
