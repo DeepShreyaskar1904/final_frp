@@ -4,8 +4,6 @@ import base64
 import binascii
 from django.utils import timezone
 from io import BytesIO
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
 from django.db import transaction
 from django.contrib.auth import (authenticate,login,logout)
 from django.contrib.auth.decorators import login_required
@@ -1696,43 +1694,40 @@ def manage_profile(request):
                                 and profile.profile_image
                             ):
 
-                                try:
-
-                                    old_public_id = (
-                                        profile.profile_image.public_id
-                                    )
-
-                                except AttributeError:
-
-                                    old_public_id = None
+                                old_public_id = getattr(
+                                    profile.profile_image,
+                                    'public_id',
+                                    None
+                                )
 
 
                             # ---------------------------------
-                            # Create unique image filename
+                            # Upload cropped image directly
+                            # to Cloudinary
                             # ---------------------------------
 
-                            image_name = (
-                                f"faculty_profile_"
-                                f"{request.user.id}_"
-                                f"{int(timezone.now().timestamp())}.jpg"
+                            upload_result = (
+                                cloudinary.uploader.upload(
+                                    image_bytes,
+                                    resource_type='image',
+                                    folder='faculty/profile',
+                                    public_id=(
+                                        f'faculty_profile_'
+                                        f'{request.user.id}'
+                                    ),
+                                    overwrite=True,
+                                    format='jpg'
+                                )
                             )
 
 
                             # ---------------------------------
-                            # Create ContentFile
+                            # Save Cloudinary public ID
                             # ---------------------------------
 
-                            new_image = ContentFile(
-                                image_bytes,
-                                name=image_name
+                            profile.profile_image = (
+                                upload_result['public_id']
                             )
-
-
-                            # ---------------------------------
-                            # Assign image
-                            # ---------------------------------
-
-                            profile.profile_image = new_image
 
 
                             # ---------------------------------
@@ -1746,7 +1741,13 @@ def manage_profile(request):
                             # Delete old Cloudinary image
                             # ---------------------------------
 
-                            if old_public_id:
+                            if (
+                                old_public_id
+                                and
+                                old_public_id != (
+                                    upload_result['public_id']
+                                )
+                            ):
 
                                 try:
 
@@ -1924,3 +1925,4 @@ def manage_profile(request):
                 skill_formset,
         }
     )
+
