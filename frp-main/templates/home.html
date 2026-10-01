@@ -132,7 +132,7 @@ home-page
 
                         <!-- DYNAMIC PROFILE IMAGE -->
                         <img
-                            src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% else %}{% static 'images/deep_shreyaskar.png' %}{% endif %}"
+                            src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}?v={{ profile.updated_at|date:'U' }}{% else %}{% static 'images/deep_shreyaskar.png' %}{% endif %}"
                             alt="{{ profile.name|default:'Faculty' }}"
                             class="faculty-photo"
                         >
@@ -385,7 +385,7 @@ home-page
                 <!-- DYNAMIC PROFILE IMAGE -->
 
                 <img
-                    src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% else %}{% static 'images/deep_shreyaskar.png' %}{% endif %}"
+                    src="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}?v={{ profile.updated_at|date:'U' }}{% else %}{% static 'images/deep_shreyaskar.png' %}{% endif %}"
                     alt="{{ profile.name|default:'Faculty' }}"
                     class="mentor-large-photo"
                 >
