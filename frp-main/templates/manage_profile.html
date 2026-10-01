@@ -44,7 +44,115 @@ Manage Faculty Profile
 
     margin-bottom: 28px;
 }
+/* =========================================================
+   MANAGE PROFILE THEME TOGGLE
+   Same style as the normal portal theme button
+========================================================= */
 
+.profile-theme-toggle {
+
+    min-width: 84px;
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 13px;
+
+    border: 1px solid #475569;
+    border-radius: 10px;
+
+    background: #0f172a;
+    color: #f8fafc;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 14px rgba(15, 23, 42, 0.20);
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.profile-theme-toggle:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(15, 23, 42, 0.25);
+}
+
+
+.profile-theme-toggle:active {
+
+    transform: scale(0.97);
+}
+
+
+/* Light theme */
+
+html[data-theme="light"] .profile-theme-toggle {
+
+    background: #0f172a;
+    color: #f8fafc;
+
+    border-color: #475569;
+}
+
+
+/* Dark theme */
+
+html[data-theme="dark"] .profile-theme-toggle {
+
+    background: #f8fafc;
+    color: #172033;
+
+    border-color: #cbd5e1;
+}
+
+
+/* Remove the old floating theme button ONLY on Manage Profile */
+
+body:has(.profile-page) #themeToggleWrapper {
+
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .profile-header {
+
+        width: 100%;
+
+        gap: 16px;
+    }
+
+
+    .profile-theme-toggle {
+
+        align-self: flex-end;
+
+        min-width: 84px;
+        height: 42px;
+    }
+
+}
 
 .profile-header-left {
 
@@ -7650,5 +7758,176 @@ document.addEventListener("click", function(event) {
     );
 
 })();
+</script>
+<script>
+
+/* =========================================================
+   MANAGE PROFILE THEME TOGGLE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const themeToggle =
+        document.getElementById("profileThemeToggle");
+
+    const themeIcon =
+        document.getElementById("profileThemeIcon");
+
+    const themeText =
+        document.getElementById("profileThemeText");
+
+
+    if (!themeToggle) {
+        return;
+    }
+
+
+    function getCurrentTheme() {
+
+        return document.documentElement
+            .getAttribute("data-theme") === "dark"
+            ? "dark"
+            : "light";
+    }
+
+
+    function updateProfileThemeButton(theme) {
+
+        if (!themeIcon || !themeText) {
+            return;
+        }
+
+
+        if (theme === "dark") {
+
+            themeIcon.className =
+                "fa-solid fa-sun";
+
+            themeText.textContent =
+                "Light";
+
+            themeToggle.setAttribute(
+                "aria-label",
+                "Switch to light mode"
+            );
+
+            themeToggle.setAttribute(
+                "title",
+                "Switch to light mode"
+            );
+
+        } else {
+
+            themeIcon.className =
+                "fa-solid fa-moon";
+
+            themeText.textContent =
+                "Dark";
+
+            themeToggle.setAttribute(
+                "aria-label",
+                "Switch to dark mode"
+            );
+
+            themeToggle.setAttribute(
+                "title",
+                "Switch to dark mode"
+            );
+        }
+    }
+
+
+    /* Initial state */
+
+    updateProfileThemeButton(
+        getCurrentTheme()
+    );
+
+
+    /* Toggle */
+
+    themeToggle.addEventListener(
+        "click",
+        function () {
+
+            const currentTheme =
+                getCurrentTheme();
+
+            const nextTheme =
+                currentTheme === "dark"
+                    ? "light"
+                    : "dark";
+
+
+            /*
+             * Use the existing global theme controller
+             * if available.
+             */
+
+            if (
+                typeof window.applyTheme ===
+                "function"
+            ) {
+
+                window.applyTheme(
+                    nextTheme
+                );
+
+            } else {
+
+                document.documentElement
+                    .setAttribute(
+                        "data-theme",
+                        nextTheme
+                    );
+
+                localStorage.setItem(
+                    "portal-theme",
+                    nextTheme
+                );
+
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "portal-theme-change",
+                        {
+                            detail: {
+                                theme: nextTheme
+                            }
+                        }
+                    )
+                );
+            }
+
+
+            updateProfileThemeButton(
+                nextTheme
+            );
+        }
+    );
+
+
+    /*
+     * Keep button synchronized if theme
+     * changes from another controller.
+     */
+
+    window.addEventListener(
+        "portal-theme-change",
+        function (event) {
+
+            const theme =
+                event.detail &&
+                event.detail.theme
+                    ? event.detail.theme
+                    : getCurrentTheme();
+
+            updateProfileThemeButton(
+                theme
+            );
+        }
+    );
+
+});
+
 </script>
 {% endblock %}
