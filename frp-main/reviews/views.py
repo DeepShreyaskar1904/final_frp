@@ -31,6 +31,8 @@ from django.urls import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 import cloudinary.uploader
+import secrets
+from urllib.parse import urlencode
 # =========================================================
 # HOME
 # =========================================================
@@ -1926,4 +1928,102 @@ def manage_profile(request):
                 skill_formset,
         }
     )
+# =========================================================
+# GMAIL API AUTHORIZATION
+# =========================================================
 
+def gmail_authorize(request):
+
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return redirect('admin_login')
+
+    state = secrets.token_urlsafe(32)
+
+    request.session['gmail_oauth_state'] = state
+
+    params = {
+        'client_id': settings.GOOGLE_CLIENT_ID,
+        'redirect_uri': settings.GMAIL_REDIRECT_URI,
+        'response_type': 'code',
+        'scope': 'https://www.googleapis.com/auth/gmail.send',
+        'access_type': 'offline',
+        'prompt': 'consent',
+        'state': state,
+    }
+
+    authorization_url = (
+        'https://accounts.google.com/o/oauth2/v2/auth?'
+        + urlencode(params)
+    )
+
+    return redirect(authorization_url)
+
+
+# =========================================================
+# GMAIL API CALLBACK
+# =========================================================
+
+def gmail_callback(request):
+
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return redirect('admin_login')
+
+    saved_state = request.session.pop(
+        'gmail_oauth_state',
+        None
+    )
+
+    returned_state = request.GET.get('state')
+
+    if not saved_state or saved_state != returned_state:
+        return HttpResponse(
+            'Invalid Gmail OAuth state.',
+            status=400
+        )
+
+    authorization_code = request.GET.get('code')
+
+    if not authorization_code:
+        return HttpResponse(
+            'Authorization code missing.',
+            status=400
+        )
+
+    token_response = requests.post(
+        'https://oauth2.googleapis.com/token',
+        data={
+            'code': authorization_code,
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'client_secret': settings.GOOGLE_CLIENT_SECRET,
+            'redirect_uri': settings.GMAIL_REDIRECT_URI,
+            'grant_type': 'authorization_code',
+        },
+        timeout=20
+    )
+
+    if not token_response.ok:
+        return HttpResponse(
+            f'Gmail OAuth failed:<br><pre>{token_response.text}</pre>',
+            status=400
+        )
+
+    token_data = token_response.json()
+
+    refresh_token = token_data.get('refresh_token')
+
+    if not refresh_token:
+        return HttpResponse(
+            'Refresh token was not returned. '
+            'Please authorize again.',
+            status=400
+        )
+
+    return HttpResponse(
+        '<h2>Gmail authorization successful.</h2>'
+        '<p>Copy the refresh token below and save it in Render '
+        'Environment Variables as <b>GMAIL_REFRESH_TOKEN</b>.</p>'
+        '<textarea style="width:100%;height:150px;">'
+        + refresh_token +
+        '</textarea>'
+        '<p><b>Do not share this token with anyone.</b></p>'
+    )
