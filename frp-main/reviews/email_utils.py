@@ -201,7 +201,7 @@ def send_via_gmail_api(email_message):
     print("✅ Email sent successfully through Gmail API")
 
 def build_background_email_html(
-    cid,
+    background_url,
     title,
     message,
     description,
@@ -372,7 +372,6 @@ def build_background_email_html(
 <tr>
 
 <td
-    background="cid:{cid}"
     bgcolor="#f4f7fb"
     valign="middle"
     align="center"
@@ -380,7 +379,7 @@ def build_background_email_html(
         width:600px;
         max-width:600px;
 
-        background-image:url('cid:{cid}');
+        background-image:url('{background_url}');
         background-repeat:no-repeat;
         background-position:center;
         background-size:cover;
@@ -636,13 +635,22 @@ Faculty Review Portal
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[student_email],
     )
+    background_url = (
+    settings.SITE_URL.rstrip("/")
+    + "/static/images/email_background.png"
+)
 
-    background_data = create_email_background()
-    cid = attach_inline_image(email, background_data)
-
-    if cid is None:
-        print("❌ Student email background could not be created.")
-        return
+html_message = build_background_email_html(
+    background_url=background_url,
+    title="Thank You!",
+    message=f"{student_name}, your review has been received successfully.",
+    description=(
+        "Thank you for taking the time to share your feedback "
+        "with me."
+    ),
+    button_text="Feedback Received",
+    button_url=None,
+)
 
     html_message = build_background_email_html(
         cid=cid,
@@ -671,17 +679,15 @@ def send_admin_notification(
     admin_login_url=None,
 ):
     """
-    Send admin notification using the SAME
-    background-image email design as the student email.
+    Send admin notification email.
+    No image attachment is sent.
     """
 
     student_name = review.student_name
 
-    print("🔥 NEW ADMIN BACKGROUND EMAIL FUNCTION RUNNING 🔥")
-
+    print("🔥 ADMIN EMAIL FUNCTION RUNNING 🔥")
 
     subject = "New Review Submitted"
-
 
     text_message = f"""
 New Review Submitted
@@ -699,7 +705,6 @@ Regards,
 Faculty Review Portal
 """
 
-
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_message,
@@ -707,32 +712,7 @@ Faculty Review Portal
         to=[settings.ADMIN_EMAIL],
     )
 
-
-    print("🖼️ Creating ADMIN email background...")
-
-    background_data = create_email_background()
-
-    if background_data is None:
-        print("❌ Admin background image creation failed.")
-        return
-
-    print("✅ ADMIN background image created")
-
-
-    cid = attach_inline_image(
-        email,
-        background_data
-    )
-
-    if cid is None:
-        print("❌ Admin background image attachment failed.")
-        return
-
-    print("✅ ADMIN background image attached")
-
-
     if not admin_login_url:
-
         admin_login_url = (
             getattr(
                 settings,
@@ -742,38 +722,101 @@ Faculty Review Portal
             + "/admin-login/"
         )
 
+    html_message = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
-    html_message = build_background_email_html(
+<body style="
+    margin:0;
+    padding:30px 15px;
+    background:#eef3f7;
+    font-family:Arial, Helvetica, sans-serif;
+">
 
-        cid=cid,
+    <div style="
+        max-width:600px;
+        margin:0 auto;
+        background:#ffffff;
+        border-radius:18px;
+        padding:45px 30px;
+        text-align:center;
+        box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    ">
 
-        title="New Review Submitted",
+        <h1 style="
+            margin:0;
+            color:#1e3a8a;
+            font-size:30px;
+        ">
+            New Review Submitted
+        </h1>
 
-        message=(
-            f"{student_name} has submitted "
-            "a new review."
-        ),
+        <div style="
+            width:65px;
+            height:4px;
+            background:#2563eb;
+            margin:18px auto 30px;
+            border-radius:5px;
+        "></div>
 
-        description=(
-            "A new feedback response is waiting "
-            "for you in the Faculty Review Portal. "
-            "Login to review the complete feedback."
-        ),
+        <p style="
+            font-size:17px;
+            font-weight:600;
+            color:#1f2937;
+            margin-bottom:20px;
+        ">
+            {student_name} has submitted a new review.
+        </p>
 
-        button_text="Admin Login",
+        <p style="
+            font-size:16px;
+            line-height:1.7;
+            color:#6b7280;
+            margin:0 auto 30px;
+        ">
+            A new feedback response is waiting for you
+            in the Faculty Review Portal.
+        </p>
 
-        button_url=admin_login_url,
-    )
+        <a href="{admin_login_url}"
+           style="
+               display:inline-block;
+               padding:14px 28px;
+               background:#2563eb;
+               color:#ffffff;
+               text-decoration:none;
+               border-radius:8px;
+               font-size:16px;
+               font-weight:600;
+           ">
+            Admin Login
+        </a>
 
+        <p style="
+            margin-top:35px;
+            color:#9ca3af;
+            font-size:14px;
+        ">
+            Faculty Review Portal
+        </p>
+
+    </div>
+
+</body>
+</html>
+"""
 
     email.attach_alternative(
         html_message,
         "text/html"
     )
 
-
     send_via_gmail_api(email)
 
     print(
-        "✅ ADMIN BACKGROUND EMAIL SENT SUCCESSFULLY"
+        "✅ ADMIN EMAIL SENT SUCCESSFULLY — NO IMAGE ATTACHMENT"
     )
