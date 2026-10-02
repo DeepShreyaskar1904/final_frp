@@ -124,6 +124,7 @@ ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI')
+GMAIL_REFRESH_TOKEN = os.getenv('GMAIL_REFRESH_TOKEN')
 GMAIL_REDIRECT_URI = os.getenv(
     'GMAIL_REDIRECT_URI',
     'https://myreviewportal.onrender.com/gmail/callback/'
