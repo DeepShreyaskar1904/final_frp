@@ -969,9 +969,7 @@ def send_via_gmail_api(email_message):
 
     token_data = token_response.json()
 
-    access_token = token_data.get(
-        "access_token"
-    )
+    access_token = token_data.get("access_token")
 
     if not access_token:
         raise RuntimeError(
@@ -1027,14 +1025,16 @@ def build_background_email_html(
     1. Student thank-you email
     2. Admin notification email
 
-    IMPORTANT:
-    No image is attached to the email.
-    The background image is loaded from the website URL.
+    Both emails use exactly the same:
+    - Main card width
+    - Inner card width
+    - Background
+    - Padding
+    - Height
+    - Responsive behavior
 
-    Both student and admin emails use the exact same
-    responsive dimensions and fixed inner-card height,
-    so the visual size remains consistent.
-    This prevents the 'noname' attachment in Gmail.
+    This keeps the Student and Admin email cards
+    visually identical on desktop and mobile.
     """
 
     # -----------------------------------------------------
@@ -1045,12 +1045,14 @@ def build_background_email_html(
 
         button_html = f"""
         <table
+            width="auto"
             cellpadding="0"
             cellspacing="0"
             border="0"
             align="center"
             style="
                 margin:0 auto 28px auto;
+                border-collapse:collapse;
             "
         >
             <tr>
@@ -1103,12 +1105,14 @@ def build_background_email_html(
 
         button_html = f"""
         <table
+            width="auto"
             cellpadding="0"
             cellspacing="0"
             border="0"
             align="center"
             style="
                 margin:0 auto 28px auto;
+                border-collapse:collapse;
             "
         >
             <tr>
@@ -1171,27 +1175,174 @@ def build_background_email_html(
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        {title}
-    </title>
+    <title>{title}</title>
+
+    <style>
+
+        /* =================================================
+           GLOBAL EMAIL RESET
+           ================================================= */
+
+        html,
+        body {{
+            margin:0 !important;
+            padding:0 !important;
+            width:100% !important;
+            min-width:100% !important;
+        }}
+
+        body {{
+            background:#eef3f8;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            -webkit-text-size-adjust:100%;
+            -ms-text-size-adjust:100%;
+        }}
+
+        table {{
+            border-collapse:collapse;
+            border-spacing:0;
+        }}
+
+        img {{
+            border:0;
+            outline:none;
+            text-decoration:none;
+            display:block;
+        }}
+
+        /* =================================================
+           MAIN EMAIL CARD
+           ================================================= */
+
+        .email-main-card {{
+            width:600px !important;
+            max-width:600px !important;
+            margin:0 auto !important;
+            table-layout:fixed;
+        }}
+
+        .email-background-cell {{
+            width:600px !important;
+            max-width:600px !important;
+            box-sizing:border-box;
+        }}
+
+        .email-inner-card {{
+            width:530px !important;
+            max-width:530px !important;
+            height:420px !important;
+            min-height:420px !important;
+            table-layout:fixed;
+        }}
+
+        .email-inner-cell {{
+            height:420px !important;
+            min-height:420px !important;
+            box-sizing:border-box;
+        }}
+
+        /* =================================================
+           MOBILE EMAIL
+           ================================================= */
+
+        @media only screen and (max-width:620px) {{
+
+            .email-outer-container {{
+                padding:20px 8px !important;
+            }}
+
+            .email-main-card {{
+                width:100% !important;
+                max-width:100% !important;
+            }}
+
+            .email-background-cell {{
+                width:100% !important;
+                max-width:100% !important;
+
+                padding:
+                    35px 18px !important;
+            }}
+
+            .email-inner-card {{
+                width:100% !important;
+                max-width:100% !important;
+
+                height:420px !important;
+                min-height:420px !important;
+            }}
+
+            .email-inner-cell {{
+                height:420px !important;
+                min-height:420px !important;
+
+                padding:
+                    38px 25px 32px 25px !important;
+            }}
+
+            .email-title {{
+                font-size:30px !important;
+                line-height:38px !important;
+            }}
+
+            .email-message {{
+                font-size:18px !important;
+                line-height:29px !important;
+            }}
+
+            .email-description {{
+                font-size:16px !important;
+                line-height:27px !important;
+            }}
+
+        }}
+
+        /* =================================================
+           SMALL MOBILE DEVICES
+           ================================================= */
+
+        @media only screen and (max-width:400px) {{
+
+            .email-outer-container {{
+                padding:15px 6px !important;
+            }}
+
+            .email-background-cell {{
+                padding:
+                    28px 12px !important;
+            }}
+
+            .email-inner-cell {{
+                padding:
+                    34px 20px 28px 20px !important;
+            }}
+
+            .email-title {{
+                font-size:28px !important;
+                line-height:36px !important;
+            }}
+
+            .email-message {{
+                font-size:17px !important;
+                line-height:27px !important;
+            }}
+
+            .email-description {{
+                font-size:15px !important;
+                line-height:25px !important;
+            }}
+
+        }}
+
+    </style>
 
 </head>
 
 
-<body
-    style="
-        margin:0;
-        padding:0;
-
-        background:#eef3f8;
-
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
-    "
->
-
+<body>
 
 <!-- ===================================================== -->
 <!-- OUTER EMAIL CONTAINER -->
@@ -1202,19 +1353,24 @@ def build_background_email_html(
     cellpadding="0"
     cellspacing="0"
     border="0"
-
+    class="email-outer-container"
     style="
         width:100%;
         margin:0;
         padding:35px 10px;
 
         background:#eef3f8;
+
+        border-collapse:collapse;
     "
 >
 
     <tr>
 
-        <td align="center">
+        <td
+            align="center"
+            valign="top"
+        >
 
 
             <!-- ============================================= -->
@@ -1227,6 +1383,7 @@ def build_background_email_html(
                 cellspacing="0"
                 border="0"
                 align="center"
+                class="email-main-card"
 
                 style="
                     width:600px;
@@ -1239,6 +1396,10 @@ def build_background_email_html(
                     border-radius:22px;
 
                     overflow:hidden;
+
+                    border-collapse:collapse;
+
+                    table-layout:fixed;
                 "
             >
 
@@ -1247,9 +1408,10 @@ def build_background_email_html(
                     <td
                         valign="middle"
                         align="center"
+                        class="email-background-cell"
 
                         style="
-                            width:100%;
+                            width:600px;
                             max-width:600px;
 
                             background-color:#f4f7fb;
@@ -1268,6 +1430,8 @@ def build_background_email_html(
 
                             padding:
                                 55px 35px;
+
+                            box-sizing:border-box;
                         "
                     >
 
@@ -1282,17 +1446,24 @@ def build_background_email_html(
                             cellspacing="0"
                             border="0"
                             align="center"
+                            class="email-inner-card"
 
                             style="
-                                width:100%;
+                                width:530px;
                                 max-width:530px;
+
                                 height:420px;
+                                min-height:420px;
 
                                 margin:0 auto;
 
                                 background:#ffffff;
 
                                 border-radius:18px;
+
+                                border-collapse:collapse;
+
+                                table-layout:fixed;
                             "
                         >
 
@@ -1301,9 +1472,12 @@ def build_background_email_html(
                                 <td
                                     align="center"
                                     valign="middle"
+                                    class="email-inner-cell"
 
                                     style="
                                         height:420px;
+                                        min-height:420px;
+
                                         box-sizing:border-box;
 
                                         padding:
@@ -1329,6 +1503,8 @@ def build_background_email_html(
                                     <!-- ========================= -->
 
                                     <h1
+                                        class="email-title"
+
                                         style="
                                             margin:0;
                                             padding:0;
@@ -1369,6 +1545,9 @@ def build_background_email_html(
                                                 auto
                                                 24px
                                                 auto;
+
+                                            border-collapse:
+                                                collapse;
                                         "
                                     >
 
@@ -1406,6 +1585,8 @@ def build_background_email_html(
                                     <!-- ========================= -->
 
                                     <p
+                                        class="email-message"
+
                                         style="
                                             margin:
                                                 0
@@ -1440,6 +1621,8 @@ def build_background_email_html(
                                     <!-- ========================= -->
 
                                     <p
+                                        class="email-description"
+
                                         style="
                                             margin:
                                                 0
@@ -1520,7 +1703,7 @@ def build_background_email_html(
 
             <!-- ============================================= -->
             <!-- END MAIN CARD -->
-            <!-- ============================================= -->
+            <!-- ================================= -->
 
 
         </td>
@@ -1531,7 +1714,7 @@ def build_background_email_html(
 
 <!-- ===================================================== -->
 <!-- END OUTER CONTAINER -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 
 </body>
@@ -1548,11 +1731,8 @@ def send_student_thank_you(review):
     """
     Send thank-you email to the student.
 
-    IMPORTANT:
-    No image attachment is added.
-
-    The email only contains the designed HTML
-    with the website background image.
+    Uses the exact same email card structure
+    as the admin notification email.
     """
 
     student_name = review.student_name
@@ -1684,11 +1864,8 @@ def send_admin_notification(
     """
     Send admin notification email.
 
-    Uses the SAME background design as the
-    student thank-you email.
-
-    IMPORTANT:
-    No image attachment is added.
+    Uses the exact same email card structure
+    as the student thank-you email.
     """
 
     student_name = review.student_name
