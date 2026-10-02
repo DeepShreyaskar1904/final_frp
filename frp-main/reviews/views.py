@@ -33,6 +33,8 @@ from django.core.mail import EmailMultiAlternatives
 import cloudinary.uploader
 import secrets
 from urllib.parse import urlencode
+import time
+import logging
 # =========================================================
 # HOME
 # =========================================================
@@ -186,30 +188,82 @@ def thank_you(request):
 # ADMIN LOGIN
 # =========================================================
 
+# def admin_login(request):
+
+#     # Already logged in
+#     if request.user.is_authenticated:
+
+#         if request.user.is_staff:
+
+#             return redirect(
+#                 'admin_dashboard'
+#             )
+
+#         logout(request)
+
+
+#     if request.method == 'POST':
+
+#         username = request.POST.get(
+#             'username'
+#         )
+
+#         password = request.POST.get(
+#             'password'
+#         )
+
+
+#         user = authenticate(
+#             request,
+#             username=username,
+#             password=password
+#         )
+
+
+#         if user is not None and user.is_staff:
+
+#             login(
+#                 request,
+#                 user
+#             )
+
+#             return redirect(
+#                 'admin_dashboard'
+#             )
+
+
+#         messages.error(
+#             request,
+#             'Invalid admin credentials.'
+#         )
+
+
+#     return render(
+#         request,
+#         'admin_login.html'
+#     )
+
+logger = logging.getLogger(__name__)
+
+
 def admin_login(request):
 
-    # Already logged in
     if request.user.is_authenticated:
 
         if request.user.is_staff:
-
-            return redirect(
-                'admin_dashboard'
-            )
+            return redirect('admin_dashboard')
 
         logout(request)
 
-
     if request.method == 'POST':
 
-        username = request.POST.get(
-            'username'
-        )
+        start = time.time()
+        logger.warning("LOGIN: POST received")
 
-        password = request.POST.get(
-            'password'
-        )
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
+        logger.warning("LOGIN: before authenticate")
 
         user = authenticate(
             request,
@@ -217,30 +271,31 @@ def admin_login(request):
             password=password
         )
 
+        logger.warning(
+            f"LOGIN: authenticate finished in {time.time() - start:.2f}s"
+        )
 
         if user is not None and user.is_staff:
 
-            login(
-                request,
-                user
+            logger.warning("LOGIN: before login()")
+
+            login(request, user)
+
+            logger.warning(
+                f"LOGIN: login() finished in {time.time() - start:.2f}s"
             )
 
-            return redirect(
-                'admin_dashboard'
-            )
-
+            return redirect('admin_dashboard')
 
         messages.error(
             request,
             'Invalid admin credentials.'
         )
 
-
     return render(
         request,
         'admin_login.html'
     )
-
 
 # =========================================================
 # ADMIN LOGOUT
