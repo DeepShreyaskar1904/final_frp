@@ -112,24 +112,48 @@ cloudinary.config(
 )
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# =========================================================
+# EMAIL / GMAIL API
+# =========================================================
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 10
+
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Gmail account authorized through Google OAuth
+GMAIL_SENDER_EMAIL = os.getenv(
+    'GMAIL_SENDER_EMAIL',
+    'dshreyaskar@gmail.com'
+)
+
+DEFAULT_FROM_EMAIL = GMAIL_SENDER_EMAIL
+
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+
+# Gmail API OAuth
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI')
-GMAIL_REFRESH_TOKEN = os.getenv('GMAIL_REFRESH_TOKEN')
+
 GMAIL_REDIRECT_URI = os.getenv(
     'GMAIL_REDIRECT_URI',
     'https://myreviewportal.onrender.com/gmail/callback/'
 )
-OAUTHLIB_INSECURE_TRANSPORT = os.getenv("OAUTHLIB_INSECURE_TRANSPORT", "0")
+
+GMAIL_REFRESH_TOKEN = os.getenv(
+    'GMAIL_REFRESH_TOKEN'
+)
+
+OAUTHLIB_INSECURE_TRANSPORT = os.getenv(
+    'OAUTHLIB_INSECURE_TRANSPORT',
+    '0'
+)
 # =========================================================
 # ADMIN SESSION TIMEOUT
 # =========================================================
