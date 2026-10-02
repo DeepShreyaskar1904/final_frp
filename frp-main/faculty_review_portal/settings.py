@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 CSRF_TRUSTED_ORIGINS = [
-    "https://MyReviewPortal.onrender.com",
+    "https://myreviewportal.onrender.com",
 ]
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -126,7 +126,7 @@ GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI')
 GMAIL_REDIRECT_URI = os.getenv(
     'GMAIL_REDIRECT_URI',
-    'http://127.0.0.1:8000/gmail/callback/'
+    'https://myreviewportal.onrender.com/gmail/callback/'
 )
 OAUTHLIB_INSECURE_TRANSPORT = os.getenv("OAUTHLIB_INSECURE_TRANSPORT", "0")
 # =========================================================
