@@ -74,7 +74,7 @@
     >
 </head>
 
-<body>
+<body style="overflow-x: hidden;">
 
     {% block content %}
     {% endblock %}
@@ -152,6 +152,39 @@
     </script>
 
     {% endif %}
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const loginPage = document.querySelector(".admin-login-page");
+
+    if (!loginPage) {
+        return;
+    }
+
+    loginPage.style.position = "relative";
+    loginPage.style.zIndex = "9999";
+
+    const loginCard = document.querySelector(".login-card");
+
+    if (loginCard) {
+        loginCard.style.position = "relative";
+        loginCard.style.zIndex = "10000";
+        loginCard.style.pointerEvents = "auto";
+    }
+
+    document.querySelectorAll(
+        ".login-card button, .login-card a, .login-card input"
+    ).forEach(function (element) {
+
+        element.style.position = "relative";
+        element.style.zIndex = "10001";
+        element.style.pointerEvents = "auto";
+        element.style.touchAction = "manipulation";
+
+    });
+
+});
+</script>
 
 </body>
 </html>
