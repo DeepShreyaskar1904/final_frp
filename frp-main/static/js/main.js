@@ -7,44 +7,109 @@ console.log("✅ FIXED MAIN.JS LOADED");
     // STUDENT REVIEW FORM CONFIRMATION
     // ==================================================
 
-    document.addEventListener("DOMContentLoaded", function () {
+   document.addEventListener("DOMContentLoaded", function () {
 
-        const form = document.getElementById("reviewForm");
+    const form = document.getElementById("reviewForm");
 
-        if (form) {
+    if (form) {
 
-            form.addEventListener("submit", function (event) {
+        let submitLocked = false;
 
-                event.preventDefault();
+        form.addEventListener("submit", function (event) {
 
-                if (typeof Swal === "undefined") {
-                    form.submit();
-                    return;
+            event.preventDefault();
+
+            // Prevent multiple submissions
+            if (submitLocked) {
+                return;
+            }
+
+            // Lock immediately
+            submitLocked = true;
+
+            const submitButton = form.querySelector(
+                'button[type="submit"]'
+            );
+
+            if (submitButton) {
+
+                submitButton.disabled = true;
+
+                submitButton.style.pointerEvents = "none";
+
+                submitButton.innerHTML =
+                    '<i class="fa-solid fa-spinner fa-spin me-2"></i>' +
+                    'Processing...';
+            }
+
+
+            if (typeof Swal === "undefined") {
+
+                form.submit();
+
+                return;
+            }
+
+
+            Swal.fire({
+
+                title: "Submit Feedback?",
+
+                text:
+                    "Please make sure your feedback is honest before submitting.",
+
+                icon: "question",
+
+                showCancelButton: true,
+
+                confirmButtonText: "Yes, Submit",
+
+                cancelButtonText: "Review Again",
+
+                reverseButtons: true,
+
+                allowOutsideClick: false,
+
+                allowEscapeKey: false,
+
+                customClass: {
+
+                    popup: "portal-swal-popup",
+
+                    confirmButton: "portal-swal-confirm"
+
                 }
 
-                Swal.fire({
-                    title: "Submit Feedback?",
-                    text: "Please make sure your feedback is honest before submitting.",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes, Submit",
-                    cancelButtonText: "Review Again",
-                    reverseButtons: true,
-                    customClass: {
-                        popup: "portal-swal-popup",
-                        confirmButton: "portal-swal-confirm"
-                    }
-                }).then(function (result) {
+            }).then(function (result) {
 
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+                if (result.isConfirmed) {
 
-                });
+                    // Submit ONLY ONCE
+                    form.submit();
+
+                } else {
+
+                    // User cancelled → unlock form
+
+                    submitLocked = false;
+
+                    if (submitButton) {
+
+                        submitButton.disabled = false;
+
+                        submitButton.style.pointerEvents = "auto";
+
+                        submitButton.innerHTML =
+                            '<i class="fa-solid fa-paper-plane me-2"></i>' +
+                            'Submit Feedback';
+                    }
+                }
 
             });
 
-        }
+        });
+
+    }
 
 
         // ==================================================
