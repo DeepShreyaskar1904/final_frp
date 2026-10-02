@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import base64
 import requests
@@ -10,9 +9,6 @@ from django.core.mail import EmailMultiAlternatives
 from email.message import MIMEPart
 from email.mime.image import MIMEImage
 
-# ============================================================
-# PATHS
-# ============================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 EMAIL_BACKGROUND_PATH = (
     BASE_DIR
@@ -21,10 +17,6 @@ EMAIL_BACKGROUND_PATH = (
     / "email_background.png"
 )
 
-
-# ============================================================
-# FONT
-# ============================================================
 
 def get_email_font(size, bold=False):
     paths = (
@@ -47,10 +39,6 @@ def get_email_font(size, bold=False):
     return ImageFont.load_default()
 
 
-# ============================================================
-# CREATE FADED EMAIL BACKGROUND
-# ============================================================
-
 def create_email_background():
     """Create a soft/faded version of the local logo image."""
 
@@ -67,7 +55,6 @@ def create_email_background():
         WIDTH = 1200
         HEIGHT = 900
 
-        # Cover the complete email canvas.
         ratio = max(
             WIDTH / background.width,
             HEIGHT / background.height,
@@ -83,7 +70,6 @@ def create_email_background():
             Image.Resampling.LANCZOS,
         )
 
-        # Center crop.
         left = (background.width - WIDTH) // 2
         top = (background.height - HEIGHT) // 2
 
@@ -96,7 +82,6 @@ def create_email_background():
             )
         )
 
-        # Make the logo/background subtle: roughly 38% image + 62% white.
         white = Image.new(
             "RGB",
             (WIDTH, HEIGHT),
@@ -125,33 +110,32 @@ def create_email_background():
         return None
 
 
-# ============================================================
-# ATTACH INLINE IMAGE
-# ============================================================
-
 def attach_inline_image(email_message, image_data):
+    """Attach the email background as a real inline MIME image."""
+
     if image_data is None:
         return None
 
     cid = make_msgid()
 
-    image_part = MIMEPart()
-    image_part.set_content(
+    image_part = MIMEImage(
         image_data.getvalue(),
-        maintype="image",
-        subtype="png",
-        disposition="inline",
-        cid=cid,
+        _subtype="png",
+    )
+
+    image_part.add_header(
+        "Content-ID",
+        cid,
+    )
+    image_part.add_header(
+        "Content-Disposition",
+        "inline",
     )
 
     email_message.attach(image_part)
 
     return cid[1:-1]
 
-
-# ============================================================
-# GMAIL API SENDING
-# ============================================================
 
 def send_via_gmail_api(email_message):
     """Send an already-built Django email through the Gmail API."""
@@ -163,9 +147,6 @@ def send_via_gmail_api(email_message):
             "GMAIL_REFRESH_TOKEN is not configured in environment variables."
         )
 
-    # --------------------------------------------------------
-    # GET A FRESH ACCESS TOKEN
-    # --------------------------------------------------------
 
     token_response = requests.post(
         "https://oauth2.googleapis.com/token",
@@ -192,18 +173,12 @@ def send_via_gmail_api(email_message):
             "Gmail access token was not returned."
         )
 
-    # --------------------------------------------------------
-    # CONVERT THE EXISTING EMAIL TO RAW MIME
-    # --------------------------------------------------------
 
     mime_message = email_message.message()
     raw_message = base64.urlsafe_b64encode(
         mime_message.as_bytes()
     ).decode("utf-8").rstrip("=")
 
-    # --------------------------------------------------------
-    # SEND THROUGH GMAIL API
-    # --------------------------------------------------------
 
     gmail_response = requests.post(
         "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
@@ -241,9 +216,6 @@ def build_background_email_html(
     Fixed card size so both emails look identical in Gmail.
     """
 
-    # ---------------------------------------------------------
-    # BUTTON
-    # ---------------------------------------------------------
 
     if button_url:
         button_html = f"""
@@ -325,9 +297,6 @@ def build_background_email_html(
         </table>
         """
 
-    # ---------------------------------------------------------
-    # EMAIL HTML
-    # ---------------------------------------------------------
 
     return f"""
 <!DOCTYPE html>
@@ -637,9 +606,6 @@ def build_background_email_html(
 
 </html>
 """
-# ============================================================
-# STUDENT THANK-YOU EMAIL
-# ============================================================
 
 def send_student_thank_you(review):
     """Send the student a thank-you email using the same logo background."""
@@ -675,35 +641,20 @@ Faculty Review Portal
     cid = attach_inline_image(email, background_data)
 
     if cid is None:
-        print("⚠️ Student email background unavailable. Sending without inline background.")
-        html_message = f"""
-        <html>
-        <body style="font-family:Arial,Helvetica,sans-serif;background:#ffffff;padding:30px;">
-            <div style="max-width:600px;margin:auto;text-align:center;">
-                <h2 style="color:#1e293b;">Thank You!</h2>
-                <p style="font-size:18px;color:#334155;">
-                    {student_name}, your review has been received successfully.
-                </p>
-                <p style="font-size:15px;color:#64748b;">
-                    Thank you for taking the time to share your feedback with me.
-                </p>
-                <p style="font-size:13px;color:#94a3b8;">Faculty Review Portal</p>
-            </div>
-        </body>
-        </html>
-        """
-    else:
-        html_message = build_background_email_html(
-            cid=cid,
-            title="Thank You!",
-            message=f"{student_name}, your review has been received successfully.",
-            description=(
-                "Thank you for taking the time to share your feedback "
-                "with me."
-            ),
-            button_text="Feedback Received",
-            button_url=None,
-        )
+        print("❌ Student email background could not be created.")
+        return
+
+    html_message = build_background_email_html(
+        cid=cid,
+        title="Thank You!",
+        message=f"{student_name}, your review has been received successfully.",
+        description=(
+            "Thank you for taking the time to share your feedback "
+            "with me."
+        ),
+        button_text="Feedback Received",
+        button_url=None,
+    )
 
     email.attach_alternative(
         html_message,
@@ -714,9 +665,6 @@ Faculty Review Portal
 
     print(f"✅ Student thank-you email sent to {student_email}")
 
-# ============================================================
-# ADMIN NOTIFICATION EMAIL
-# ============================================================
 
 def send_admin_notification(
     review,
@@ -731,15 +679,9 @@ def send_admin_notification(
 
     print("🔥 NEW ADMIN BACKGROUND EMAIL FUNCTION RUNNING 🔥")
 
-    # --------------------------------------------------------
-    # SUBJECT
-    # --------------------------------------------------------
 
     subject = "New Review Submitted"
 
-    # --------------------------------------------------------
-    # PLAIN TEXT FALLBACK
-    # --------------------------------------------------------
 
     text_message = f"""
 New Review Submitted
@@ -757,9 +699,6 @@ Regards,
 Faculty Review Portal
 """
 
-    # --------------------------------------------------------
-    # CREATE EMAIL
-    # --------------------------------------------------------
 
     email = EmailMultiAlternatives(
         subject=subject,
@@ -768,13 +707,17 @@ Faculty Review Portal
         to=[settings.ADMIN_EMAIL],
     )
 
-    # --------------------------------------------------------
-    # CREATE SAME BACKGROUND IMAGE
-    # --------------------------------------------------------
 
     print("🖼️ Creating ADMIN email background...")
 
     background_data = create_email_background()
+
+    if background_data is None:
+        print("❌ Admin background image creation failed.")
+        return
+
+    print("✅ ADMIN background image created")
+
 
     cid = attach_inline_image(
         email,
@@ -782,13 +725,11 @@ Faculty Review Portal
     )
 
     if cid is None:
-        print("⚠️ Admin background unavailable. Sending without inline background.")
-    else:
-        print("✅ ADMIN background image attached")
+        print("❌ Admin background image attachment failed.")
+        return
 
-    # --------------------------------------------------------
-    # ADMIN LOGIN URL
-    # --------------------------------------------------------
+    print("✅ ADMIN background image attached")
+
 
     if not admin_login_url:
 
@@ -801,57 +742,35 @@ Faculty Review Portal
             + "/admin-login/"
         )
 
-    # --------------------------------------------------------
-    # SAME BACKGROUND HTML
-    # --------------------------------------------------------
 
-    if cid is None:
-        html_message = f"""
-        <html>
-        <body style="font-family:Arial,Helvetica,sans-serif;background:#ffffff;padding:30px;">
-            <div style="max-width:600px;margin:auto;text-align:center;">
-                <h2 style="color:#1e293b;">New Review Submitted</h2>
-                <p style="font-size:18px;color:#334155;">
-                    {student_name} has submitted a new review.
-                </p>
-                <p style="font-size:15px;color:#64748b;">
-                    A new feedback response is waiting for you in the Faculty Review Portal.
-                </p>
-                <p><a href="{admin_login_url}" style="display:inline-block;padding:14px 24px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:9px;font-weight:700;">Admin Login</a></p>
-                <p style="font-size:13px;color:#94a3b8;">Faculty Review Portal</p>
-            </div>
-        </body>
-        </html>
-        """
-    else:
-        html_message = build_background_email_html(
-            cid=cid,
-            title="New Review Submitted",
-            message=(
-                f"{student_name} has submitted "
-                "a new review."
-            ),
-            description=(
-                "A new feedback response is waiting "
-                "for you in the Faculty Review Portal. "
-                "Login to review the complete feedback."
-            ),
-            button_text="Admin Login",
-            button_url=admin_login_url,
-        )
+    html_message = build_background_email_html(
 
-    # --------------------------------------------------------
-    # ATTACH HTML
-    # --------------------------------------------------------
+        cid=cid,
+
+        title="New Review Submitted",
+
+        message=(
+            f"{student_name} has submitted "
+            "a new review."
+        ),
+
+        description=(
+            "A new feedback response is waiting "
+            "for you in the Faculty Review Portal. "
+            "Login to review the complete feedback."
+        ),
+
+        button_text="Admin Login",
+
+        button_url=admin_login_url,
+    )
+
 
     email.attach_alternative(
         html_message,
         "text/html"
     )
 
-    # --------------------------------------------------------
-    # SEND
-    # --------------------------------------------------------
 
     send_via_gmail_api(email)
 
