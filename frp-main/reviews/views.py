@@ -316,18 +316,19 @@ def admin_login(request):
             username=username,
             password=password
         )
-    if user is not None and user.is_staff:
 
-        login(request, user)
+        if user is not None and user.is_staff:
+
+            login(request, user)
+
+            return redirect('admin_dashboard')
+
+        messages.error(
+            request,
+            'Invalid admin credentials.'
+        )
 
         return redirect('admin_login')
-
-    messages.error(
-    request,
-    'Invalid admin credentials.'
-    )
-
-    return redirect('admin_login')
 
     return render(
         request,
