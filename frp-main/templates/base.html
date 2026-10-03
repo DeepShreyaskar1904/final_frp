@@ -76,7 +76,7 @@
 
 
     <!-- =========================================
-         BOOTSTRAP
+         BOOTSTRAP CSS
     ========================================== -->
 
     <link
@@ -125,14 +125,14 @@
 
 
     <!-- =========================================
-         SWEETALERT2 LAYER FIX
+         SWEETALERT2 Z-INDEX FIX
     ========================================== -->
 
     <style>
 
         /*
-         * SweetAlert must always appear above
-         * login page/card and other UI elements.
+         * SweetAlert must always stay
+         * above the login page/card.
          */
 
         .swal2-container {
@@ -142,11 +142,6 @@
         .swal2-popup {
             z-index: 1000000 !important;
         }
-
-        /*
-         * Make sure the SweetAlert backdrop
-         * is also above the login page.
-         */
 
         .swal2-backdrop-show {
             z-index: 999998 !important;
@@ -257,17 +252,47 @@
 
                 Swal.fire({
 
+                    /* =========================
+                       ALERT TYPE
+                    ========================= */
+
                     icon:
                         "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+
+
+                    /* =========================
+                       ALERT TITLE
+                    ========================= */
 
                     title:
                         "{% if message.tags == 'error' %}Login Failed{% else %}Success{% endif %}",
 
+
+                    /* =========================
+                       ALERT MESSAGE
+                    ========================= */
+
                     text:
                         "{{ message|escapejs }}",
 
-                    confirmButtonText:
-                        "OK",
+
+                    /* =========================
+                       AUTO CLOSE
+                    ========================= */
+
+                    showConfirmButton:
+                        false,
+
+                    timer:
+                        2000,
+
+                    timerProgressBar:
+                        true,
+
+
+                    /* =========================
+                       USER INTERACTION
+                    ========================= */
 
                     allowOutsideClick:
                         true,
@@ -275,13 +300,15 @@
                     allowEscapeKey:
                         true,
 
+
+                    /* =========================
+                       CUSTOM STYLE
+                    ========================= */
+
                     customClass: {
 
                         popup:
-                            "portal-swal-popup",
-
-                        confirmButton:
-                            "portal-swal-confirm"
+                            "portal-swal-popup"
 
                     }
 
@@ -318,9 +345,9 @@
                 }
 
 
-                /*
-                 * Login page
-                 */
+                /* =========================
+                   LOGIN PAGE
+                ========================= */
 
                 loginPage.style.position =
                     "relative";
@@ -329,9 +356,9 @@
                     "9999";
 
 
-                /*
-                 * Login card
-                 */
+                /* =========================
+                   LOGIN CARD
+                ========================= */
 
                 const loginCard =
                     document.querySelector(
@@ -353,9 +380,9 @@
                 }
 
 
-                /*
-                 * Login controls
-                 */
+                /* =========================
+                   LOGIN CONTROLS
+                ========================= */
 
                 document.querySelectorAll(
                     ".login-card button, " +
