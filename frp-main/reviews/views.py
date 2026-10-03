@@ -297,6 +297,54 @@ def thank_you(request):
 #         request,
 #         'admin_login.html'
 #     )
+
+
+# def admin_login(request):
+
+#     if request.user.is_authenticated:
+
+#         if request.user.is_staff:
+#             return redirect('admin_dashboard')
+
+#         logout(request)
+
+#     if request.method == 'POST':
+
+#         username = request.POST.get('username', '').strip()
+#         password = request.POST.get('password', '')
+
+#         user = authenticate(
+#             request,
+#             username=username,
+#             password=password
+#         )
+
+#         if user is not None and user.is_staff:
+
+#             login(request, user)
+
+#             messages.success(
+#                 request,
+#                 'Welcome back, Admin!'
+#             )
+
+#             return redirect('admin_login')
+
+#         messages.error(
+#             request,
+#             'Invalid admin credentials.'
+#         )
+
+#         return redirect('admin_login')
+
+#     return render(
+#         request,
+#         'admin_login.html'
+#     )
+
+logger = logging.getLogger(__name__)
+
+
 def admin_login(request):
 
     if request.user.is_authenticated:
@@ -311,6 +359,9 @@ def admin_login(request):
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
 
+        logger.warning("LOGIN: POST received")
+        logger.warning(f"LOGIN: username = {username}")
+
         user = authenticate(
             request,
             username=username,
@@ -319,15 +370,26 @@ def admin_login(request):
 
         if user is not None and user.is_staff:
 
+            logger.warning("LOGIN: valid admin")
+
             login(request, user)
 
-            messages.success(
+            # IMPORTANT:
+            # Do NOT use messages.success()
+            # Render login page first so the success
+            # alert appears on the login page itself.
+
+            return render(
                 request,
-                'Welcome back, Admin!'
+                'admin_login.html',
+                {
+                    'login_success': True
+                }
             )
 
-            return redirect('admin_login')
+        logger.warning("LOGIN: invalid admin credentials")
 
+        # Error can still use the global messages system
         messages.error(
             request,
             'Invalid admin credentials.'
