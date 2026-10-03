@@ -923,5 +923,39 @@ document.addEventListener("click", function (event) {
     }
 
 }, true);   
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    {% if login_success %}
+
+    Swal.fire({
+
+        icon: "success",
+
+        title: "Login Successful!",
+
+        text: "Welcome back, Admin.",
+
+        showConfirmButton: false,
+
+        timer: 2000,
+
+        timerProgressBar: true,
+
+        allowOutsideClick: false,
+
+        allowEscapeKey: false
+
+    }).then(function () {
+
+        window.location.href =
+            "{% url 'admin_dashboard' %}";
+
+    });
+
+    {% endif %}
+
+});
+</script>
 </script>
 {% endblock %}
