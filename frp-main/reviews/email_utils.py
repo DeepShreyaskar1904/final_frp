@@ -1,6 +1,6 @@
-
 from pathlib import Path
 import base64
+import html
 import requests
 
 from django.conf import settings
@@ -65,23 +65,27 @@ def send_via_gmail_api(email_message):
 
     token_data = token_response.json()
 
-    access_token = token_data.get(
-        "access_token"
-    )
+    access_token = token_data.get("access_token")
 
     if not access_token:
         raise RuntimeError(
             "Gmail access token was not returned."
         )
 
-    # Convert Django email into MIME
+    # -----------------------------------------------------
+    # CONVERT DJANGO EMAIL INTO MIME
+    # -----------------------------------------------------
+
     mime_message = email_message.message()
 
     raw_message = base64.urlsafe_b64encode(
         mime_message.as_bytes()
     ).decode("utf-8").rstrip("=")
 
-    # Send through Gmail API
+    # -----------------------------------------------------
+    # SEND THROUGH GMAIL API
+    # -----------------------------------------------------
+
     gmail_response = requests.post(
         "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
         headers={
@@ -124,27 +128,65 @@ def build_background_email_html(
     2. Admin notification email
 
     IMPORTANT:
-    No image is attached to the email.
-    The background image is loaded from the website URL.
-    This prevents the 'noname' attachment in Gmail.
+    Both emails use exactly the same:
+
+    - Main card width
+    - Inner card width
+    - Card height
+    - Padding
+    - Typography
+    - Button structure
+    - Background structure
+
+    Only the actual text/content changes.
     """
 
     # -----------------------------------------------------
-    # BUTTON
+    # SAFELY ESCAPE CONTENT
     # -----------------------------------------------------
 
-    if button_url:
+    safe_title = html.escape(str(title))
+    safe_message = html.escape(str(message))
+    safe_description = html.escape(str(description))
+    safe_button_text = html.escape(str(button_text))
 
-        button_html = f"""
+    if button_url:
+        safe_button_url = html.escape(
+            str(button_url),
+            quote=True
+        )
+    else:
+        safe_button_url = "#"
+
+    # -----------------------------------------------------
+    # COMMON BUTTON
+    # -----------------------------------------------------
+    #
+    # IMPORTANT:
+    # Student and Admin both use the SAME <a> structure.
+    #
+    # Admin:
+    #     href = actual admin URL
+    #
+    # Student:
+    #     href = #
+    #
+    # Visual structure remains identical.
+    # -----------------------------------------------------
+
+    button_html = f"""
         <table
+            width="auto"
             cellpadding="0"
             cellspacing="0"
             border="0"
             align="center"
             style="
                 margin:0 auto 28px auto;
+                border-collapse:collapse;
             "
         >
+
             <tr>
 
                 <td
@@ -157,10 +199,11 @@ def build_background_email_html(
                 >
 
                     <a
-                        href="{button_url}"
+                        href="{safe_button_url}"
                         target="_blank"
                         style="
                             display:inline-block;
+
                             padding:15px 28px;
 
                             font-family:
@@ -169,6 +212,7 @@ def build_background_email_html(
                                 sans-serif;
 
                             font-size:16px;
+
                             line-height:20px;
 
                             font-weight:700;
@@ -182,72 +226,19 @@ def build_background_email_html(
                             background:#2563eb;
                         "
                     >
-                        {button_text}
+                        {safe_button_text}
                     </a>
 
                 </td>
 
             </tr>
+
         </table>
-        """
+    """
 
-    else:
-
-        button_html = f"""
-        <table
-            cellpadding="0"
-            cellspacing="0"
-            border="0"
-            align="center"
-            style="
-                margin:0 auto 28px auto;
-            "
-        >
-            <tr>
-
-                <td
-                    align="center"
-                    bgcolor="#2563eb"
-                    style="
-                        background:#2563eb;
-                        border-radius:9px;
-                    "
-                >
-
-                    <span
-                        style="
-                            display:inline-block;
-                            padding:15px 28px;
-
-                            font-family:
-                                Arial,
-                                Helvetica,
-                                sans-serif;
-
-                            font-size:16px;
-                            line-height:20px;
-
-                            font-weight:700;
-
-                            color:#ffffff;
-
-                            border-radius:9px;
-
-                            background:#2563eb;
-                        "
-                    >
-                        {button_text}
-                    </span>
-
-                </td>
-
-            </tr>
-        </table>
-        """
-
-    # -----------------------------------------------------
-    # COMPLETE EMAIL
-    # -----------------------------------------------------
+    # =====================================================
+    # COMPLETE EMAIL HTML
+    # =====================================================
 
     return f"""
 <!DOCTYPE html>
@@ -263,9 +254,126 @@ def build_background_email_html(
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        {title}
-    </title>
+    <title>{safe_title}</title>
+
+
+    <style>
+
+        /* =================================================
+           GLOBAL RESET
+           ================================================= */
+
+        html,
+        body {{
+            margin:0 !important;
+            padding:0 !important;
+
+            width:100% !important;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            -webkit-text-size-adjust:100%;
+            -ms-text-size-adjust:100%;
+        }}
+
+
+        body {{
+            background:#eef3f8;
+        }}
+
+
+        table {{
+            border-collapse:collapse;
+            border-spacing:0;
+        }}
+
+
+        td {{
+            border-collapse:collapse;
+        }}
+
+
+        img {{
+            border:0;
+            outline:none;
+            text-decoration:none;
+            display:block;
+        }}
+
+
+        /* =================================================
+           MAIN CARD
+           ================================================= */
+
+        .email-main-card {{
+            width:600px !important;
+
+            min-width:600px !important;
+
+            max-width:600px !important;
+
+            margin:0 auto !important;
+
+            table-layout:fixed;
+        }}
+
+
+        /* =================================================
+           BACKGROUND AREA
+           ================================================= */
+
+        .email-background-cell {{
+            width:600px !important;
+
+            min-width:600px !important;
+
+            max-width:600px !important;
+
+            box-sizing:border-box;
+        }}
+
+
+        /* =================================================
+           INNER WHITE CARD
+           ================================================= */
+
+        .email-inner-card {{
+            width:530px !important;
+
+            min-width:530px !important;
+
+            max-width:530px !important;
+
+            height:420px !important;
+
+            min-height:420px !important;
+
+            max-height:420px !important;
+
+            table-layout:fixed;
+        }}
+
+
+        .email-inner-cell {{
+            width:530px !important;
+
+            min-width:530px !important;
+
+            max-width:530px !important;
+
+            height:420px !important;
+
+            min-height:420px !important;
+
+            max-height:420px !important;
+
+            box-sizing:border-box;
+        }}
+
+    </style>
 
 </head>
 
@@ -285,9 +393,9 @@ def build_background_email_html(
 >
 
 
-<!-- ===================================================== -->
-<!-- OUTER EMAIL CONTAINER -->
-<!-- ===================================================== -->
+<!-- =====================================================
+     OUTER EMAIL CONTAINER
+     ===================================================== -->
 
 <table
     width="100%"
@@ -297,34 +405,43 @@ def build_background_email_html(
 
     style="
         width:100%;
+
         margin:0;
-        padding:35px 15px;
+        padding:35px 10px;
 
         background:#eef3f8;
+
+        border-collapse:collapse;
     "
 >
 
     <tr>
 
-        <td align="center">
+        <td
+            align="center"
+            valign="top"
+        >
 
 
-            <!-- ============================================= -->
-            <!-- MAIN CARD -->
-            <!-- ============================================= -->
+            <!-- =============================================
+                 MAIN WHITE CARD
+                 ============================================= -->
 
             <table
                 width="600"
-                height="560"
                 cellpadding="0"
                 cellspacing="0"
                 border="0"
                 align="center"
 
+                class="email-main-card"
+
                 style="
                     width:600px;
+
+                    min-width:600px;
+
                     max-width:600px;
-                    height:560px;
 
                     margin:0 auto;
 
@@ -333,6 +450,10 @@ def build_background_email_html(
                     border-radius:22px;
 
                     overflow:hidden;
+
+                    border-collapse:collapse;
+
+                    table-layout:fixed;
                 "
             >
 
@@ -342,8 +463,13 @@ def build_background_email_html(
                         valign="middle"
                         align="center"
 
+                        class="email-background-cell"
+
                         style="
                             width:600px;
+
+                            min-width:600px;
+
                             max-width:600px;
 
                             background-color:#f4f7fb;
@@ -362,32 +488,47 @@ def build_background_email_html(
 
                             padding:
                                 55px 35px;
+
+                            box-sizing:border-box;
                         "
                     >
 
 
-                        <!-- ================================= -->
-                        <!-- INNER WHITE CARD -->
-                        <!-- ================================= -->
+                        <!-- =================================
+                             INNER WHITE CARD
+                             ================================= -->
 
                         <table
                             width="530"
-                            height="430"
                             cellpadding="0"
                             cellspacing="0"
                             border="0"
                             align="center"
 
+                            class="email-inner-card"
+
                             style="
                                 width:530px;
+
+                                min-width:530px;
+
                                 max-width:530px;
-                                height:430px;
+
+                                height:420px;
+
+                                min-height:420px;
+
+                                max-height:420px;
 
                                 margin:0 auto;
 
                                 background:#ffffff;
 
                                 border-radius:18px;
+
+                                border-collapse:collapse;
+
+                                table-layout:fixed;
                             "
                         >
 
@@ -396,10 +537,24 @@ def build_background_email_html(
                                 <td
                                     align="center"
                                     valign="middle"
-                                    height="430"
+
+                                    class="email-inner-cell"
 
                                     style="
-                                        height:430px;
+                                        width:530px;
+
+                                        min-width:530px;
+
+                                        max-width:530px;
+
+                                        height:420px;
+
+                                        min-height:420px;
+
+                                        max-height:420px;
+
+                                        box-sizing:border-box;
+
                                         padding:
                                             42px
                                             38px
@@ -418,9 +573,9 @@ def build_background_email_html(
                                 >
 
 
-                                    <!-- ========================= -->
-                                    <!-- TITLE -->
-                                    <!-- ========================= -->
+                                    <!-- =================================
+                                         TITLE
+                                         ================================= -->
 
                                     <h1
                                         style="
@@ -443,13 +598,13 @@ def build_background_email_html(
                                             text-align:center;
                                         "
                                     >
-                                        {title}
+                                        {safe_title}
                                     </h1>
 
 
-                                    <!-- ========================= -->
-                                    <!-- BLUE LINE -->
-                                    <!-- ========================= -->
+                                    <!-- =================================
+                                         BLUE LINE
+                                         ================================= -->
 
                                     <table
                                         cellpadding="0"
@@ -463,6 +618,9 @@ def build_background_email_html(
                                                 auto
                                                 24px
                                                 auto;
+
+                                            border-collapse:
+                                                collapse;
                                         "
                                     >
 
@@ -495,9 +653,9 @@ def build_background_email_html(
                                     </table>
 
 
-                                    <!-- ========================= -->
-                                    <!-- MAIN MESSAGE -->
-                                    <!-- ========================= -->
+                                    <!-- =================================
+                                         MAIN MESSAGE
+                                         ================================= -->
 
                                     <p
                                         style="
@@ -525,13 +683,13 @@ def build_background_email_html(
                                             text-align:center;
                                         "
                                     >
-                                        {message}
+                                        {safe_message}
                                     </p>
 
 
-                                    <!-- ========================= -->
-                                    <!-- DESCRIPTION -->
-                                    <!-- ========================= -->
+                                    <!-- =================================
+                                         DESCRIPTION
+                                         ================================= -->
 
                                     <p
                                         style="
@@ -557,20 +715,20 @@ def build_background_email_html(
                                             text-align:center;
                                         "
                                     >
-                                        {description}
+                                        {safe_description}
                                     </p>
 
 
-                                    <!-- ========================= -->
-                                    <!-- BUTTON -->
-                                    <!-- ========================= -->
+                                    <!-- =================================
+                                         BUTTON
+                                         ================================= -->
 
                                     {button_html}
 
 
-                                    <!-- ========================= -->
-                                    <!-- FOOTER -->
-                                    <!-- ========================= -->
+                                    <!-- =================================
+                                         FOOTER
+                                         ================================= -->
 
                                     <p
                                         style="
@@ -601,9 +759,9 @@ def build_background_email_html(
 
                         </table>
 
-                        <!-- ================================= -->
-                        <!-- END INNER CARD -->
-                        <!-- ================================= -->
+                        <!-- =================================
+                             END INNER WHITE CARD
+                             ================================= -->
 
 
                     </td>
@@ -612,9 +770,9 @@ def build_background_email_html(
 
             </table>
 
-            <!-- ============================================= -->
-            <!-- END MAIN CARD -->
-            <!-- ============================================= -->
+            <!-- =============================================
+                 END MAIN CARD
+                 ================================= -->
 
 
         </td>
@@ -623,9 +781,10 @@ def build_background_email_html(
 
 </table>
 
-<!-- ===================================================== -->
-<!-- END OUTER CONTAINER -->
-<!-- ===================================================== -->
+
+<!-- =====================================================
+     END OUTER EMAIL CONTAINER
+     ===================================================== -->
 
 
 </body>
@@ -642,11 +801,8 @@ def send_student_thank_you(review):
     """
     Send thank-you email to the student.
 
-    IMPORTANT:
-    No image attachment is added.
-
-    The email only contains the designed HTML
-    with the website background image.
+    Uses the exact same HTML structure
+    as the admin notification email.
     """
 
     student_name = review.student_name
@@ -695,6 +851,7 @@ Faculty Review Portal
     # -----------------------------------------------------
 
     email = EmailMultiAlternatives(
+
         subject=subject,
 
         body=text_message,
@@ -732,13 +889,13 @@ Faculty Review Portal
         title="Thank You!",
 
         message=(
-            f"{student_name}, "
-            "your review has been received successfully."
+            f"Thank you, {student_name}."
         ),
 
         description=(
-            "Thank you for taking the time "
-            "to share your feedback with me."
+            "Your feedback has been received successfully. "
+            "Thank you for taking the time to share "
+            "your feedback with me."
         ),
 
         button_text="Feedback Received",
@@ -778,11 +935,8 @@ def send_admin_notification(
     """
     Send admin notification email.
 
-    Uses the SAME background design as the
-    student thank-you email.
-
-    IMPORTANT:
-    No image attachment is added.
+    Uses the exact same HTML structure
+    as the student thank-you email.
     """
 
     student_name = review.student_name
@@ -865,7 +1019,7 @@ Faculty Review Portal
     )
 
     # -----------------------------------------------------
-    # BUILD SAME HTML DESIGN
+    # BUILD HTML
     # -----------------------------------------------------
 
     html_message = build_background_email_html(
