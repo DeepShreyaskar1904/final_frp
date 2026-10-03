@@ -237,7 +237,7 @@
 
 
     <!-- =========================================
-         GLOBAL DJANGO MESSAGE ALERT
+         GLOBAL DJANGO ERROR MESSAGE ALERT
     ========================================== -->
 
     {% if messages %}
@@ -250,22 +250,22 @@
 
                 {% for message in messages %}
 
+                {% if message.tags == 'error' %}
+
                 Swal.fire({
 
                     /* =========================
                        ALERT TYPE
                     ========================= */
 
-                    icon:
-                        "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+                    icon: "error",
 
 
                     /* =========================
                        ALERT TITLE
                     ========================= */
 
-                    title:
-                        "{% if message.tags == 'error' %}Login Failed{% else %}Success{% endif %}",
+                    title: "Login Failed",
 
 
                     /* =========================
@@ -277,28 +277,32 @@
 
 
                     /* =========================
-                       AUTO CLOSE
+                       OK BUTTON
                     ========================= */
 
-                    showConfirmButton:
-                        false,
+                    showConfirmButton: true,
 
-                    timer:
-                        2000,
+                    confirmButtonText: "OK",
 
-                    timerProgressBar:
-                        true,
+                    confirmButtonColor: "#2563eb",
+
+
+                    /* =========================
+                       NO AUTO CLOSE
+                    ========================= */
+
+                    timer: undefined,
+
+                    timerProgressBar: false,
 
 
                     /* =========================
                        USER INTERACTION
                     ========================= */
 
-                    allowOutsideClick:
-                        true,
+                    allowOutsideClick: true,
 
-                    allowEscapeKey:
-                        true,
+                    allowEscapeKey: true,
 
 
                     /* =========================
@@ -313,6 +317,8 @@
                     }
 
                 });
+
+                {% endif %}
 
                 {% endfor %}
 
