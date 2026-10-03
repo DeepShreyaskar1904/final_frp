@@ -244,6 +244,59 @@ def thank_you(request):
 #         'admin_login.html'
 #     )
 
+# logger = logging.getLogger(__name__)
+
+
+# def admin_login(request):
+
+#     if request.user.is_authenticated:
+
+#         if request.user.is_staff:
+#             return redirect('admin_dashboard')
+
+#         logout(request)
+
+#     if request.method == 'POST':
+
+#         start = time.time()
+#         logger.warning("LOGIN: POST received")
+
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+
+#         logger.warning("LOGIN: before authenticate")
+
+#         user = authenticate(
+#             request,
+#             username=username,
+#             password=password
+#         )
+
+#         logger.warning(
+#             f"LOGIN: authenticate finished in {time.time() - start:.2f}s"
+#         )
+
+#         if user is not None and user.is_staff:
+
+#             logger.warning("LOGIN: before login()")
+
+#             login(request, user)
+
+#             logger.warning(
+#                 f"LOGIN: login() finished in {time.time() - start:.2f}s"
+#             )
+
+#             return redirect('admin_dashboard')
+
+#         messages.error(
+#             request,
+#             'Invalid admin credentials.'
+#         )
+
+#     return render(
+#         request,
+#         'admin_login.html'
+#     )
 logger = logging.getLogger(__name__)
 
 
@@ -286,7 +339,14 @@ def admin_login(request):
                 f"LOGIN: login() finished in {time.time() - start:.2f}s"
             )
 
-            return redirect('admin_dashboard')
+            # Show SweetAlert before redirecting to dashboard
+            return render(
+                request,
+                'admin_login.html',
+                {
+                    'login_success': True
+                }
+            )
 
         messages.error(
             request,
@@ -297,7 +357,6 @@ def admin_login(request):
         request,
         'admin_login.html'
     )
-
 # =========================================================
 # ADMIN LOGOUT
 # =========================================================
