@@ -339,13 +339,15 @@ def admin_login(request):
 
         logger.warning("LOGIN: invalid admin credentials")
 
+        # IMPORTANT
+        messages.error(
+            request,
+            'Invalid admin credentials.'
+        )
+
         return render(
             request,
-            'admin_login.html',
-            {
-                'login_error': True,
-                'login_error_message': 'Invalid admin credentials.'
-            }
+            'admin_login.html'
         )
 
     return render(
