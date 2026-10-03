@@ -297,9 +297,6 @@ def thank_you(request):
 #         request,
 #         'admin_login.html'
 #     )
-logger = logging.getLogger(__name__)
-
-
 def admin_login(request):
 
     if request.user.is_authenticated:
@@ -311,14 +308,8 @@ def admin_login(request):
 
     if request.method == 'POST':
 
-        start = time.time()
-
-        logger.warning("LOGIN: POST received")
-
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
-
-        logger.warning(f"LOGIN: username = {username}")
 
         user = authenticate(
             request,
@@ -326,19 +317,9 @@ def admin_login(request):
             password=password
         )
 
-        logger.warning(
-            f"LOGIN: authenticate finished in {time.time() - start:.2f}s"
-        )
-
         if user is not None and user.is_staff:
 
-            logger.warning("LOGIN: valid admin")
-
             login(request, user)
-
-            logger.warning(
-                f"LOGIN: login() finished in {time.time() - start:.2f}s"
-            )
 
             messages.success(
                 request,
@@ -346,8 +327,6 @@ def admin_login(request):
             )
 
             return redirect('admin_login')
-
-        logger.warning("LOGIN: invalid admin credentials")
 
         messages.error(
             request,
