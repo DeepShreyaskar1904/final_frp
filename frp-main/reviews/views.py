@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import base64
@@ -1136,42 +1137,337 @@ def export_reviews_excel(request):
 # GOOGLE LOGIN
 # =========================================================
 
+# def google_login(request):
+
+#     flow = create_google_flow()
+
+
+#     authorization_url, state = (
+#         flow.authorization_url(
+
+#             prompt='select_account',
+
+#             access_type='online'
+
+#         )
+#     )
+
+
+#     # Save OAuth state
+#     request.session[
+#         'google_oauth_state'
+#     ] = state
+
+
+#     # Save PKCE verifier
+#     request.session[
+#         'google_code_verifier'
+#     ] = flow.code_verifier
+
+
+#     return redirect(
+#         authorization_url
+#     )
+
 def google_login(request):
 
     flow = create_google_flow()
 
-
-    authorization_url, state = (
-        flow.authorization_url(
-
-            prompt='select_account',
-
-            access_type='online'
-
-        )
+    authorization_url, state = flow.authorization_url(
+        prompt='select_account',
+        access_type='online'
     )
 
+    request.session['google_oauth_state'] = state
+    request.session['google_code_verifier'] = flow.code_verifier
 
-    # Save OAuth state
-    request.session[
-        'google_oauth_state'
-    ] = state
-
-
-    # Save PKCE verifier
-    request.session[
-        'google_code_verifier'
-    ] = flow.code_verifier
-
-
-    return redirect(
-        authorization_url
-    )
-
-
+    return redirect(authorization_url)
 # =========================================================
 # GOOGLE CALLBACK
 # =========================================================
+
+# def google_callback(request):
+
+#     # =====================================================
+#     # GET SAVED STATE
+#     # =====================================================
+
+#     saved_state = request.session.pop(
+#         'google_oauth_state',
+#         None
+#     )
+
+
+#     # =====================================================
+#     # GET PKCE VERIFIER
+#     # =====================================================
+
+#     code_verifier = request.session.pop(
+#         'google_code_verifier',
+#         None
+#     )
+
+
+#     if not saved_state:
+
+#         messages.error(
+#             request,
+#             'Google authentication session expired. Please try again.'
+#         )
+
+#         return redirect(
+#             'forgot_password'
+#         )
+
+
+#     if not code_verifier:
+
+#         messages.error(
+#             request,
+#             'Google security verification failed. Please try again.'
+#         )
+
+#         return redirect(
+#             'forgot_password'
+#         )
+
+
+#     try:
+
+#         # =================================================
+#         # CHECK STATE
+#         # =================================================
+
+#         returned_state = request.GET.get(
+#             'state'
+#         )
+
+
+#         if returned_state != saved_state:
+
+#             raise ValueError(
+#                 'OAuth state mismatch.'
+#             )
+
+
+#         # =================================================
+#         # AUTHORIZATION CODE
+#         # =================================================
+
+#         authorization_code = (
+#             request.GET.get(
+#                 'code'
+#             )
+#         )
+
+
+#         if not authorization_code:
+
+#             raise ValueError(
+#                 'Authorization code missing.'
+#             )
+
+
+#         # =================================================
+#         # TOKEN EXCHANGE
+#         # =================================================
+
+#         token_response = requests.post(
+
+#             'https://oauth2.googleapis.com/token',
+
+#             data={
+
+#                 'code':
+#                     authorization_code,
+
+#                 'client_id':
+#                     settings.GOOGLE_CLIENT_ID,
+
+#                 'client_secret':
+#                     settings.GOOGLE_CLIENT_SECRET,
+
+#                 'redirect_uri':
+#                     settings.GOOGLE_REDIRECT_URI,
+
+#                 'grant_type':
+#                     'authorization_code',
+
+#                 'code_verifier':
+#                     code_verifier,
+
+#             },
+
+#             timeout=20
+
+#         )
+
+
+#         print(
+#             'Google token status:',
+#             token_response.status_code
+#         )
+
+
+#         if not token_response.ok:
+
+#             print(
+#                 'Google token response:',
+#                 token_response.text
+#             )
+
+
+#             raise ValueError(
+#                 'Google token exchange failed.'
+#             )
+
+
+#         # =================================================
+#         # TOKEN DATA
+#         # =================================================
+
+#         token_data = (
+#             token_response.json()
+#         )
+
+
+#         google_id_token = (
+#             token_data.get(
+#                 'id_token'
+#             )
+#         )
+
+
+#         if not google_id_token:
+
+#             raise ValueError(
+#                 'Google ID token was not returned.'
+#             )
+
+
+#         # =================================================
+#         # VERIFY GOOGLE ID TOKEN
+#         # =================================================
+
+#         google_user = (
+#             id_token.verify_oauth2_token(
+
+#                 google_id_token,
+
+#                 google_requests.Request(),
+
+#                 settings.GOOGLE_CLIENT_ID,
+
+#                 clock_skew_in_seconds=60
+
+#             )
+#         )
+
+
+#     except Exception as e:
+
+#         print(
+#             '================================'
+#         )
+
+#         print(
+#             'GOOGLE AUTH ERROR:',
+#             repr(e)
+#         )
+
+#         print(
+#             '================================'
+#         )
+
+
+#         messages.error(
+#             request,
+#             'Google authentication failed.'
+#         )
+
+
+#         return redirect(
+#             'forgot_password'
+#         )
+
+
+#     # =====================================================
+#     # GOOGLE EMAIL
+#     # =====================================================
+
+#     google_email = (
+#         google_user.get(
+#             'email',
+#             ''
+#         )
+#         .strip()
+#         .lower()
+#     )
+
+
+#     # =====================================================
+#     # EMAIL VERIFIED?
+#     # =====================================================
+
+#     email_verified = (
+#         google_user.get(
+#             'email_verified',
+#             False
+#         )
+#     )
+
+
+#     # =====================================================
+#     # ADMIN EMAIL
+#     # =====================================================
+
+#     admin_email = (
+#         settings.ADMIN_EMAIL
+#         .strip()
+#         .lower()
+#     )
+
+
+#     if not email_verified:
+
+#         messages.error(
+#             request,
+#             'Google email is not verified.'
+#         )
+
+#         return redirect(
+#             'forgot_password'
+#         )
+
+
+#     # =====================================================
+#     # CHECK ADMIN EMAIL
+#     # =====================================================
+
+#     if google_email != admin_email:
+
+#         messages.error(
+#             request,
+#             'This Google account is not authorized for admin recovery.'
+#         )
+
+#         return redirect(
+#             'forgot_password'
+#         )
+
+
+#     # =====================================================
+#     # GOOGLE VERIFIED
+#     # =====================================================
+
+#     request.session[
+#         'google_verified_for_reset'
+#     ] = True
+
+
+#     return redirect(
+#         'reset_password'
+#     )
 
 def google_callback(request):
 
@@ -1184,7 +1480,6 @@ def google_callback(request):
         None
     )
 
-
     # =====================================================
     # GET PKCE VERIFIER
     # =====================================================
@@ -1194,30 +1489,19 @@ def google_callback(request):
         None
     )
 
-
     if not saved_state:
-
         messages.error(
             request,
             'Google authentication session expired. Please try again.'
         )
-
-        return redirect(
-            'forgot_password'
-        )
-
+        return redirect('forgot_password')
 
     if not code_verifier:
-
         messages.error(
             request,
             'Google security verification failed. Please try again.'
         )
-
-        return redirect(
-            'forgot_password'
-        )
-
+        return redirect('forgot_password')
 
     try:
 
@@ -1225,184 +1509,90 @@ def google_callback(request):
         # CHECK STATE
         # =================================================
 
-        returned_state = request.GET.get(
-            'state'
-        )
-
+        returned_state = request.GET.get('state')
 
         if returned_state != saved_state:
-
-            raise ValueError(
-                'OAuth state mismatch.'
-            )
-
+            raise ValueError('OAuth state mismatch.')
 
         # =================================================
-        # AUTHORIZATION CODE
+        # CHECK AUTHORIZATION CODE
         # =================================================
 
-        authorization_code = (
-            request.GET.get(
-                'code'
-            )
-        )
-
+        authorization_code = request.GET.get('code')
 
         if not authorization_code:
+            raise ValueError('Authorization code missing.')
 
-            raise ValueError(
-                'Authorization code missing.'
-            )
+        # =================================================
+        # CREATE GOOGLE FLOW
+        # =================================================
 
+        flow = create_google_flow(
+            state=saved_state,
+            code_verifier=code_verifier
+        )
 
         # =================================================
         # TOKEN EXCHANGE
         # =================================================
 
-        token_response = requests.post(
-
-            'https://oauth2.googleapis.com/token',
-
-            data={
-
-                'code':
-                    authorization_code,
-
-                'client_id':
-                    settings.GOOGLE_CLIENT_ID,
-
-                'client_secret':
-                    settings.GOOGLE_CLIENT_SECRET,
-
-                'redirect_uri':
-                    settings.GOOGLE_REDIRECT_URI,
-
-                'grant_type':
-                    'authorization_code',
-
-                'code_verifier':
-                    code_verifier,
-
-            },
-
-            timeout=20
-
+        flow.fetch_token(
+            code=authorization_code
         )
-
-
-        print(
-            'Google token status:',
-            token_response.status_code
-        )
-
-
-        if not token_response.ok:
-
-            print(
-                'Google token response:',
-                token_response.text
-            )
-
-
-            raise ValueError(
-                'Google token exchange failed.'
-            )
-
 
         # =================================================
-        # TOKEN DATA
+        # GET ID TOKEN
         # =================================================
 
-        token_data = (
-            token_response.json()
-        )
-
-
-        google_id_token = (
-            token_data.get(
-                'id_token'
-            )
-        )
-
+        google_id_token = flow.credentials.id_token
 
         if not google_id_token:
-
             raise ValueError(
                 'Google ID token was not returned.'
             )
-
 
         # =================================================
         # VERIFY GOOGLE ID TOKEN
         # =================================================
 
-        google_user = (
-            id_token.verify_oauth2_token(
-
-                google_id_token,
-
-                google_requests.Request(),
-
-                settings.GOOGLE_CLIENT_ID,
-
-                clock_skew_in_seconds=60
-
-            )
+        google_user = id_token.verify_oauth2_token(
+            google_id_token,
+            google_requests.Request(),
+            settings.GOOGLE_CLIENT_ID,
+            clock_skew_in_seconds=60
         )
-
 
     except Exception as e:
 
-        print(
-            '================================'
-        )
-
-        print(
-            'GOOGLE AUTH ERROR:',
-            repr(e)
-        )
-
-        print(
-            '================================'
-        )
-
+        print('================================')
+        print('GOOGLE AUTH ERROR:', repr(e))
+        print('================================')
 
         messages.error(
             request,
             'Google authentication failed.'
         )
 
-
-        return redirect(
-            'forgot_password'
-        )
-
+        return redirect('forgot_password')
 
     # =====================================================
     # GOOGLE EMAIL
     # =====================================================
 
     google_email = (
-        google_user.get(
-            'email',
-            ''
-        )
+        google_user.get('email', '')
         .strip()
         .lower()
     )
 
-
     # =====================================================
-    # EMAIL VERIFIED?
+    # EMAIL VERIFIED
     # =====================================================
 
-    email_verified = (
-        google_user.get(
-            'email_verified',
-            False
-        )
+    email_verified = google_user.get(
+        'email_verified',
+        False
     )
-
 
     # =====================================================
     # ADMIN EMAIL
@@ -1414,7 +1604,6 @@ def google_callback(request):
         .lower()
     )
 
-
     if not email_verified:
 
         messages.error(
@@ -1422,10 +1611,7 @@ def google_callback(request):
             'Google email is not verified.'
         )
 
-        return redirect(
-            'forgot_password'
-        )
-
+        return redirect('forgot_password')
 
     # =====================================================
     # CHECK ADMIN EMAIL
@@ -1438,10 +1624,7 @@ def google_callback(request):
             'This Google account is not authorized for admin recovery.'
         )
 
-        return redirect(
-            'forgot_password'
-        )
-
+        return redirect('forgot_password')
 
     # =====================================================
     # GOOGLE VERIFIED
@@ -1451,12 +1634,7 @@ def google_callback(request):
         'google_verified_for_reset'
     ] = True
 
-
-    return redirect(
-        'reset_password'
-    )
-
-
+    return redirect('reset_password')
 # =========================================================
 # FORGOT PASSWORD
 # =========================================================
