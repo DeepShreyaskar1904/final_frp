@@ -956,4 +956,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ================= ERROR MESSAGES ================= */
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            Swal.fire({
+                icon: "error",
+                title: "Login Failed",
+                text: "{{ message|escapejs }}",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#2563eb"
+            });
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    /* ================= LOGIN SUCCESS ================= */
+
+    {% if login_success %}
+
+        Swal.fire({
+            icon: "success",
+            title: "Login Successful!",
+            text: "Welcome back, Admin.",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then(function () {
+
+            window.location.href = "{% url 'admin_dashboard' %}";
+
+        });
+
+    {% endif %}
+
+});
+</script>
 {% endblock %}
