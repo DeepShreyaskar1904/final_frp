@@ -321,12 +321,7 @@ def admin_login(request):
 
             login(request, user)
 
-            messages.success(
-                request,
-                'Welcome back, Admin!'
-            )
-
-            return redirect('admin_login')
+            return redirect('admin_dashboard')
 
         messages.error(
             request,
