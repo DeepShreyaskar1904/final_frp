@@ -926,34 +926,4 @@ document.addEventListener("click", function (event) {
     
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const form = document.getElementById("adminLoginForm");
-
-    if (!form) return;
-
-    let submitting = false;
-
-    form.addEventListener("submit", function (event) {
-
-        if (submitting) {
-            event.preventDefault();
-            return;
-        }
-
-        submitting = true;
-
-        const button = form.querySelector(
-            'button[type="submit"], input[type="submit"]'
-        );
-
-        if (button) {
-            button.disabled = true;
-            button.innerHTML = "Logging in...";
-        }
-    });
-
-});
-</script>
 {% endblock %}
