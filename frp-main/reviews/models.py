@@ -201,3 +201,29 @@ class FacultySkill(models.Model):
 
     class Meta:
         ordering = ["display_order", "name"]
+
+class EmailServiceStatus(models.Model):
+
+    is_working = models.BooleanField(default=True)
+
+    last_success = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    last_failure = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    last_error = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return "Gmail Email Service Status"
