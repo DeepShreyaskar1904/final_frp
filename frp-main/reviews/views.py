@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import base64
@@ -2296,3 +2295,5 @@ def gmail_callback(request):
         '</textarea>'
         '<p><b>Do not share this token with anyone.</b></p>'
     )
+def privacy_policy(request):
+   return render(request, "privacy_policy.html")
