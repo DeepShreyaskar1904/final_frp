@@ -5,7 +5,8 @@ import requests
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-
+from django.utils import timezone
+from .models import EmailServiceStatus
 
 # =========================================================
 # BASE DIRECTORY
@@ -30,10 +31,86 @@ EMAIL_BACKGROUND_PATH = (
 # GMAIL API EMAIL SENDER
 # =========================================================
 
+# def send_via_gmail_api(email_message):
+#     """
+#     Send an already-built Django email through Gmail API.
+#     """
+
+#     refresh_token = getattr(
+#         settings,
+#         "GMAIL_REFRESH_TOKEN",
+#         ""
+#     ).strip()
+
+#     if not refresh_token:
+#         raise RuntimeError(
+#             "GMAIL_REFRESH_TOKEN is not configured in environment variables."
+#         )
+
+#     token_response = requests.post(
+#         "https://oauth2.googleapis.com/token",
+#         data={
+#             "client_id": settings.GOOGLE_CLIENT_ID,
+#             "client_secret": settings.GOOGLE_CLIENT_SECRET,
+#             "refresh_token": refresh_token,
+#             "grant_type": "refresh_token",
+#         },
+#         timeout=20,
+#     )
+
+#     if not token_response.ok:
+#         raise RuntimeError(
+#             "Gmail access token request failed: "
+#             + token_response.text
+#         )
+
+#     token_data = token_response.json()
+
+#     access_token = token_data.get("access_token")
+
+#     if not access_token:
+#         raise RuntimeError(
+#             "Gmail access token was not returned."
+#         )
+
+#     # -----------------------------------------------------
+#     # CONVERT DJANGO EMAIL INTO MIME
+#     # -----------------------------------------------------
+
+#     mime_message = email_message.message()
+
+#     raw_message = base64.urlsafe_b64encode(
+#         mime_message.as_bytes()
+#     ).decode("utf-8").rstrip("=")
+
+#     # -----------------------------------------------------
+#     # SEND THROUGH GMAIL API
+#     # -----------------------------------------------------
+
+#     gmail_response = requests.post(
+#         "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+#         headers={
+#             "Authorization": f"Bearer {access_token}",
+#             "Content-Type": "application/json",
+#         },
+#         json={
+#             "raw": raw_message
+#         },
+#         timeout=20,
+#     )
+
+#     if not gmail_response.ok:
+#         raise RuntimeError(
+#             "Gmail API email send failed: "
+#             + gmail_response.text
+#         )
+
+#     print(
+#         "✅ Email sent successfully through Gmail API"
+#     )
+
 def send_via_gmail_api(email_message):
-    """
-    Send an already-built Django email through Gmail API.
-    """
+    """Send an already-built Django email through Gmail API."""
 
     refresh_token = getattr(
         settings,
@@ -42,73 +119,144 @@ def send_via_gmail_api(email_message):
     ).strip()
 
     if not refresh_token:
-        raise RuntimeError(
-            "GMAIL_REFRESH_TOKEN is not configured in environment variables."
+        error_message = (
+            "GMAIL_REFRESH_TOKEN is not configured."
         )
 
-    token_response = requests.post(
-        "https://oauth2.googleapis.com/token",
-        data={
-            "client_id": settings.GOOGLE_CLIENT_ID,
-            "client_secret": settings.GOOGLE_CLIENT_SECRET,
-            "refresh_token": refresh_token,
-            "grant_type": "refresh_token",
-        },
-        timeout=20,
-    )
-
-    if not token_response.ok:
-        raise RuntimeError(
-            "Gmail access token request failed: "
-            + token_response.text
+        EmailServiceStatus.objects.update_or_create(
+            id=1,
+            defaults={
+                "is_working": False,
+                "last_failure": timezone.now(),
+                "last_error": error_message,
+            }
         )
 
-    token_data = token_response.json()
+        raise RuntimeError(error_message)
 
-    access_token = token_data.get("access_token")
+    try:
 
-    if not access_token:
-        raise RuntimeError(
-            "Gmail access token was not returned."
+        # ==========================================
+        # GET ACCESS TOKEN
+        # ==========================================
+
+        token_response = requests.post(
+            "https://oauth2.googleapis.com/token",
+            data={
+                "client_id": settings.GOOGLE_CLIENT_ID,
+                "client_secret": settings.GOOGLE_CLIENT_SECRET,
+                "refresh_token": refresh_token,
+                "grant_type": "refresh_token",
+            },
+            timeout=20,
         )
 
-    # -----------------------------------------------------
-    # CONVERT DJANGO EMAIL INTO MIME
-    # -----------------------------------------------------
+        if not token_response.ok:
 
-    mime_message = email_message.message()
+            error_message = (
+                "Gmail authentication failed: "
+                + token_response.text
+            )
 
-    raw_message = base64.urlsafe_b64encode(
-        mime_message.as_bytes()
-    ).decode("utf-8").rstrip("=")
+            EmailServiceStatus.objects.update_or_create(
+                id=1,
+                defaults={
+                    "is_working": False,
+                    "last_failure": timezone.now(),
+                    "last_error": error_message,
+                }
+            )
 
-    # -----------------------------------------------------
-    # SEND THROUGH GMAIL API
-    # -----------------------------------------------------
+            raise RuntimeError(error_message)
 
-    gmail_response = requests.post(
-        "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
-        headers={
-            "Authorization": f"Bearer {access_token}",
-            "Content-Type": "application/json",
-        },
-        json={
-            "raw": raw_message
-        },
-        timeout=20,
-    )
+        token_data = token_response.json()
 
-    if not gmail_response.ok:
-        raise RuntimeError(
-            "Gmail API email send failed: "
-            + gmail_response.text
+        access_token = token_data.get(
+            "access_token"
         )
 
-    print(
-        "✅ Email sent successfully through Gmail API"
-    )
+        if not access_token:
 
+            error_message = (
+                "Gmail access token was not returned."
+            )
 
+            EmailServiceStatus.objects.update_or_create(
+                id=1,
+                defaults={
+                    "is_working": False,
+                    "last_failure": timezone.now(),
+                    "last_error": error_message,
+                }
+            )
+
+            raise RuntimeError(error_message)
+
+        # ==========================================
+        # CREATE MIME
+        # ==========================================
+
+        mime_message = email_message.message()
+
+        raw_message = base64.urlsafe_b64encode(
+            mime_message.as_bytes()
+        ).decode("utf-8").rstrip("=")
+
+        # ==========================================
+        # SEND EMAIL
+        # ==========================================
+
+        gmail_response = requests.post(
+            "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "raw": raw_message
+            },
+            timeout=20,
+        )
+
+        if not gmail_response.ok:
+
+            error_message = (
+                "Gmail API email send failed: "
+                + gmail_response.text
+            )
+
+            EmailServiceStatus.objects.update_or_create(
+                id=1,
+                defaults={
+                    "is_working": False,
+                    "last_failure": timezone.now(),
+                    "last_error": error_message,
+                }
+            )
+
+            raise RuntimeError(error_message)
+
+        # ==========================================
+        # SUCCESS
+        # ==========================================
+
+        EmailServiceStatus.objects.update_or_create(
+            id=1,
+            defaults={
+                "is_working": True,
+                "last_success": timezone.now(),
+                "last_error": "",
+            }
+        )
+
+        print(
+            "✅ Email sent successfully through Gmail API"
+        )
+
+    except Exception:
+
+        # Don't hide the original error.
+        raise
 # =========================================================
 # COMMON EMAIL HTML DESIGN
 # =========================================================
