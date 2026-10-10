@@ -17,4 +17,5 @@ urlpatterns = [
     path('manage-profile/',views.manage_profile,name='manage_profile'),
     path('gmail/authorize/', views.gmail_authorize, name='gmail_authorize'),
     path('gmail/callback/', views.gmail_callback, name='gmail_callback'),
+    path("privacy-policy/", views.privacy_policy, name="privacy_policy"),
 ]
