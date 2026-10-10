@@ -885,15 +885,12 @@ def admin_dashboard(request):
         page_number
     )
 
+# =====================================================
+# GMAIL EMAIL SERVICE STATUS
+# =====================================================
 
-    # =====================================================
-    # GMAIL EMAIL SERVICE STATUS
-    # =====================================================
-
-    email_status = EmailServiceStatus.objects.filter(
-        id=1
-    ).first()
-
+    email_status, created = EmailServiceStatus.objects.get_or_create(id=1,defaults={'is_working': True})
+    
 
     # =====================================================
     # CONTEXT
