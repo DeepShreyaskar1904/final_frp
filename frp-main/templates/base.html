@@ -154,6 +154,12 @@ body:has(.admin-login-page) #themeToggleWrapper {
     visibility: hidden !important;
     pointer-events: none !important;
 }
+        /* Hide global theme toggle only on Reset Password page */
+body:has(.reset-password-page) #themeToggleWrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
     </style>
 
 </head>
