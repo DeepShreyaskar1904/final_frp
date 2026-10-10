@@ -938,6 +938,120 @@ html[data-theme="dark"] .dashboard-manage-profile:hover {
     background: #26344d;
     color: #bfdbfe;
 }
+
+
+/* ==========================================
+   DASHBOARD THEME CONSISTENCY PATCH
+   ========================================== */
+
+/* Email service alerts - common styling */
+.dashboard-wrapper .alert {
+    border-radius: 10px;
+    border-width: 1px;
+    padding: 14px 16px;
+    line-height: 1.6;
+    transition: background-color 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+}
+
+/* LIGHT THEME */
+html[data-theme="light"] .dashboard-wrapper .alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border-color: #badbcc;
+}
+
+html[data-theme="light"] .dashboard-wrapper .alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border-color: #f5c2c7;
+}
+
+html[data-theme="light"] .filter-input {
+    background-color: #ffffff;
+    color: #172033;
+}
+
+html[data-theme="light"] .review-modal,
+html[data-theme="light"] .review-modal .modal-body,
+html[data-theme="light"] .review-modal .modal-footer {
+    background-color: #ffffff;
+    color: #172033;
+}
+
+html[data-theme="light"] .review-modal .modal-footer {
+    border-top-color: #e5e7eb;
+}
+
+/* DARK THEME */
+html[data-theme="dark"] .dashboard-wrapper .alert-success {
+    background-color: #123b2c;
+    color: #d1fae5;
+    border-color: #216548;
+}
+
+html[data-theme="dark"] .dashboard-wrapper .alert-danger {
+    background-color: #451b25;
+    color: #fecdd3;
+    border-color: #7f1d1d;
+}
+
+/* Alert links */
+html[data-theme="dark"] .dashboard-wrapper .alert a {
+    color: #93c5fd;
+    font-weight: 600;
+}
+
+html[data-theme="light"] .dashboard-wrapper .alert a {
+    color: #084298;
+    font-weight: 600;
+}
+
+/* Modal */
+html[data-theme="dark"] .review-modal,
+html[data-theme="dark"] .review-modal .modal-body,
+html[data-theme="dark"] .review-modal .modal-footer {
+    background-color: #1e293b;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .review-modal .modal-footer {
+    border-top-color: #475569;
+}
+
+html[data-theme="dark"] .review-modal .text-muted,
+html[data-theme="dark"] .dashboard-wrapper .text-muted {
+    color: #94a3b8 !important;
+}
+
+/* Form controls */
+html[data-theme="dark"] .review-modal input,
+html[data-theme="dark"] .review-modal select,
+html[data-theme="dark"] .review-modal textarea {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-color: #475569;
+}
+
+/* Avoid accidental overflow in status messages */
+.dashboard-wrapper .alert {
+    overflow-wrap: anywhere;
+}
+
+/* Smooth theme changes */
+.dashboard-wrapper .stat-card,
+.dashboard-wrapper .dashboard-card,
+.dashboard-wrapper .reviews-card,
+.dashboard-wrapper .review-filter-form,
+.dashboard-wrapper .dashboard-theme-toggle,
+.dashboard-wrapper .dashboard-manage-profile,
+.dashboard-wrapper .session-timer {
+    transition: background-color 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+}
+
 </style>
 
 
