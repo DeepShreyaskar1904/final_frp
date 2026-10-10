@@ -1008,7 +1008,51 @@ html[data-theme="dark"] .dashboard-manage-profile:hover {
 </div>
     </div>
 
+{% if email_status %}
 
+    {% if email_status.is_working %}
+
+        <div class="alert alert-success">
+            <strong>🟢 Email Service Working</strong>
+            <br>
+            Student and admin emails are working normally.
+
+            {% if email_status.last_success %}
+                <small>
+                    Last successful email:
+                    {{ email_status.last_success|date:"d M Y, h:i A" }}
+                </small>
+            {% endif %}
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-danger">
+
+            <strong>🔴 Email Service Problem</strong>
+
+            <br>
+
+            Gmail authorization has expired or been revoked.
+
+            <br>
+
+            <small>
+                Reviews are still being saved, but email notifications
+                may not be delivered.
+            </small>
+
+            <br><br>
+
+            <a href="{% url 'gmail_authorize' %}">
+                Reconnect Gmail
+            </a>
+
+        </div>
+
+    {% endif %}
+
+{% endif %}
 
     <!-- ==================================================
          MAIN STATISTICS
