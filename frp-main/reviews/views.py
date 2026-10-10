@@ -2199,33 +2199,45 @@ def manage_profile(request):
 # =========================================================
 # GMAIL API AUTHORIZATION
 # =========================================================
-
 def gmail_authorize(request):
 
-    if not request.user.is_authenticated or not request.user.is_staff:
-        return redirect('admin_login')
+    try:
+        if not request.user.is_authenticated or not request.user.is_staff:
+            return redirect('admin_login')
 
-    state = secrets.token_urlsafe(32)
+        state = secrets.token_urlsafe(32)
 
-    request.session['gmail_oauth_state'] = state
+        request.session['gmail_oauth_state'] = state
 
-    params = {
-        'client_id': settings.GOOGLE_CLIENT_ID,
-        'redirect_uri': settings.GMAIL_REDIRECT_URI,
-        'response_type': 'code',
-        'scope': 'https://www.googleapis.com/auth/gmail.send',
-        'access_type': 'offline',
-        'prompt': 'consent',
-        'state': state,
-    }
+        params = {
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'redirect_uri': settings.GMAIL_REDIRECT_URI,
+            'response_type': 'code',
+            'scope': 'https://www.googleapis.com/auth/gmail.send',
+            'access_type': 'offline',
+            'prompt': 'consent',
+            'state': state,
+        }
 
-    authorization_url = (
-        'https://accounts.google.com/o/oauth2/v2/auth?'
-        + urlencode(params)
-    )
+        authorization_url = (
+            'https://accounts.google.com/o/oauth2/v2/auth?'
+            + urlencode(params)
+        )
 
-    return redirect(authorization_url)
+        return redirect(authorization_url)
 
+    except Exception as e:
+        import traceback
+
+        print("===== GMAIL AUTHORIZE ERROR =====")
+        print(traceback.format_exc())
+        print("=================================")
+
+        return HttpResponse(
+            f"<h2>Gmail authorization error</h2>"
+            f"<pre>{str(e)}</pre>",
+            status=500
+        )
 
 # =========================================================
 # GMAIL API CALLBACK
