@@ -16,7 +16,7 @@ from django.db.models import Avg, Q
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from .forms import (ReviewForm,FacultyProfileForm,EducationFormSet,SkillFormSet)
-from .models import (Review,FacultyProfile)
+from .models import (Review,FacultyProfile, EmailServiceStatus)
 from .email_utils import (send_student_thank_you,send_admin_notification)
 from .sentiment_utils import analyze_sentiment
 from .google_auth import create_google_flow
@@ -466,6 +466,248 @@ def get_filtered_reviews(request):
 # ADMIN DASHBOARD
 # =========================================================
 
+# @login_required(login_url='admin_login')
+# def admin_dashboard(request):
+
+#     # Only staff/admin
+#     if not request.user.is_staff:
+
+#         logout(request)
+
+#         return redirect(
+#             'admin_login'
+#         )
+
+
+#     # =====================================================
+#     # ALL REVIEWS
+#     # =====================================================
+
+#     all_reviews = Review.objects.all().order_by(
+#         '-created_at'
+#     )
+
+
+#     # =====================================================
+#     # TOTAL REVIEWS
+#     # =====================================================
+
+#     total_reviews = all_reviews.count()
+
+
+#     # =====================================================
+#     # UNIQUE STUDENTS
+#     # =====================================================
+
+#     total_students = (
+
+#         all_reviews
+
+#         .values(
+#             'student_email'
+#         )
+
+#         .distinct()
+
+#         .count()
+
+#     )
+
+
+#     # =====================================================
+#     # AVERAGE RATING
+#     # =====================================================
+
+#     average_rating = all_reviews.aggregate(
+#         avg_rating=Avg('rating')
+#     )['avg_rating']
+
+
+#     if average_rating is None:
+
+#         average_rating = 0
+
+
+#     # =====================================================
+#     # SENTIMENT COUNTS
+#     # =====================================================
+
+#     positive_count = all_reviews.filter(
+#         sentiment='positive'
+#     ).count()
+
+
+#     neutral_count = all_reviews.filter(
+#         sentiment='neutral'
+#     ).count()
+
+
+#     negative_count = all_reviews.filter(
+#         sentiment='negative'
+#     ).count()
+
+
+#     # =====================================================
+#     # RATING COUNTS
+#     # =====================================================
+
+#     rating_counts = []
+
+
+#     for rating in range(1, 6):
+
+#         count = all_reviews.filter(
+#             rating=rating
+#         ).count()
+
+#         rating_counts.append(
+#             count
+#         )
+
+
+#     # =====================================================
+#     # FILTERED REVIEWS
+#     # =====================================================
+
+#     filtered_reviews = get_filtered_reviews(
+#         request
+#     )
+
+
+#     # =====================================================
+#     # FILTER VALUES
+#     # =====================================================
+
+#     search_query = request.GET.get(
+#         'search',
+#         ''
+#     ).strip()
+
+
+#     selected_course = request.GET.get(
+#         'course',
+#         ''
+#     ).strip()
+
+
+#     selected_rating = request.GET.get(
+#         'rating',
+#         ''
+#     ).strip()
+
+
+#     selected_sentiment = request.GET.get(
+#         'sentiment',
+#         ''
+#     ).strip()
+
+
+#     # =====================================================
+#     # COURSE LIST
+#     # =====================================================
+
+#     courses = (
+
+#         Review.objects
+
+#         .values_list(
+#             'course',
+#             flat=True
+#         )
+
+#         .distinct()
+
+#         .order_by(
+#             'course'
+#         )
+
+#     )
+
+
+#     # =====================================================
+#     # PAGINATION
+#     # =====================================================
+
+#     paginator = Paginator(
+#         filtered_reviews,
+#         10
+#     )
+
+
+#     page_number = request.GET.get(
+#         'page'
+#     )
+
+
+#     reviews_page = paginator.get_page(
+#         page_number
+#     )
+
+
+#     # =====================================================
+#     # CONTEXT
+#     # =====================================================
+
+#     context = {
+
+#         # Overall statistics
+
+#         'total_reviews':
+#             total_reviews,
+
+#         'total_students':
+#             total_students,
+
+#         'average_rating':
+#             round(
+#                 average_rating,
+#                 2
+#             ),
+
+#         'positive_count':
+#             positive_count,
+
+#         'neutral_count':
+#             neutral_count,
+
+#         'negative_count':
+#             negative_count,
+
+#         'rating_counts':
+#             rating_counts,
+
+
+#         # Reviews
+
+#         'recent_reviews':
+#             reviews_page,
+
+
+#         # Filters
+
+#         'courses':
+#             courses,
+
+#         'search_query':
+#             search_query,
+
+#         'selected_course':
+#             selected_course,
+
+#         'selected_rating':
+#             selected_rating,
+
+#         'selected_sentiment':
+#             selected_sentiment,
+
+#     }
+
+
+#     return render(
+#         request,
+#         'admin_dashboard.html',
+#         context
+#     )
 @login_required(login_url='admin_login')
 def admin_dashboard(request):
 
@@ -645,6 +887,15 @@ def admin_dashboard(request):
 
 
     # =====================================================
+    # GMAIL EMAIL SERVICE STATUS
+    # =====================================================
+
+    email_status = EmailServiceStatus.objects.filter(
+        id=1
+    ).first()
+
+
+    # =====================================================
     # CONTEXT
     # =====================================================
 
@@ -700,6 +951,12 @@ def admin_dashboard(request):
         'selected_sentiment':
             selected_sentiment,
 
+
+        # Gmail Email Service
+
+        'email_status':
+            email_status,
+
     }
 
 
@@ -708,7 +965,6 @@ def admin_dashboard(request):
         'admin_dashboard.html',
         context
     )
-
 
 # =========================================================
 # FULL REVIEW DETAIL
